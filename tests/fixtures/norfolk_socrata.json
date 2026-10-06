@@ -1,0 +1,62 @@
+[
+ {
+  "permit_number": "B2026-10011",
+  "address": "1214 W Little Creek Rd",
+  "type": "Building",
+  "work_type": "New",
+  "use_type": "Residential",
+  "structure": "Single Family Dwelling",
+  "status": "Issued",
+  "project_cost": "385000",
+  "issue_date": "2026-10-05T02:41:21.000",
+  "contractor_name": "Tidewater Custom Homes LLC",
+  "latitude": "36.9183",
+  "longitude": "-76.2771"
+ },
+ {
+  "permit_number": "B2026-10012",
+  "address": "733 Graydon Ave",
+  "type": "Building",
+  "work_type": "Addition",
+  "use_type": "Residential",
+  "structure": "Deck",
+  "status": "Issued",
+  "project_cost": "14500",
+  "issue_date": "2026-10-04T02:41:21.000",
+  "contractor_name": "Owner"
+ },
+ {
+  "permit_number": "E2026-20001",
+  "address": "55 Main St",
+  "type": "Electrical",
+  "work_type": "Alteration",
+  "use_type": "Commercial",
+  "structure": "Office",
+  "status": "Issued",
+  "project_cost": "3000",
+  "issue_date": "2026-10-05T02:41:21.000"
+ },
+ {
+  "permit_number": "B2026-10013",
+  "address": "9 Colley Ave",
+  "type": "Building",
+  "work_type": "Alteration",
+  "use_type": "Residential",
+  "structure": "Single Family Dwelling",
+  "status": "Issued",
+  "project_cost": "62000",
+  "issue_date": "2026-10-03T02:41:21.000",
+  "work_description": "Kitchen remodel, remove load bearing wall, new beam"
+ },
+ {
+  "permit_number": "B2026-10014",
+  "address": "400 Granby St",
+  "type": "Building",
+  "work_type": "New",
+  "use_type": "Residential",
+  "structure": "Single Family Dwelling",
+  "status": "Void",
+  "project_cost": "300000",
+  "issue_date": "2026-10-04T02:41:21.000"
+ }
+]

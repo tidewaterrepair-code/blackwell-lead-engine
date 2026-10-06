@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Sources{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Sources</h1><span class="ink-2">Imports run automatically on a schedule. Edit <code>sources.yaml</code> to turn sources on or off.</span></div>
+  <form method="post" action="/sources/run"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="primary" type="submit">Run all enabled now</button></form>
+</div>
+<div class="table-wrap"><table>
+  <thead><tr><th>Source</th><th>Type</th><th>Status</th><th>Last run</th><th class="num">Fetched</th><th class="num">New</th><th class="num">Leads</th><th></th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+  <tr>
+    <td><strong>{{ r.cfg.name }}</strong><br><small>{{ r.id }}{% if not r.cfg.enabled %} · disabled{% endif %}</small></td>
+    <td>{{ r.cfg.type }}<br><small>{{ LEAD_KINDS.get(r.cfg.kind, r.cfg.kind) }}</small></td>
+    <td>{% if r.running %}<span class="pill">running…</span>
+        {% elif r.src and r.src.last_status == 'ok' %}<span class="pill status-won">✓ OK</span>
+        {% elif r.src and r.src.last_status == 'error' %}<span class="pill overdue">✕ Error</span>
+        {% elif r.src and r.src.last_status == 'running' %}<span class="pill">running…</span>
+        {% else %}<span class="muted">never run</span>{% endif %}</td>
+    <td>{{ r.src.last_run_at|ago if r.src and r.src.last_run_at else '' }}</td>
+    <td class="num">{{ r.src.last_fetched if r.src else '' }}</td>
+    <td class="num">{{ r.src.last_new_leads if r.src else '' }}</td>
+    <td class="num">{{ r.leads }}</td>
+    <td><form method="post" action="/sources/run"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="source" value="{{ r.id }}"><button class="btn-sm" type="submit">Run</button></form></td>
+  </tr>
+  {% if r.src and r.src.last_error %}<tr><td colspan="8"><details><summary>Error details</summary><pre class="raw">{{ r.src.last_error }}</pre></details></td></tr>{% endif %}
+  {% endfor %}
+  </tbody></table></div>
+{% endblock %}

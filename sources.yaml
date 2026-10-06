@@ -1,0 +1,124 @@
+# Lead sources. Each entry has a `type` (adapter) and `kind`
+# (permit / bid / request / subdivision).
+#
+# Before trusting a new source, check it on your server:
+#     leadengine inspect <source-id>
+# That prints raw records plus how each one normalizes and classifies, so you
+# can fix `fields:` mappings. Then flip `enabled: true`.
+#
+# ${VAR} values are read from the environment (.env), so passwords stay out of this file.
+
+sources:
+
+  # ---------------------------------------------------------------- permits
+
+  norfolk-permits:
+    name: Norfolk permits (data.norfolk.gov)
+    type: socrata
+    kind: permit
+    enabled: true
+    domain: data.norfolk.gov
+    dataset: fahm-yuh4            # "Permits", Development Service Center, updated daily
+    city: Norfolk
+    # date_field: issue_date      # optional; default uses Socrata's :updated_at system field
+    # fields:                     # override column names if `inspect` shows different ones
+    #   description: work_description
+    #   est_value: project_cost
+
+  vb-permits:
+    name: Virginia Beach permit applications (open data)
+    type: arcgis
+    kind: permit
+    enabled: true
+    url: https://services2.arcgis.com/CyVvlIiUfRBmMQuu/arcgis/rest/services/Building_Permits_Applications_view/FeatureServer/0
+    city: Virginia Beach
+    date_field: ApplicationDate
+    fields:
+      external_id: PermitNumber
+      description: WorkDesc
+      permit_type: PermitType
+      work_type: WorkType
+
+  chesapeake-permits:
+    name: Chesapeake eBUILD (Accela)
+    type: accela
+    kind: permit
+    enabled: false                # needs the browser image (INSTALL_BROWSER=true); test with `inspect --days 7`
+    base_url: https://aca-prod.accela.com/CHESAPEAKE
+    module: Building
+    city: Chesapeake
+    window_days: 7
+
+  # Other Accela cities follow the same pattern; find the agency code in the
+  # portal URL (aca-prod.accela.com/<CODE>) and copy the block above.
+  # Suffolk, Portsmouth, Hampton and Newport News each run their own portal;
+  # run `leadengine inspect` after adding one.
+
+  # ---------------------------------------------------------------- bids / RFPs
+  # Many Hampton Roads city sites run on CivicPlus, which publishes bid postings
+  # as RSS at /RSSFeed.aspx?ModID=76&CID=All-bids.xml. Check each one with
+  # `leadengine inspect <id> --days 60` before enabling it.
+
+  norfolk-bids:
+    name: Norfolk bid postings
+    type: rss
+    kind: bid
+    enabled: false
+    url: https://www.norfolk.gov/RSSFeed.aspx?ModID=76&CID=All-bids.xml
+    city: Norfolk
+
+  hampton-bids:
+    name: Hampton bid postings
+    type: rss
+    kind: bid
+    enabled: false
+    url: https://www.hampton.gov/RSSFeed.aspx?ModID=76&CID=All-bids.xml
+    city: Hampton
+
+  suffolk-bids:
+    name: Suffolk bid postings
+    type: rss
+    kind: bid
+    enabled: false
+    url: https://www.suffolkva.us/RSSFeed.aspx?ModID=76&CID=All-bids.xml
+    city: Suffolk
+
+  # eVA (Virginia's state + local procurement site). Fill in the CSS selectors
+  # after looking at the public opportunities page in your browser's inspector.
+  # eva-bids:
+  #   name: eVA opportunities
+  #   type: html_list
+  #   kind: bid
+  #   enabled: false
+  #   url: https://mvendor.cgieva.com/Vendor/public/AllOpportunities.jsp
+  #   item: "table tr"
+  #   title: "td:nth-child(2)"
+  #   link: "a"
+  #   due: "td:nth-child(4)"
+
+  # ---------------------------------------------------------------- homeowner requests
+
+  email-requests:
+    name: Lead emails (Gmail label)
+    type: imap
+    kind: request
+    enabled: false                # set IMAP_USER / IMAP_PASSWORD in .env, then enable
+    host: imap.gmail.com
+    user: ${IMAP_USER}
+    password: ${IMAP_PASSWORD}
+    folder: Leads
+    ignore_senders: []
+
+  # ---------------------------------------------------------------- new subdivisions
+
+  # Planning commission agendas: point `index` at the city's agenda list page
+  # (or its RSS feed) and set `link_pattern` to match the agenda PDF links.
+  # vb-planning-agendas:
+  #   name: Virginia Beach planning commission agendas
+  #   type: agenda_pdf
+  #   kind: subdivision
+  #   enabled: false
+  #   index: https://www.example.gov/AgendaCenter
+  #   link_pattern: "(?i)agenda.*(\\.pdf|ViewFile)"
+  #   city: Virginia Beach
+  #   max_docs: 5

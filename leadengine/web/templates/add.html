@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Add lead{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Add a lead</h1><span class="ink-2">Referrals, Facebook/Nextdoor posts, phone calls: anything that didn't come in automatically.</span></div></div>
+{% if error %}<div class="banner error">{{ error }}</div>{% endif %}
+{% set form = form or {} %}
+<form method="post" action="/add" class="card form-grid" style="max-width:720px">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <label class="full">What's the job? *<input name="title" required value="{{ form.title or '' }}" placeholder="16x20 deck with stairs, Great Neck"></label>
+  <label class="full">Details<textarea name="description" placeholder="Paste the post or describe the job">{{ form.description or '' }}</textarea></label>
+  <label>Job type<select name="job_type"><option value="">Auto-detect</option>{% for k, v in JOB_TYPES.items() %}<option value="{{ k }}" {{ 'selected' if form.job_type == k }}>{{ v }}</option>{% endfor %}</select></label>
+  <label>Customer<select name="customer_type">{% for k, v in CUSTOMER_TYPES.items() %}<option value="{{ k }}" {{ 'selected' if form.customer_type == k }}>{{ v }}</option>{% endfor %}</select></label>
+  <label>Contact name<input name="contact_name" value="{{ form.contact_name or '' }}"></label>
+  <label>Phone<input name="phone" type="tel" value="{{ form.phone or '' }}"></label>
+  <label>Email<input name="email" type="email" value="{{ form.email or '' }}"></label>
+  <label>Est. value ($)<input name="est_value" inputmode="decimal" value="{{ form.est_value or '' }}"></label>
+  <label>Address<input name="address" value="{{ form.address or '' }}"></label>
+  <label>City<input name="city" list="cities" value="{{ form.city or '' }}"></label>
+  <datalist id="cities">{% for c in ["Virginia Beach","Chesapeake","Norfolk","Portsmouth","Suffolk","Hampton","Newport News"] %}<option>{{ c }}</option>{% endfor %}</datalist>
+  <label class="full">Link<input name="url" type="url" value="{{ form.url or '' }}" placeholder="https://"></label>
+  <label class="full">First note<textarea name="note">{{ form.note or '' }}</textarea></label>
+  <input type="hidden" name="kind" value="manual">
+  <div class="full"><button class="primary" type="submit">Save lead</button></div>
+</form>
+{% endblock %}

@@ -1,0 +1,16 @@
+# systemd unit for running without Docker. Install:
+#   sudo cp deploy/leadengine-*.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now leadengine-web leadengine-worker
+[Unit]
+Description=Blackwell Lead Engine scheduler
+After=network-online.target
+
+[Service]
+User=leadengine
+WorkingDirectory=/opt/blackwell-lead-engine
+EnvironmentFile=/opt/blackwell-lead-engine/.env
+ExecStart=/opt/blackwell-lead-engine/.venv/bin/leadengine worker
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

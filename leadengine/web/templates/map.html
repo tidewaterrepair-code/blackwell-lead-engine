@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Map{% endblock %}
+{% block head %}<link rel="stylesheet" href="/static/leaflet/leaflet.css">{% endblock %}
+{% block content %}
+<form class="filters" method="get" action="/map">
+  <select name="job_type" aria-label="Job type"><option value="">All job types</option>
+    {% for k, v in JOB_TYPES.items() if k != 'other' %}<option value="{{ k }}" {{ 'selected' if f.job_type == k }}>{{ v }}</option>{% endfor %}</select>
+  <select name="customer_type" aria-label="Customer"><option value="">All customers</option>
+    {% for k, v in CUSTOMER_TYPES.items() %}<option value="{{ k }}" {{ 'selected' if f.customer_type == k }}>{{ v }}</option>{% endfor %}</select>
+  <select name="days" aria-label="Posted within"><option value="">Any date</option>
+    {% for d, label in [("7","Last 7 days"),("30","Last 30 days"),("90","Last 90 days")] %}<option value="{{ d }}" {{ 'selected' if f.days == d }}>{{ label }}</option>{% endfor %}</select>
+  <select name="min_score" aria-label="Minimum score"><option value="">Any score</option>
+    {% for s in ["40","55","70","80"] %}<option value="{{ s }}" {{ 'selected' if f.min_score == s }}>Score ≥ {{ s }}</option>{% endfor %}</select>
+  <button class="primary" type="submit">Filter</button>
+  <span class="muted" id="map-count"></span>
+</form>
+<div class="legend">
+  {% for k, v in JOB_TYPES.items() if k != 'other' %}<span class="job"><span class="job-dot" style="background: var(--job-{{ k }})">{{ JOB_LETTERS[k] }}</span>{{ v }}</span>{% endfor %}
+</div>
+<div id="map" role="region" aria-label="Map of leads"></div>
+<p class="muted">Only leads with a known location appear here; addresses are geocoded after each import. Map data © OpenStreetMap contributors.</p>
+{% endblock %}
+{% block scripts %}
+<script src="/static/leaflet/leaflet.js"></script>
+<script>
+(function () {
+  var base = {{ [base[0] or 36.85, base[1] or -76.2]|tojson }};
+  var map = L.map('map').setView(base, 10);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+  {% if base[0] %}L.circleMarker(base, {radius: 6, color: '#0b0b0b', weight: 2, fillOpacity: 0}).addTo(map).bindTooltip('Home base');{% endif %}
+  function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+  fetch('/api/leads.geojson?{{ qs()|safe }}').then(function (r) { return r.json(); }).then(function (data) {
+    var pts = [];
+    data.features.forEach(function (f) {
+      var p = f.properties, ll = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+      pts.push(ll);
+      var icon = L.divIcon({className: '', iconSize: [24, 24], iconAnchor: [12, 12],
+        html: '<div class="pin" style="background: var(--job-' + p.job_type + ')">' + esc(p.letter) + '</div>'});
+      L.marker(ll, {icon: icon, title: p.job + ' · ' + p.title}).addTo(map)
+        .bindTooltip('<strong>' + esc(p.score) + '</strong> · ' + esc(p.job) + '<br>' + esc(p.title))
+        .bindPopup('<strong>' + esc(p.title) + '</strong><br>' + esc(p.job) + ' · ' + esc(p.customer) +
+          '<br>Score ' + esc(p.score) + (p.value ? ' · ' + esc(p.value) : '') + ' · ' + esc(p.when) +
+          '<br><a href="/leads/' + p.id + '">Open lead →</a>');
+    });
+    document.getElementById('map-count').textContent = pts.length + ' on map';
+    if (pts.length) map.fitBounds(pts, {padding: [30, 30], maxZoom: 13});
+  });
+})();
+</script>
+{% endblock %}

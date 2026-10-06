@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Bids{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Bids &amp; RFPs</h1><span class="ink-2">Public bid postings that match your trades, soonest deadline first.</span></div>
+  <a class="btn" href="/bids?past={{ 0 if past else 1 }}">{{ 'Hide closed' if past else 'Show closed' }}</a>
+</div>
+{% if bids %}
+<div class="table-wrap"><table>
+  <thead><tr><th>Due</th><th>Bid</th><th>Type</th><th>Where</th><th class="num">Score</th><th>Status</th></tr></thead>
+  <tbody>
+  {% for b in bids %}
+  <tr>
+    <td style="white-space:nowrap">{% if b.due_at %}{{ b.due_at.strftime('%b %d') }}<br><small>{{ b.due_at|ago }}</small>{% else %}<span class="muted">not listed</span>{% endif %}</td>
+    <td><a href="/leads/{{ b.id }}">{{ b.title }}</a>{% if b.url %} · <a href="{{ b.url }}" target="_blank" rel="noopener">posting</a>{% endif %}</td>
+    <td>{{ b.job_label }}</td><td>{{ b.city or '' }}</td><td class="num">{{ b.score }}</td>
+    <td><span class="pill status-{{ b.status }}">{{ b.status_label }}</span></td>
+  </tr>
+  {% endfor %}
+  </tbody></table></div>
+{% else %}
+<div class="card empty">No open bids. Turn on bid sources on the <a href="/sources">Sources</a> page.</div>
+{% endif %}
+{% endblock %}

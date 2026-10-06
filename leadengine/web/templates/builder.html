@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% from "_macros.html" import lead_row %}
+{% block title %}{{ name }}{% endblock %}
+{% block content %}
+<p><a href="/builders">← Builders</a></p>
+<div class="page-head"><h1>{{ name }}</h1><span class="ink-2">{{ leads|length }} permits on file</span></div>
+<div class="lead-list">{% for lead in leads %}{{ lead_row(lead, csrf, '/builders/' ~ (name|urlencode)) }}{% endfor %}</div>
+{% endblock %}

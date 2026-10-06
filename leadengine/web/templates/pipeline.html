@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% from "_macros.html" import job_badge, status_form %}
+{% block title %}Pipeline{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Pipeline</h1><span class="ink-2">Won so far: <strong>{{ won_value|money or '$0' }}</strong></span></div>
+  <a class="btn" href="/?status=new">New leads →</a>
+</div>
+<div class="board">
+  {% for status, leads in columns.items() %}
+  <section class="column">
+    <h2><span>{{ STATUSES[status] }}</span><span class="muted">{{ leads|length }}</span></h2>
+    {% for lead in leads %}
+    <div class="mini">
+      <a href="/leads/{{ lead.id }}">{{ lead.title }}</a>
+      <div class="lead-meta">{{ job_badge(lead) }}{% if lead.est_value %}<span>{{ lead.est_value|money }}</span>{% endif %}<span class="muted">{{ lead.updated_at|ago }}</span></div>
+      <div style="margin-top:6px">{{ status_form(lead, csrf, '/pipeline') }}</div>
+    </div>
+    {% else %}<p class="muted">Empty</p>{% endfor %}
+  </section>
+  {% endfor %}
+</div>
+{% endblock %}

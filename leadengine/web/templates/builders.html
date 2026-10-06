@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Builders{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Builders &amp; GCs</h1>
+  <span class="ink-2">Contractors pulling permits in the last {{ days }} days. Those building the most new homes are your best framing prospects.</span></div>
+  <form method="get" class="btn-row"><select name="days" onchange="this.form.submit()" aria-label="Period">
+    {% for d in [30, 90, 180, 365] %}<option value="{{ d }}" {{ 'selected' if days == d }}>Last {{ d }} days</option>{% endfor %}</select></form>
+</div>
+{% if rows %}
+<div class="table-wrap"><table>
+  <thead><tr><th>Contractor</th><th class="num">New homes / framing</th><th class="num">All permits</th><th class="num">Total value</th><th>Area</th><th>Latest</th></tr></thead>
+  <tbody>
+  {% for r in rows %}
+  <tr><td><a href="/builders/{{ r.contractor_name|urlencode }}">{{ r.contractor_name }}</a></td>
+    <td class="num">{{ r.new_homes or 0 }}</td><td class="num">{{ r.permits }}</td>
+    <td class="num">{{ r.value|money }}</td><td>{{ r.city or '' }}</td><td>{{ r.latest|ago }}</td></tr>
+  {% endfor %}
+  </tbody></table></div>
+{% else %}
+<div class="card empty">No contractor names yet. Not every city's permit data lists the contractor; Norfolk and Virginia Beach are the most likely to.</div>
+{% endif %}
+{% endblock %}

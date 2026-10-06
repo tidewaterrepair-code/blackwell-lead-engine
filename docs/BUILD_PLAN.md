@@ -1,88 +1,61 @@
 # Blackwell Lead Engine: Build Plan
 
-## Context
-You want one dashboard that finds construction leads in **Hampton Roads, VA** for decks, garage and house framing, new construction, additions, and kitchen and bath remodels. It covers both customer types: **homeowners** (direct remodels and decks) and **builders/GCs** (framing subcontract work). The repo `tidewaterrepair-code/blackwell-lead-engine` is empty apart from a README, so this is a greenfield build.
+## Goal
+One dashboard that finds construction leads in **Hampton Roads, VA** for decks, garage and house framing, new construction, additions, and kitchen and bath remodels. It covers both **homeowners** (direct work) and **builders/GCs** (framing subcontract work).
 
-How it works: scheduled scrapers pull raw records from public sources. Each record is classified into one of your job types, scored, de-duplicated, and shown on a mobile-friendly dashboard where you work leads through a pipeline (New → Contacted → Quoted → Won/Lost).
+**Constraint:** it runs on your own VPS using only free tools. No paid APIs, no hosted database, no subscriptions.
 
-## Stack (chosen for you)
-- **Next.js (App Router) + TypeScript + Tailwind/shadcn UI**, hosted on **Vercel**. It works on your phone in the truck.
-- **Supabase**: Postgres database, login (just you, plus a crew login later), and file storage for permit PDFs.
-- **Ingestion workers** in TypeScript, in the same repo. They run on a **GitHub Actions cron** (free; Playwright is available for portals that need a browser).
-- **Classification**: keyword and permit-code rules first. Records the rules can't place go to the Claude API (`claude-haiku-4-5`, cheap) to label the job type, size, and customer type.
-- Map with **MapLibre/Leaflet**. Addresses are geocoded once with the free US Census geocoder.
+## Stack (all free, self-hosted)
+| Need | Choice |
+|---|---|
+| App + dashboard | Python 3.11+, FastAPI, server-rendered Jinja pages (no JS build step) |
+| Database | SQLite (one file, WAL mode). Works with Postgres via `DATABASE_URL` if ever needed |
+| Scheduler | APScheduler `worker` process (imports at 6:05 & 14:05, digest at 7:30) |
+| Browser scraping | Playwright + headless Chromium (optional image build, for Accela portals) |
+| Classification | Keyword + permit-field rules; optional local LLM via **Ollama** |
+| Map | Leaflet (bundled in the repo) + OpenStreetMap tiles |
+| Geocoding | US Census Bureau geocoder (free, no key, cached) |
+| Email digest | Any SMTP, e.g. a Gmail app password |
+| Phone alerts | ntfy (free app / free server) |
+| HTTPS | Caddy + Let's Encrypt |
+| Deploy | Docker Compose (web, worker, caddy, optional ollama) or systemd |
 
-## Lead sources (Hampton Roads)
-| Kind | Source | Access | Phase |
+## Lead sources
+| Kind | Source | Adapter | State |
 |---|---|---|---|
-| Permits | Norfolk: data.norfolk.gov (Socrata) | SODA JSON API | 1 |
-| Permits | Virginia Beach: city open-data permits dataset | API (exact dataset ID confirmed in Phase 0) | 1 |
-| Permits | Chesapeake: eBUILD (Accela Citizen Access, `aca-prod.accela.com/CHESAPEAKE`) | Playwright scrape of anonymous search | 3 |
-| Permits | Suffolk, Portsmouth, Hampton, Newport News, York, James City | Each portal checked in Phase 0 (open data, Accela/EnerGov, or CSV) | 3 |
-| Bids/RFPs | eVA (Virginia state and local procurement) | Scrape public solicitations, filtered by construction NIGP codes | 3 |
-| Bids/RFPs | City and county procurement pages, school boards | Page scrape or RSS | 3 |
-| Homeowner requests | Craigslist Norfolk "gigs/services wanted" | Only if the site's terms allow it, otherwise saved-search email → inbox parser | 5 |
-| Homeowner requests | Facebook groups, Nextdoor, word of mouth | No scraping (against their terms). Use a fast **Quick Add** form or share-sheet instead | 5 |
-| New subdivisions | Planning commission and City Council agendas (rezonings, subdivision plats), site-plan submittals in eBUILD | PDF agenda parse + keyword match | 5 |
+| Permits | Norfolk: `data.norfolk.gov` dataset `fahm-yuh4` | `socrata` | enabled |
+| Permits | Virginia Beach: `Building_Permits_Applications_view` FeatureServer | `arcgis` | enabled |
+| Permits | Chesapeake: eBUILD (`aca-prod.accela.com/CHESAPEAKE`) | `accela` | needs browser image |
+| Permits | Suffolk, Portsmouth, Hampton, Newport News… | `accela` / `socrata` / `arcgis` | add per city with `inspect` |
+| Bids | CivicPlus bid RSS (Norfolk, Hampton, Suffolk) | `rss` | verify, then enable |
+| Bids | eVA and other bid pages | `html_list` (CSS selectors) | template |
+| Homeowner requests | Gmail label: Craigslist alerts, Angi/Thumbtack, web form, FB/Nextdoor notifications | `imap` | needs app password |
+| Homeowner requests | Referrals, calls, social posts | Quick Add form | done |
+| New subdivisions | Planning commission agenda PDFs | `agenda_pdf` | template |
 
-The **Phase 0** recon pins down every URL, dataset ID, and field mapping, and records them in `docs/sources.md` before any scraper is written.
+No scraping of Facebook, Nextdoor or Craigslist pages (their terms forbid it). Their email alerts go through the inbox instead.
 
-## Data model (Supabase)
-- `sources`: id, name, kind (permit/bid/request/subdivision), jurisdiction, last_run_at, status
-- `raw_records`: source_id, external_id, payload jsonb, fetched_at. Unique on (source_id, external_id) so re-runs are idempotent
-- `leads`: id, raw_record_id, title, description, job_type enum (deck, garage_framing, house_framing, new_construction, addition, kitchen, bath, other), customer_type (homeowner/builder/public), address, city, lat/lng, est_value, owner_name, contractor_name, contractor_license, contact phone/email, posted_at, due_date (bids), score, status, dedupe_key
-- `lead_activity`: lead_id, type (note/call/status_change/quote), body, created_at
-- `saved_filters`: name, criteria jsonb, notify (bool)
-
-## Repo layout
-```
-apps/web/                 Next.js dashboard
-packages/core/            shared types, job-type classifier, scoring, dedupe
-packages/ingest/
-  sources/<jurisdiction>-<kind>.ts   one adapter per source: fetch() → normalize()
-  run.ts                  runs all adapters, upserts raw_records → leads
-supabase/migrations/      SQL schema
-.github/workflows/ingest.yml   cron (e.g. 6am and 2pm daily)
-docs/sources.md
-```
-Each source adapter implements one interface, `{ id, fetch(since), normalize(raw): LeadInput[] }`. New cities plug in without touching the rest of the code.
+## Data model
+`sources` (run health) · `raw_records` (untouched payloads, unique per source+id) · `leads` (normalized, classified, scored, status) · `activities` (notes, calls, quotes, status changes) · `geocode_cache`.
 
 ## Classification and scoring
-- **Rules** (`packages/core/classify.ts`): permit type codes plus keywords, e.g. "deck", "porch", "addition", "SFD"/"single family dwelling", "detached garage", "kitchen", "bath", "remodel", "alteration". Exclusions drop noise such as electrical-only, HVAC changeouts, roofs, fences, and pools.
-- **LLM fallback** for ambiguous text. The output is a strict JSON schema: job_type, customer_type, confidence, one-line summary.
-- **Score (0–100)**: job-type match weight + valuation band + recency + distance from your base + customer type + "no contractor listed yet" bonus (the homeowner may still need someone). For builder leads, a GC with many recent new-home permits scores higher, which points to framing opportunities.
-- **Dedupe**: normalized address + job type within 90 days, which merges the same project when it shows up in two sources.
-
-## Dashboard features
-1. **Lead feed**: table and cards, filterable by job type, city, customer type, score, date, and status, sorted by score.
-2. **Map view** with pins colored by job type.
-3. **Lead detail**: source link, permit or bid details, owner/contractor, notes, status changes, a call button, and "Mark quoted/won/lost".
-4. **Pipeline board** (kanban by status).
-5. **Builders tab**: GCs ranked by new-construction permit volume over the last 90 days, the framing prospect list.
-6. **Bids tab**: open RFPs with due-date countdowns.
-7. **Daily digest**: email (Resend) of new leads scoring 60 or above, plus alerts for saved filters.
-8. **Quick Add**: a manual lead entry form for referrals and Facebook/Nextdoor posts.
-9. **Source health**: last run, record counts, and errors per source.
+- **Job types:** new_construction, house_framing, garage_framing, addition, deck, kitchen, bath, remodel. Trade-only work (electrical, HVAC, plumbing, roofing, solar, fences, pools, signs, demolition) is dropped unless the description names our work.
+- **Customer:** bid → public; subdivision → builder; request → homeowner; permit with a named contractor, new home or commercial → builder; otherwise homeowner.
+- **Score 0–100:** job type (≤30) + value (≤25) + recency (≤20) + distance from base (≤15) + bonuses (owner-pulled permit, active request, open bid), minus a commercial penalty. Expired bids score 0.
+- **Dedupe:** normalized street address + job type within 90 days across sources.
+- User edits (status, job type, contact info) are never overwritten by re-imports.
 
 ## Phases
-- **Phase 0, Recon (½ day)**: confirm endpoints and fields for each jurisdiction and write `docs/sources.md`.
-- **Phase 1, MVP (first working version)**: scaffold the monorepo, Supabase schema, Norfolk and Virginia Beach permit adapters, rule-based classifier, and a simple lead feed with filters and status. Deploy to Vercel. At this point you have real leads every morning.
-- **Phase 2, Smarts**: LLM fallback classifier, scoring, dedupe, geocoding, map view, lead detail, and notes.
-- **Phase 3, Coverage**: Chesapeake eBUILD (Playwright), the remaining cities, eVA, and city procurement bids. Adds the Bids tab, Builders tab, and Source health.
-- **Phase 4, Workflow**: pipeline board, daily email digest, saved-filter alerts, Quick Add.
-- **Phase 5, Expansion**: homeowner-request intake (Craigslist only if its terms allow, plus an email parser) and the subdivision/agenda watcher.
-- **Phase 6, Enrichment (optional)**: owner names and mailing addresses from city assessor/GIS parcel data, contractor license status from the Virginia DPOR license lookup, and an export to CSV or your CRM.
-
-## Secrets needed
-`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `ANTHROPIC_API_KEY` (Phase 2), `RESEND_API_KEY` (Phase 4). These are stored as GitHub Actions secrets and Vercel env vars, never committed.
+- [x] **Phase 0: Recon.** Norfolk Socrata and VB ArcGIS endpoints identified; Chesapeake Accela confirmed.
+- [x] **Phase 1: MVP.** Package, schema, Norfolk + VB adapters, rule classifier, lead feed with filters and status.
+- [x] **Phase 2: Smarts.** Scoring, dedupe, Census geocoding, map, lead detail, notes, optional Ollama fallback.
+- [x] **Phase 3: Coverage.** Accela adapter, RSS and HTML bid adapters, Bids, Builders and Sources pages.
+- [x] **Phase 4: Workflow.** Pipeline board, email digest, ntfy hot-lead pushes, Quick Add, CSV export.
+- [x] **Phase 5: Expansion.** IMAP homeowner-request intake, planning-agenda subdivision watcher.
+- [ ] **Phase 5b: Go-live on the VPS.** Run `leadengine inspect` on each source against live data, fix `fields:` mappings, enable bids/Chesapeake/agendas.
+- [ ] **Phase 6: Enrichment (optional).** Owner name and mailing address from city assessor/GIS parcel data, contractor license status from the Virginia DPOR lookup, more cities.
 
 ## Verification
-- Unit tests (Vitest) for the classifier against a fixture set of about 50 real permit descriptions per job type, including exclusions, and for scoring and dedupe.
-- Each adapter gets a recorded-fixture test (a saved API response) so normalize() is tested offline.
-- `pnpm ingest --source norfolk-permits --dry-run` prints the normalized leads. Running it twice must produce no duplicate rows.
-- Run the dashboard locally (`pnpm dev`) and check the feed, filters, and status changes in the browser with Playwright. Then confirm the GitHub Actions cron run fills the database on schedule.
-
-## Ground rules
-- Use public data and official APIs first, respect each site's terms and robots.txt, and keep request rates low.
-- Contact data is only what's in public records. No scraping of Facebook, Nextdoor, or login-gated sites.
-- All work goes on branch `claude/kind-cerf-2xjti5`.
+- `pytest`: 57 offline tests with recorded fixtures for every adapter (Socrata, ArcGIS, Accela grid, RSS, HTML list, agenda text, email), classifier cases, scoring, idempotent re-runs, cross-source dedupe, preserved user edits, a failing source, every dashboard page, CSRF and login.
+- `leadengine run --dry-run`: fetch and classify against live sources without saving.
+- `leadengine inspect <source>`: check a live feed's columns and classification before enabling it.

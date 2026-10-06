@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% from "_macros.html" import lead_row %}
+{% block title %}Leads{% endblock %}
+{% block content %}
+<div class="stats">
+  <a class="stat" href="/?days=1&status=all"><div class="label">New in last 24h</div><div class="value">{{ stats.new_today }}</div></a>
+  <a class="stat" href="/?status=new&min_score=80"><div class="label">Hot, not contacted</div><div class="value">{{ stats.hot }}</div></a>
+  <a class="stat" href="/bids"><div class="label">Open bids</div><div class="value">{{ stats.open_bids }}</div></a>
+  <a class="stat" href="/pipeline"><div class="label">In pipeline</div><div class="value">{{ stats.pipeline }}</div></a>
+</div>
+
+<form class="filters" method="get" action="/">
+  <input type="search" name="q" value="{{ f.q }}" placeholder="Search address, GC, description…" aria-label="Search">
+  <select name="job_type" aria-label="Job type"><option value="">All job types</option>
+    {% for k, v in JOB_TYPES.items() if k != 'other' %}<option value="{{ k }}" {{ 'selected' if f.job_type == k }}>{{ v }}</option>{% endfor %}</select>
+  <select name="customer_type" aria-label="Customer"><option value="">All customers</option>
+    {% for k, v in CUSTOMER_TYPES.items() %}<option value="{{ k }}" {{ 'selected' if f.customer_type == k }}>{{ v }}</option>{% endfor %}</select>
+  <select name="kind" aria-label="Source kind"><option value="">All sources</option>
+    {% for k, v in LEAD_KINDS.items() %}<option value="{{ k }}" {{ 'selected' if f.kind == k }}>{{ v }}</option>{% endfor %}</select>
+  <select name="city" aria-label="City"><option value="">All cities</option>
+    {% for c in cities %}<option {{ 'selected' if f.city == c }}>{{ c }}</option>{% endfor %}</select>
+  <select name="status" aria-label="Status">
+    <option value="open" {{ 'selected' if f.status == 'open' }}>Open</option>
+    <option value="all" {{ 'selected' if f.status == 'all' }}>Any status</option>
+    {% for k, v in STATUSES.items() %}<option value="{{ k }}" {{ 'selected' if f.status == k }}>{{ v }}</option>{% endfor %}</select>
+  <select name="days" aria-label="Posted within">
+    <option value="">Any date</option>
+    {% for d, label in [("1","Last 24h"),("7","Last 7 days"),("30","Last 30 days"),("90","Last 90 days")] %}<option value="{{ d }}" {{ 'selected' if f.days == d }}>{{ label }}</option>{% endfor %}</select>
+  <select name="sort" aria-label="Sort">
+    {% for k, label in [("score","Best first"),("newest","Newest"),("value","Biggest $")] %}<option value="{{ k }}" {{ 'selected' if f.sort == k }}>{{ label }}</option>{% endfor %}</select>
+  <input type="hidden" name="min_score" value="{{ f.min_score }}">
+  <button class="primary" type="submit">Filter</button>
+  <a class="btn" href="/">Reset</a>
+</form>
+
+<div class="page-head">
+  <span class="ink-2">{{ total }} lead{{ 's' if total != 1 }}{% if f.min_score %} · score ≥ {{ f.min_score }}{% endif %}</span>
+  <span class="btn-row"><a class="btn btn-sm" href="/map?{{ qs() }}">Map these</a><a class="btn btn-sm" href="/export.csv?{{ qs() }}">Export CSV</a></span>
+</div>
+
+{% if leads %}
+<div class="lead-list">
+  {% for lead in leads %}{{ lead_row(lead, csrf, request.url.path ~ ('?' ~ request.url.query if request.url.query else '')) }}{% endfor %}
+</div>
+<div class="pager">
+  {% if page > 1 %}<a class="btn" href="/?{{ qs(page=page-1) }}">← Previous</a>{% else %}<span></span>{% endif %}
+  <span class="muted">Page {{ page }} of {{ ((total - 1) // page_size) + 1 if total else 1 }}</span>
+  {% if page * page_size < total %}<a class="btn" href="/?{{ qs(page=page+1) }}">Next →</a>{% else %}<span></span>{% endif %}
+</div>
+{% else %}
+<div class="card empty">
+  <p><strong>No leads match.</strong></p>
+  <p>Leave the filters wide, or go to <a href="/sources">Sources</a> and run an import.</p>
+</div>
+{% endif %}
+{% endblock %}

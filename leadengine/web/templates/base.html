@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Leads{% endblock %} · Blackwell Lead Engine</title>
+  <link rel="stylesheet" href="/static/style.css">
+  {% block head %}{% endblock %}
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="/">Blackwell Leads</a>
+    <nav class="nav">
+      {% for key, label, href in [("feed","Leads","/"),("map","Map","/map"),("pipeline","Pipeline","/pipeline"),("bids","Bids","/bids"),("builders","Builders","/builders"),("add","+ Add","/add"),("sources","Sources","/sources")] %}
+      <a href="{{ href }}" class="{{ 'active' if nav == key }}">{{ label }}</a>
+      {% endfor %}
+    </nav>
+    {% if auth_enabled %}
+    <form method="post" action="/logout"><button class="btn-sm" type="submit">Log out</button></form>
+    {% endif %}
+  </div>
+</header>
+<main>
+  {% if not auth_enabled %}
+  <div class="banner">No <code>APP_PASSWORD</code> is set, so anyone who can reach this server can see your leads. Set one in <code>.env</code>.</div>
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+{% block scripts %}{% endblock %}
+</body>
+</html>

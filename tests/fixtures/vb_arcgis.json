@@ -1,0 +1,89 @@
+{
+ "features": [
+  {
+   "attributes": {
+    "OBJECTID": 1,
+    "PermitNumber": "BLDR-2026-0501",
+    "WorkDesc": "Construct 16x24 composite deck with stairs at rear of dwelling",
+    "PermitType": "Building Residential",
+    "ConstructionType": "Residential",
+    "WorkType": "Addition",
+    "ApplicationDate": 1791168081264,
+    "Status": "In Review",
+    "FullAddress": "2417 Haversham Close"
+   },
+   "geometry": {
+    "x": -76.0601,
+    "y": 36.841
+   }
+  },
+  {
+   "attributes": {
+    "OBJECTID": 2,
+    "PermitNumber": "BLDR-2026-0502",
+    "WorkDesc": "Primary bathroom remodel - new shower, vanity, tile",
+    "PermitType": "Building Residential",
+    "ConstructionType": "Residential",
+    "WorkType": "Alteration",
+    "ApplicationDate": 1791081681264,
+    "Status": "Issued",
+    "FullAddress": "516 Dunstan Ln"
+   },
+   "geometry": {
+    "x": -76.0154,
+    "y": 36.8732
+   }
+  },
+  {
+   "attributes": {
+    "OBJECTID": 3,
+    "PermitNumber": "BLDR-2026-0503",
+    "WorkDesc": "Reroof, architectural shingles",
+    "PermitType": "Building Residential",
+    "ConstructionType": "Residential",
+    "WorkType": "Alteration",
+    "ApplicationDate": 1791168081264,
+    "Status": "Issued",
+    "FullAddress": "88 Shore Dr"
+   },
+   "geometry": {
+    "x": -76.1,
+    "y": 36.9
+   }
+  },
+  {
+   "attributes": {
+    "OBJECTID": 4,
+    "PermitNumber": "BLDR-2026-0504",
+    "WorkDesc": "New 2-story single family dwelling with attached 2 car garage",
+    "PermitType": "Building Residential",
+    "ConstructionType": "Residential",
+    "WorkType": "New",
+    "ApplicationDate": 1790908881264,
+    "Status": "Issued",
+    "FullAddress": "3100 Sandpiper Rd"
+   },
+   "geometry": {
+    "x": -75.981,
+    "y": 36.7402
+   }
+  },
+  {
+   "attributes": {
+    "OBJECTID": 5,
+    "PermitNumber": "BLDR-2026-0505",
+    "WorkDesc": "Construct 24x30 detached garage",
+    "PermitType": "Building Residential",
+    "ConstructionType": "Residential",
+    "WorkType": "New",
+    "ApplicationDate": 1790736081264,
+    "Status": "Issued",
+    "FullAddress": "1214 W Little Creek Rd"
+   },
+   "geometry": {
+    "x": -76.2771,
+    "y": 36.9183
+   }
+  }
+ ]
+}

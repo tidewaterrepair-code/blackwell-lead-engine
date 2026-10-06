@@ -1,0 +1,46 @@
+{% macro job_badge(lead) -%}
+<span class="job"><span class="job-dot" style="background: var(--job-{{ lead.job_type }})" aria-hidden="true">{{ JOB_LETTERS.get(lead.job_type, '?') }}</span>{{ lead.job_label }}</span>
+{%- endmacro %}
+
+{% macro score_box(lead) -%}
+<div class="score" title="Lead score {{ lead.score }}/100">
+  <div class="num">{{ lead.score }}</div>
+  <div class="meter"><span style="width: {{ lead.score }}%"></span></div>
+  <div class="tag">{{ score_band(lead.score) }}</div>
+</div>
+{%- endmacro %}
+
+{% macro status_form(lead, csrf, back) -%}
+<form method="post" action="/leads/{{ lead.id }}/status" class="inline">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <input type="hidden" name="back" value="{{ back }}">
+  <select name="status" onchange="this.form.submit()" aria-label="Status">
+    {% for key, label in STATUSES.items() %}<option value="{{ key }}" {{ 'selected' if lead.status == key }}>{{ label }}</option>{% endfor %}
+  </select>
+  <noscript><button class="btn-sm">Save</button></noscript>
+</form>
+{%- endmacro %}
+
+{% macro lead_row(lead, csrf, back) -%}
+<article class="lead {{ 'dupe' if lead.duplicate_of_id }}">
+  {{ score_box(lead) }}
+  <div>
+    <a class="lead-title" href="/leads/{{ lead.id }}">{{ lead.title }}</a>
+    {% if lead.description %}<div class="lead-desc">{{ lead.description }}</div>{% endif %}
+    <div class="lead-meta">
+      {{ job_badge(lead) }}
+      <span>{{ lead.customer_label }}</span>
+      <span>{{ lead.kind_label }}</span>
+      {% if lead.city %}<span>{{ lead.city }}</span>{% endif %}
+      {% if lead.est_value %}<span>{{ lead.est_value|money }}</span>{% endif %}
+      {% if has_contractor(lead.contractor_name) %}<span>GC: {{ lead.contractor_name }}</span>{% endif %}
+      {% if lead.due_at %}<span>Due {{ lead.due_at.strftime('%b %d') }}</span>{% endif %}
+      <span class="muted">{{ (lead.posted_at or lead.created_at)|ago }}</span>
+    </div>
+  </div>
+  <div class="lead-actions">
+    {{ status_form(lead, csrf, back) }}
+    {% if lead.phone %}<a class="btn btn-sm" href="tel:{{ lead.phone }}">Call</a>{% endif %}
+  </div>
+</article>
+{%- endmacro %}

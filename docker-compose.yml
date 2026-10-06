@@ -1,0 +1,64 @@
+# Blackwell Lead Engine: dashboard + scheduler + HTTPS reverse proxy.
+#   cp .env.example .env   # then edit it
+#   docker compose up -d --build
+services:
+  web:
+    build:
+      context: .
+      args:
+        INSTALL_BROWSER: ${INSTALL_BROWSER:-false}
+    image: blackwell-lead-engine
+    env_file: .env
+    environment:
+      TZ: ${TZ:-America/New_York}
+    volumes:
+      - leads_data:/data
+      - ./sources.yaml:/app/sources.yaml:ro
+    ports:
+      - "127.0.0.1:8000:8000"   # only reachable through Caddy (or an SSH tunnel)
+    restart: unless-stopped
+
+  worker:
+    image: blackwell-lead-engine
+    command: ["leadengine", "worker"]
+    env_file: .env
+    environment:
+      TZ: ${TZ:-America/New_York}
+    volumes:
+      - leads_data:/data
+      - ./sources.yaml:/app/sources.yaml:ro
+    depends_on: [web]
+    restart: unless-stopped
+
+  # Free automatic HTTPS (Let's Encrypt). Needs a domain pointed at the VPS;
+  # set DOMAIN in .env. Skip it with: docker compose up -d web worker
+  caddy:
+    image: caddy:2-alpine
+    environment:
+      DOMAIN: ${DOMAIN:-localhost}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on: [web]
+    restart: unless-stopped
+
+  # Optional free local AI classifier for records the rules can't place.
+  # Needs ~4 GB RAM. Enable with: docker compose --profile ai up -d
+  # then: docker compose exec ollama ollama pull llama3.2:3b
+  # and set OLLAMA_URL=http://ollama:11434 in .env
+  ollama:
+    image: ollama/ollama
+    profiles: ["ai"]
+    volumes:
+      - ollama:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  leads_data:
+  caddy_data:
+  caddy_config:
+  ollama:

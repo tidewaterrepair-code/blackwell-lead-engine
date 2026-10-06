@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% from "_macros.html" import job_badge, score_box, status_form %}
+{% block title %}{{ lead.title }}{% endblock %}
+{% block content %}
+<p><a href="javascript:history.back()">← Back</a></p>
+{% if original %}<div class="banner">Looks like a duplicate of <a href="/leads/{{ original.id }}">{{ original.title }}</a>.</div>{% endif %}
+<div class="grid-2">
+  <div class="stack">
+    <section class="card stack">
+      <div style="display:flex; gap:14px; align-items:flex-start">
+        <div style="width:54px; flex:none">{{ score_box(lead) }}</div>
+        <div style="min-width:0">
+          <h1>{{ lead.title }}</h1>
+          <div class="lead-meta">{{ job_badge(lead) }}<span>{{ lead.customer_label }}</span><span>{{ lead.kind_label }}</span>
+            {% if lead.commercial %}<span class="pill">Commercial</span>{% endif %}
+            <span class="pill status-{{ lead.status }}">{{ lead.status_label }}</span></div>
+        </div>
+      </div>
+      {% if lead.description %}<p style="white-space:pre-line; margin:0">{{ lead.description }}</p>{% endif %}
+      <dl class="facts">
+        {% if lead.address %}<dt>Address</dt><dd>{{ lead.address }}{% if lead.city %}, {{ lead.city }}{% endif %} {{ lead.zip or '' }}
+          · <a href="https://www.google.com/maps/search/?api=1&query={{ (lead.address ~ ' ' ~ (lead.city or '') ~ ' VA')|urlencode }}" target="_blank" rel="noopener">Map</a></dd>
+        {% elif lead.city %}<dt>City</dt><dd>{{ lead.city }}</dd>{% endif %}
+        {% if lead.permit_type %}<dt>Permit type</dt><dd>{{ lead.permit_type }}</dd>{% endif %}
+        {% if lead.est_value %}<dt>Value</dt><dd>${{ '{:,.0f}'.format(lead.est_value) }}</dd>{% endif %}
+        {% if lead.owner_name %}<dt>Owner</dt><dd>{{ lead.owner_name }}</dd>{% endif %}
+        {% if lead.contractor_name %}<dt>Contractor</dt><dd><a href="/builders/{{ lead.contractor_name|urlencode }}">{{ lead.contractor_name }}</a></dd>{% endif %}
+        {% if lead.contact_name %}<dt>Contact</dt><dd>{{ lead.contact_name }}</dd>{% endif %}
+        {% if lead.phone %}<dt>Phone</dt><dd><a href="tel:{{ lead.phone }}">{{ lead.phone }}</a></dd>{% endif %}
+        {% if lead.email %}<dt>Email</dt><dd><a href="mailto:{{ lead.email }}">{{ lead.email }}</a></dd>{% endif %}
+        {% if lead.posted_at %}<dt>Posted</dt><dd>{{ lead.posted_at.strftime('%b %d, %Y') }} ({{ lead.posted_at|ago }})</dd>{% endif %}
+        {% if lead.due_at %}<dt>Due</dt><dd>{{ lead.due_at.strftime('%b %d, %Y') }} ({{ lead.due_at|ago }})</dd>{% endif %}
+        <dt>Source</dt><dd>{{ lead.source_id }}{% if lead.url %} · <a href="{{ lead.url }}" target="_blank" rel="noopener">Open original</a>{% endif %}</dd>
+        <dt>Classified</dt><dd>{{ lead.classified_by }}{% if lead.classified_by != 'manual' %} ({{ (lead.confidence * 100)|round|int }}% sure){% endif %}</dd>
+      </dl>
+    </section>
+
+    <section class="card stack">
+      <h2>Notes &amp; activity</h2>
+      <form method="post" action="/leads/{{ lead.id }}/note" class="stack">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <textarea name="body" placeholder="Called, left voicemail… / Quoted $18,500 for 16x20 deck…" required></textarea>
+        <div class="btn-row">
+          <select name="kind" aria-label="Note type"><option value="note">Note</option><option value="call">Call</option><option value="quote">Quote</option></select>
+          <button class="primary" type="submit">Add</button>
+        </div>
+      </form>
+      {% if lead.activities %}
+      <ul class="timeline">
+        {% for a in lead.activities %}<li><small>{{ a.created_at.strftime('%b %d %I:%M %p') }} · {{ a.kind }}</small><div style="white-space:pre-line">{{ a.body }}</div></li>{% endfor %}
+      </ul>
+      {% else %}<p class="muted">Nothing yet.</p>{% endif %}
+    </section>
+
+    {% if raw %}
+    <details class="card"><summary>Raw record from {{ lead.source_id }}</summary>
+      <pre class="raw">{{ raw.payload|tojson(indent=2) }}</pre></details>
+    {% endif %}
+  </div>
+
+  <aside class="stack">
+    <section class="card stack">
+      <h2>Status</h2>
+      {{ status_form(lead, csrf, '/leads/' ~ lead.id) }}
+      <div class="btn-row">
+        {% if lead.phone %}<a class="btn btn-primary" href="tel:{{ lead.phone }}">Call</a>{% endif %}
+        {% if lead.email %}<a class="btn" href="mailto:{{ lead.email }}">Email</a>{% endif %}
+      </div>
+    </section>
+    <section class="card">
+      <h2>Edit</h2>
+      <form method="post" action="/leads/{{ lead.id }}/edit" class="form-grid">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <label class="full">Job type<select name="job_type">{% for k, v in JOB_TYPES.items() %}<option value="{{ k }}" {{ 'selected' if lead.job_type == k }}>{{ v }}</option>{% endfor %}</select></label>
+        <label class="full">Customer<select name="customer_type">{% for k, v in CUSTOMER_TYPES.items() %}<option value="{{ k }}" {{ 'selected' if lead.customer_type == k }}>{{ v }}</option>{% endfor %}</select></label>
+        <label class="full">Contact name<input name="contact_name" value="{{ lead.contact_name or '' }}"></label>
+        <label>Phone<input name="phone" type="tel" value="{{ lead.phone or '' }}"></label>
+        <label>Email<input name="email" type="email" value="{{ lead.email or '' }}"></label>
+        <label class="full">Value ($)<input name="est_value" inputmode="decimal" value="{{ '%.0f'|format(lead.est_value) if lead.est_value else '' }}"></label>
+        <div class="full"><button type="submit">Save</button></div>
+      </form>
+    </section>
+    {% if dupes %}
+    <section class="card"><h2>Also seen in</h2>
+      <ul>{% for d in dupes %}<li><a href="/leads/{{ d.id }}">{{ d.source_id }}</a></li>{% endfor %}</ul></section>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}
