@@ -1,14 +1,20 @@
-{% from "_icons.html" import mark %}<!doctype html>
+{% from "_icons.html" import mark, icon %}<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Pegasus · See the job before your competition does{% endblock %}</title>
+  <title>{% block title %}Pegasus · Construction & real estate leads before your competition{% endblock %}</title>
   <meta name="description" content="{% block description %}Pegasus finds construction and real estate leads from public permits, bids, sales, storms and distressed properties, predicts the next job, and delivers them every morning.{% endblock %}">
   <meta property="og:title" content="{{ self.title() }}">
   <meta property="og:description" content="{{ self.description() }}">
   <meta property="og:image" content="{{ public_url() }}/static/brand/og-image.png">
+  <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+  <meta property="og:url" content="{{ public_url() }}{{ request.url.path }}">
+  <meta property="og:type" content="website"><meta property="og:site_name" content="Pegasus">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ self.title() }}"><meta name="twitter:description" content="{{ self.description() }}">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="preload" href="/static/fonts/montserrat-latin-800.woff2" as="font" type="font/woff2" crossorigin>
   <meta name="theme-color" content="#0B0A08">
   <link rel="icon" href="/static/brand/pegasus-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="/static/brand/apple-touch-icon.png">
@@ -18,25 +24,34 @@
   {% block head %}{% endblock %}
 </head>
 <body>
+{% block announce %}{% endblock %}
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="/">{{ mark(28) }}<span>PEGASUS</span></a>
-    <nav class="nav-links">
-      <a href="/#how">How it works</a><a href="/#trades">Trades</a><a href="/#realestate">Real estate</a><a href="/pricing">Pricing</a>
+    <a class="brand" href="/" aria-label="Pegasus home"><img src="/static/brand/logo-mark.png" width="34" height="34" alt=""><img class="brand-word" src="/static/brand/logo-wordmark.png" width="150" height="27" alt="Pegasus · data &amp; lead technology"></a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/#how">How it works</a><a href="/#contractors">Contractors</a><a href="/#realestate">Real estate</a><a href="/leads">Leads by city</a><a href="/pricing">Pricing</a>
     </nav>
-    <div class="cta"><a class="btn btn-sm" href="/app/login">Log in</a><a class="btn btn-primary btn-sm" href="/app/signup">Start free</a></div>
+    <div class="cta"><a class="btn btn-sm btn-ghost" href="/app/login">Log in</a><a class="btn btn-outline btn-sm" href="/app/signup">Get started {{ icon("arrow") }}</a></div>
   </div>
 </header>
 {% block content %}{% endblock %}
 <footer>
   <div class="wrap cols">
-    <div><a class="brand" href="/">{{ mark(24) }}<span>PEGASUS</span></a><p class="small" style="margin-top:10px;max-width:320px">Data &amp; lead technology for the trades and real estate. Built from public records, scored for you.</p></div>
-    <div><b>Product</b><a href="/pricing">Pricing</a><a href="/app/signup">Start free</a><a href="/app/login">Log in</a></div>
+    <div><a class="brand" href="/" aria-label="Pegasus home"><img src="/static/brand/logo-mark.png" width="30" height="30" alt=""><img class="brand-word" src="/static/brand/logo-wordmark.png" width="132" height="24" alt="Pegasus"></a><p class="small" style="margin-top:10px;max-width:320px">Data &amp; lead technology for the trades and real estate. Built from public records, scored for you.</p></div>
+    <div><b>Product</b><a href="/pricing">Pricing</a><a href="/leads">Leads by city</a><a href="/app/signup">Start free</a><a href="/app/login">Log in</a></div>
     <div><b>For</b>{% for key in ["general_contractor","framer","deck_builder","roofer","remodeler","real_estate_agent","investor"] %}<a href="/for/{{ key|replace('_','-') }}">{{ trades[key].label }}</a>{% endfor %}</div>
     <div><b>Company</b><a href="/legal/terms">Terms</a><a href="/legal/privacy">Privacy</a><a href="/legal/acceptable-use">Acceptable use</a><a href="/legal/data-sources">Data sources</a><a href="/optout">Do not sell / opt out</a></div>
   </div>
   <div class="wrap small" style="margin-top:28px">© Pegasus · data &amp; lead technology</div>
 </footer>
+<a class="mobile-cta btn btn-primary" href="/app/signup">Start free: 14 days, no card {{ icon("arrow") }}</a>
+<script>
+  (function () {  // sticky mobile CTA appears once the visitor scrolls past the first screen
+    var cta = document.querySelector(".mobile-cta"); if (!cta) return;
+    var on = function () { cta.classList.toggle("show", window.scrollY > window.innerHeight * 0.8); };
+    window.addEventListener("scroll", on, { passive: true }); on();
+  })();
+</script>
 {% block scripts %}{% endblock %}
 </body>
 </html>

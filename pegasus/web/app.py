@@ -10,6 +10,7 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import HTTPException
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.gzip import GZipMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 
 from ..api import admin_routes, auth_routes, lead_routes, org_routes
@@ -47,6 +48,11 @@ def create_app() -> FastAPI:
         response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
         response.headers.setdefault("X-Frame-Options", "DENY")
         response.headers.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=(self)")
+        path = request.url.path
+        if path.startswith("/app/assets/"):  # content-hashed build output
+            response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+        elif path.startswith("/static/"):
+            response.headers.setdefault("Cache-Control", "public, max-age=604800")
         return response
 
     @app.exception_handler(HTTPException)
@@ -69,6 +75,7 @@ def create_app() -> FastAPI:
     def healthz():
         return {"ok": True}
 
+    app.add_middleware(GZipMiddleware, minimum_size=800, compresslevel=6)
     app.mount("/static", StaticFiles(directory=HERE / "static"), name="static")
 
     @app.get("/app")

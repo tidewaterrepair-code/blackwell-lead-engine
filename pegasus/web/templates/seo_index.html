@@ -1,5 +1,6 @@
 {% extends "base_site.html" %}
-{% block title %}New construction leads by city · Pegasus{% endblock %}
+{% block title %}Building Permit Leads by City: New Construction Projects This Month | Pegasus{% endblock %}
+{% block head %}{{ breadcrumb_ld(("Home", "/"), ("Leads by city", "/leads")) }}{% endblock %}
 {% block description %}Live counts of new building permits, bids and projects by city from public records, updated daily by Pegasus.{% endblock %}
 {% block content %}
 <section class="hero"><div class="wrap">

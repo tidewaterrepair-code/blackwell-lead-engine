@@ -1,6 +1,7 @@
 {% extends "base_site.html" %}
 {% block title %}{{ count }} new {% if tag %}{{ tag_label(tag)|lower }} {% endif %}construction leads in {{ city }}, {{ state }} · Pegasus{% endblock %}
 {% block description %}{{ count }} new {% if tag %}{{ tag_label(tag)|lower }} {% endif %}permits, bids and projects in {{ city }}, {{ state }} in the last 30 days, worth about {{ total_value|money }}. Updated daily by Pegasus.{% endblock %}
+{% block head %}{% if tag %}{{ breadcrumb_ld(("Home", "/"), ("Leads by city", "/leads"), (city ~ ", " ~ state, "/leads/" ~ state|lower ~ "/" ~ city_slug), (tag_label(tag) ~ " leads", request.url.path)) }}{% else %}{{ breadcrumb_ld(("Home", "/"), ("Leads by city", "/leads"), (city ~ ", " ~ state, request.url.path)) }}{% endif %}{% endblock %}
 {% block content %}
 <section class="hero"><div class="wrap">
   <div class="kicker">{{ city }}, {{ state }} · last 30 days</div>

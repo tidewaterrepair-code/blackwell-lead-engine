@@ -70,3 +70,47 @@ def test_market_report_requires_elite(client):
         s.scalars(select(Org)).one().plan = "elite"
     r = client.get(f"/reports/market/{tid}")
     assert r.status_code == 200 and "Market report" in r.text
+
+
+def test_homepage_structured_data_and_meta(client):
+    import re
+
+    html = client.get("/").text
+    blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S)
+    graph = json.loads(blocks[0])["@graph"]
+    types = {g["@type"] for g in graph}
+    assert {"Organization", "WebSite", "SoftwareApplication", "FAQPage"} <= types
+    app = next(g for g in graph if g["@type"] == "SoftwareApplication")
+    assert app["offers"]["lowPrice"] == 79 and "aggregateRating" not in app  # never invent reviews
+    faq = next(g for g in graph if g["@type"] == "FAQPage")
+    assert len(faq["mainEntity"]) >= 6
+    assert html.count("<h1") == 1 and "Construction Leads" in re.search(r"<title>(.*?)</title>", html).group(1)
+    assert 'property="og:url"' in html and 'name="twitter:title"' in html
+    assert not re.findall(r"<img(?![^>]*alt=)[^>]*>", html)  # every image has alt text
+
+
+def test_homepage_uses_live_numbers_only(client, fixture_text):
+    ingest("nor", NORFOLK, json.loads(fixture_text("norfolk_socrata.json")))
+    html = client.get("/").text
+    assert "Filed this week" in html and "Little Creek" in html and "1214" not in html  # street only
+    assert "100 of 100" in html  # founding seats come from the database
+
+
+def test_llms_txt_robots_and_city_search(client, fixture_text):
+    ingest("nor", NORFOLK, json.loads(fixture_text("norfolk_socrata.json")))
+    llms = client.get("/llms.txt").text
+    assert llms.startswith("# Pegasus") and "/for/roofer" in llms and "$79/mo" in llms
+    assert "Allow: /" in client.get("/robots.txt").text
+    assert "/leads/va/norfolk" in client.get("/leads?q=norf").text
+    assert "/leads/va/norfolk" not in client.get("/leads?q=zzz").text
+
+
+def test_breadcrumbs_on_seo_pages(client):
+    html = client.get("/for/roofer").text
+    assert '"BreadcrumbList"' in html and "Roofing Leads" in html
+
+
+def test_compression_and_cache_headers(client):
+    r = client.get("/", headers={"Accept-Encoding": "gzip"})
+    assert r.headers.get("content-encoding") == "gzip"
+    assert "max-age" in client.get("/static/site.css").headers.get("cache-control", "")

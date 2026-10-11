@@ -28,7 +28,8 @@ PACK_BOXES = {
     "app-icon": (461, 50, 703, 288),       # rounded gold tile
     "social-profile": (720, 42, 972, 294),
     "social-cover": (992, 22, 1534, 342),
-    "website-hero": (0, 392, 1536, 1024),  # for the website splash page (not built yet)
+    "website-hero": (0, 392, 1536, 1024),  # the full website mockup (reference only: its text is baked in)
+    "hero-city": (1000, 560, 1536, 890),   # text-free city scene from the website mockup (sheet coordinates), homepage hero art
 }
 
 
@@ -136,6 +137,19 @@ def main() -> list[Path]:
     m.thumbnail((56, 56), Image.LANCZOS)
     fav.alpha_composite(m, ((64 - m.width) // 2, (64 - m.height) // 2))
     save(rounded(fav).resize((32, 32), Image.LANCZOS), STATIC / "pegasus-32.png")
+    # Website: text-free hero art as WebP (fast LCP), and the splash art as WebP with alpha
+    site = STATIC.parent / "site"
+    site.mkdir(parents=True, exist_ok=True)
+    city = pack.crop(pb["hero-city"])
+    city = city.resize((round(city.width * 1.6), round(city.height * 1.6)), Image.LANCZOS)
+    city = city.filter(ImageFilter.UnsharpMask(radius=1.4, percent=50, threshold=2))
+    save(city, site / "hero-city.webp", quality=80, method=6)
+    save(city.resize((480, round(480 * city.height / city.width)), Image.LANCZOS), site / "hero-city-480.webp",
+         quality=55, method=6)  # phones show it faded; keep it tiny
+    logo_art = Image.open(STATIC / "splash.png")
+    save(logo_art, site / "hero-logo.webp", quality=88, method=6)
+    small = logo_art.resize((360, round(360 * logo_art.height / logo_art.width)), Image.LANCZOS)
+    save(small, site / "hero-logo-360.webp", quality=68, method=6)  # phones: faster LCP
     for name in ("social-profile", "social-cover", "website-hero"):
         save(pack.crop(pb[name]), PACK_OUT / f"{name}.png")
     save(rounded(upscale(icon, 512)), PACK_OUT / "app-icon-rounded.png")

@@ -1,6 +1,7 @@
 {% extends "base_site.html" %}
-{% block title %}{{ trade.label }} leads · Pegasus{% endblock %}
-{% block description %}Pegasus finds {{ trade.label|lower }} leads from public permits, bids, sales and storms, predicts upcoming jobs, and delivers them every morning.{% endblock %}
+{% block title %}{% if trade.group == "realestate" %}{{ trade.label }} Leads: Off-Market & Likely-to-Sell Properties | Pegasus{% else %}{{ trade.label }} Leads: Find {{ trade.label }} Jobs Before They're Posted | Pegasus{% endif %}{% endblock %}
+{% block description %}{% if trade.group == "realestate" %}{{ trade.label }} leads from public records and your MLS: off-market and distressed properties, likely-to-sell forecasts and expired listings, ranked every morning. 14 days free.{% else %}{{ trade.label }} leads from building permits, bids, property sales and storms, scored for {{ trade.label|lower }} contractors and predicted before they're advertised. 14 days free, no card.{% endif %}{% endblock %}
+{% block head %}{{ breadcrumb_ld(("Home", "/"), (trade.label ~ " leads", request.url.path)) }}{% endblock %}
 {% block content %}
 <section class="hero"><div class="wrap hero-grid">
   <div>
