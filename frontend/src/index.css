@@ -1,0 +1,96 @@
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/space-grotesk";
+@import "leaflet/dist/leaflet.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Pegasus design tokens (RGB triplets so Tailwind can apply opacity). */
+:root {
+  --page: 246 247 253;
+  --surface: 255 255 255;
+  --surface-2: 238 240 250;
+  --line: 10 15 44;
+  --ink: 10 15 44;
+  --ink-2: 74 82 128;
+  --muted: 120 128 168;
+  --violet: 108 76 245;
+  --cyan: 8 176 207;
+  --gold: 214 150 20;
+  --good: 10 160 110;
+  --bad: 214 54 86;
+  color-scheme: light;
+}
+.dark {
+  --page: 7 10 30;
+  --surface: 15 21 54;
+  --surface-2: 24 32 77;
+  --line: 255 255 255;
+  --ink: 244 246 255;
+  --ink-2: 169 176 214;
+  --muted: 118 126 168;
+  --violet: 124 92 255;
+  --cyan: 34 211 238;
+  --gold: 255 194 75;
+  --good: 46 230 166;
+  --bad: 255 92 122;
+  color-scheme: dark;
+}
+
+html, body, #root { min-height: 100%; }
+body {
+  font-family: "Inter Variable", system-ui, sans-serif;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgb(var(--violet) / 0.16), transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, rgb(var(--cyan) / 0.10), transparent 60%),
+    rgb(var(--page));
+  background-attachment: fixed;
+  -webkit-tap-highlight-color: transparent;
+}
+h1, h2, h3, .font-display { font-family: "Space Grotesk Variable", system-ui, sans-serif; letter-spacing: -0.02em; }
+
+@layer components {
+  .card {
+    @apply rounded-2xl border bg-surface/80 backdrop-blur-xl shadow-card;
+    border-color: rgb(var(--line) / 0.08);
+  }
+  .card-hover { @apply transition-all duration-200 hover:-translate-y-0.5; }
+  .card-hover:hover { border-color: rgb(var(--violet) / 0.45); box-shadow: 0 0 0 1px rgb(var(--violet) / 0.25), 0 18px 40px -20px rgb(var(--violet) / 0.55); }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition
+           active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none select-none;
+  }
+  .btn-primary { @apply btn text-white bg-wing shadow-glow hover:brightness-110; }
+  .btn-ghost { @apply btn text-ink border bg-surface2/60 hover:bg-surface2; border-color: rgb(var(--line) / 0.1); }
+  .btn-gold { @apply btn text-[#1b1300] hover:brightness-105; background: linear-gradient(135deg, #FFD36E, #FFAE2B); }
+  .btn-sm { @apply px-3 py-1.5 text-xs rounded-lg; }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium border whitespace-nowrap;
+    border-color: rgb(var(--line) / 0.1);
+    background: rgb(var(--surface-2) / 0.6);
+  }
+  .chip-active { background: rgb(var(--violet) / 0.18); border-color: rgb(var(--violet) / 0.55); color: rgb(var(--ink)); }
+  .input {
+    @apply w-full rounded-xl border bg-surface2/50 px-3.5 py-2.5 text-sm text-ink placeholder:text-muted outline-none transition;
+    border-color: rgb(var(--line) / 0.12);
+  }
+  .input:focus { border-color: rgb(var(--violet) / 0.7); box-shadow: 0 0 0 3px rgb(var(--violet) / 0.18); }
+  .label { @apply text-xs font-medium text-ink2; }
+  .kicker { @apply text-[11px] uppercase tracking-[0.14em] font-semibold text-muted; }
+  .gradient-text { background: linear-gradient(135deg, rgb(var(--violet)), rgb(var(--cyan))); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .skeleton { background: linear-gradient(90deg, rgb(var(--surface-2)) 0px, rgb(var(--line) / 0.08) 80px, rgb(var(--surface-2)) 160px); background-size: 800px 100%; @apply animate-shimmer rounded-lg; }
+  .scrollbar-none { scrollbar-width: none; }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+}
+
+/* Leaflet theming */
+.leaflet-container { background: rgb(var(--surface-2)); font: inherit; }
+.dark .leaflet-tile-pane { filter: brightness(0.62) invert(1) contrast(0.92) hue-rotate(200deg) saturate(0.35) brightness(0.85); }
+.leaflet-popup-content-wrapper, .leaflet-popup-tip { background: rgb(var(--surface)); color: rgb(var(--ink)); }
+.leaflet-control-attribution { font-size: 10px; background: rgb(var(--surface) / 0.7) !important; color: rgb(var(--muted)); }
+.leaflet-control-attribution a { color: rgb(var(--ink-2)); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}

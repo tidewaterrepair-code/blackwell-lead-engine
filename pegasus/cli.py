@@ -11,6 +11,7 @@
   classify "TEXT"        test the classifier
   make-admin EMAIL       give a user platform-admin (Mission Control) access
   daily                  run the daily job now (rescore, digests, learning)
+  demo                   seed demo data + demo accounts (dev/staging only)
   marketing ...          launch toolkit (render banners, export ads, calendar)
 """
 
@@ -177,6 +178,13 @@ def cmd_worker(args) -> int:
     return 0
 
 
+def cmd_demo(_args) -> int:
+    from .demo import seed
+
+    print(json.dumps(seed(), indent=2))
+    return 0
+
+
 def cmd_marketing(args) -> int:
     from .marketing.cli import run
 
@@ -217,6 +225,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("email")
     p.set_defaults(func=cmd_make_admin)
     sub.add_parser("daily", help="run the daily job now").set_defaults(func=cmd_daily)
+    sub.add_parser("demo", help="seed demo data and accounts (dev only)").set_defaults(func=cmd_demo)
     p = sub.add_parser("db", help="database migrations")
     p.add_argument("action", choices=["upgrade", "revision"])
     p.add_argument("-m", "--message")

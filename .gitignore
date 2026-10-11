@@ -8,3 +8,6 @@ dist/
 data/*
 !data/.gitkeep
 .env
+frontend/node_modules/
+pegasus/web/static/app/
+marketing/dist/

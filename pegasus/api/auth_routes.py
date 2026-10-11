@@ -77,7 +77,7 @@ def me_payload(db: Session, ctx: Ctx) -> dict:
             "plan_status": org.plan_status, "trial_ends_at": iso(org.trial_ends_at), "credits": org.credits or 0,
             "founding_member": org.founding_member, "referral_code": org.referral_code,
             "base_lat": org.base_lat, "base_lng": org.base_lng, "settings": org.settings or {},
-            "role": ctx.membership.role,
+            "role": ctx.membership.role, "has_billing": bool(org.stripe_customer_id),
         },
         "plan": {"key": plan.key, "label": plan.label, "features": sorted(plan.features), "trades": plan.trades,
                  "territories": territory_allowance(org), "seats": plan.seats, "monthly_credits": plan.monthly_credits,

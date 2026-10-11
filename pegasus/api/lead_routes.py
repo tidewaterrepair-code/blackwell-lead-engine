@@ -46,6 +46,8 @@ def lead_query(org_id: int, *, status: str = "open", lead_type: str | None = Non
             .where(OrgLead.org_id == org_id, OrgLead.visible_at <= utcnow()))
     if status == "open":
         stmt = stmt.where(OrgLead.status.in_(OPEN_STATUSES))
+    elif status == "pipeline":
+        stmt = stmt.where(OrgLead.status.in_(("saved", "contacted", "quoted", "won", "lost")))
     elif status and status != "all":
         stmt = stmt.where(OrgLead.status == status)
     if lead_type:
