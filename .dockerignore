@@ -5,3 +5,7 @@ data
 tests
 **/__pycache__
 .pytest_cache
+*.egg-info
+frontend/node_modules
+pegasus/web/static/app
+marketing/dist

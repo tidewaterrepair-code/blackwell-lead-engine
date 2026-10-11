@@ -33,16 +33,21 @@ def _sqlite_pragmas(dbapi_conn, _record) -> None:
     cur.close()
 
 
+def normalize_url(url: str) -> str:
+    """Accept postgres:// and postgresql:// (Heroku/Docker style) and use the psycopg 3 driver."""
+    if url.startswith("postgres://"):
+        return "postgresql+psycopg://" + url[len("postgres://"):]
+    if url.startswith("postgresql://"):
+        return "postgresql+psycopg://" + url[len("postgresql://"):]
+    return url
+
+
 def get_engine(url: str | None = None) -> Engine:
     global _engine, _sessionmaker
     if _engine is None or url is not None:
         from . import models  # noqa: F401 - register tables
 
-        url = url or get_settings().database_url
-        if url.startswith("postgres://"):
-            url = "postgresql+psycopg://" + url[len("postgres://"):]
-        elif url.startswith("postgresql://"):
-            url = "postgresql+psycopg://" + url[len("postgresql://"):]
+        url = normalize_url(url or get_settings().database_url)
         if url.startswith("sqlite"):
             _engine = create_engine(url, connect_args={"check_same_thread": False})
             event.listen(_engine, "connect", _sqlite_pragmas)

@@ -11,3 +11,4 @@ data/*
 frontend/node_modules/
 pegasus/web/static/app/
 marketing/dist/
+backups/

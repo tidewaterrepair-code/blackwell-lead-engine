@@ -7,7 +7,8 @@ import pytest
 
 _TMP = Path(tempfile.mkdtemp(prefix="pegasus-test-"))
 os.environ["PEGASUS_DATA_DIR"] = str(_TMP)
-os.environ["DATABASE_URL"] = f"sqlite:///{_TMP / 'test.db'}"
+# Run the suite against Postgres with PEGASUS_TEST_DATABASE_URL=postgresql://.../pegasus_test (it is wiped).
+os.environ["DATABASE_URL"] = os.environ.get("PEGASUS_TEST_DATABASE_URL") or f"sqlite:///{_TMP / 'test.db'}"
 os.environ["SOURCES_FILE"] = str(_TMP / "no-seed-sources.yaml")
 os.environ["GEOCODE"] = "0"
 os.environ["SECRET_KEY"] = "test-secret"

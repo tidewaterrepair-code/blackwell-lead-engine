@@ -10,8 +10,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 from . import tasks
 from .config import get_settings
-from .db import get_engine, session_scope
-from .ingest import sync_seed_sources
+from .db import get_engine
+from .ingest import sync_seed_sources_safely
 from .jobs import work_forever
 
 log = logging.getLogger(__name__)
@@ -20,8 +20,7 @@ log = logging.getLogger(__name__)
 def main(threads: int = 3) -> None:
     settings = get_settings()
     get_engine()
-    with session_scope() as s:
-        sync_seed_sources(s)
+    sync_seed_sources_safely()
     scheduler = BackgroundScheduler()
     tasks.schedule(scheduler, settings)
     scheduler.start()

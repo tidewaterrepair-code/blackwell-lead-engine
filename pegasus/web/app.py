@@ -14,7 +14,7 @@ from starlette.middleware.sessions import SessionMiddleware
 
 from ..api import admin_routes, auth_routes, lead_routes, org_routes
 from ..config import get_settings
-from ..db import get_engine, session_scope
+from ..db import get_engine
 from . import site
 
 log = logging.getLogger(__name__)
@@ -25,13 +25,12 @@ APP_DIST = HERE / "static" / "app"
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     settings = get_settings()
+    if settings.env == "production" and (settings.secret_key.startswith("dev-") or len(settings.secret_key) < 32):
+        raise RuntimeError("Set SECRET_KEY to a long random value (openssl rand -hex 32) before running in production")
     get_engine()
-    from ..ingest import sync_seed_sources
+    from ..ingest import sync_seed_sources_safely
 
-    with session_scope() as s:
-        sync_seed_sources(s)
-    if settings.secret_key.startswith("dev-") and settings.env == "production":
-        log.error("SECRET_KEY is not set: sessions are insecure")
+    sync_seed_sources_safely()
     yield
 
 

@@ -160,6 +160,10 @@ def cmd_db(args) -> int:
         command.upgrade(cfg, "head")
     elif args.action == "revision":
         command.revision(cfg, message=args.message or "change", autogenerate=True)
+    elif args.action == "stamp":  # a database created before migrations existed: mark it current
+        command.stamp(cfg, "head")
+    elif args.action == "current":
+        command.current(cfg, verbose=True)
     return 0
 
 
@@ -227,7 +231,7 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("daily", help="run the daily job now").set_defaults(func=cmd_daily)
     sub.add_parser("demo", help="seed demo data and accounts (dev only)").set_defaults(func=cmd_demo)
     p = sub.add_parser("db", help="database migrations")
-    p.add_argument("action", choices=["upgrade", "revision"])
+    p.add_argument("action", choices=["upgrade", "revision", "stamp", "current"])
     p.add_argument("-m", "--message")
     p.set_defaults(func=cmd_db)
     p = sub.add_parser("serve", help="run the web app")

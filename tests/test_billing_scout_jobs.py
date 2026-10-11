@@ -3,7 +3,6 @@ import time
 from datetime import timedelta
 
 import httpx
-import pytest
 from sqlalchemy import select
 
 from pegasus.db import session_scope, utcnow

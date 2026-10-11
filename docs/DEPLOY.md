@@ -1,118 +1,147 @@
-# Deploying on your VPS
+# Deploying Pegasus on your VPS
 
-Any Linux VPS with 1 GB RAM works (2 GB if you turn on the Chesapeake browser scraper, 6 GB+ for the optional local AI). The steps below assume Ubuntu/Debian.
+**Server size.** Ubuntu 22.04/24.04 with 2 vCPU / 4 GB handles a beta of about 100 customers. 4 vCPU / 8 GB covers several hundred. Add about 1 GB if you build with the browser (Accela portals, banner rendering), and 4 GB more for the optional local AI.
 
-## 1. Point a domain at the server (for HTTPS)
+**What runs.** Postgres 16, the web app (API, React app, marketing site), the background worker (ingest, scoring, alerts, email, Source Scout, MLS sync), Caddy (HTTPS) and a nightly backup job. Everything is defined in `docker-compose.yml`.
 
-Create a DNS **A record**, e.g. `leads.yourdomain.com` → your VPS IP. No domain? Skip Caddy and use an SSH tunnel instead (see the end of this page).
+## 1. Domain and DNS
+
+Point an **A record** for your domain (e.g. `pegasusleads.com`, and `www` if you want it) at the VPS IP. Caddy gets the HTTPS certificate on first start.
+
+For email deliverability, add the SPF, DKIM and DMARC records from your mail provider now: see `marketing/automation/email.md`.
 
 ## 2. Install Docker
 
 ```bash
 curl -fsSL https://get.docker.com | sudo sh
-sudo usermod -aG docker $USER   # log out and back in
+sudo usermod -aG docker $USER      # log out and back in
+sudo ufw allow OpenSSH && sudo ufw allow 80 && sudo ufw allow 443 && sudo ufw enable
 ```
 
-## 3. Get the code and configure it
+## 3. Get the code and configure
 
 ```bash
-git clone https://github.com/tidewaterrepair-code/blackwell-lead-engine.git
-cd blackwell-lead-engine
+sudo mkdir -p /opt/pegasus && sudo chown $USER /opt/pegasus
+git clone https://github.com/tidewaterrepair-code/blackwell-lead-engine.git /opt/pegasus
+cd /opt/pegasus
 cp .env.example .env
-openssl rand -hex 32            # paste the output into SECRET_KEY
+openssl rand -hex 32     # → SECRET_KEY
+openssl rand -hex 16     # → POSTGRES_PASSWORD
 nano .env
 ```
 
-Minimum settings: `APP_PASSWORD`, `SECRET_KEY`, `DOMAIN`, `PUBLIC_URL`, `BASE_LAT`, `BASE_LNG` (your shop; right-click it in Google Maps to copy the coordinates).
+Required: `DOMAIN`, `PUBLIC_URL`, `SECRET_KEY`, `POSTGRES_PASSWORD`, `ADMIN_EMAILS`. The app refuses to start in production without a real `SECRET_KEY`.
 
-## 4. Start it
+Each feature switches on when its block in `.env` is filled in:
+
+| Block | Turns on | Guide |
+|---|---|---|
+| `SMTP_*` | Sign-in links, Morning Drop, lifecycle email | `marketing/automation/email.md` |
+| `STRIPE_*` | Paid plans, credits, add-ons, referrals | `marketing/automation/stripe.md` |
+| `ANTHROPIC_API_KEY` | AI lead briefs, Source Scout research and mapping, label fallback, weekly-post polish | console.anthropic.com |
+| `BATCHDATA_API_KEY` | Skip trace with DNC flags (sold as credits) | batchdata.com |
+| `REGRID_TOKEN` | Parcels, owners, vacancy | regrid.com |
+| `SOCRATA_APP_TOKEN` | Higher open-data rate limits (free) | any Socrata portal → developer settings |
+
+## 4. Start
 
 ```bash
 docker compose up -d --build
-docker compose exec web leadengine run      # first import (last 30 days)
-docker compose logs -f worker               # scheduler log
+docker compose ps                  # postgres healthy, web healthy, worker/caddy/backup up
+docker compose logs -f web         # migrations, then "Application startup complete"
 ```
 
-Open `https://leads.yourdomain.com` and log in with `APP_PASSWORD`.
+Open `https://YOUR_DOMAIN`. Sign up with an email from `ADMIN_EMAILS` to get **Mission Control** at `/app/admin`, or promote an existing account with `docker compose exec web pegasus make-admin you@example.com`.
 
-From then on the worker imports at **6:05 and 14:05**, rescores and emails the digest at **7:30**, and pushes hot leads right after each import. Change the times with `INGEST_HOURS` and `DIGEST_HOUR`.
-
-## 5. Check and turn on more sources
+First data import (the worker also does this on schedule at `INGEST_HOURS`):
 
 ```bash
-docker compose exec web leadengine inspect norfolk-permits
-docker compose exec web leadengine inspect norfolk-bids --days 60
+docker compose exec web pegasus run
+docker compose exec web pegasus sources
 ```
 
-`inspect` prints raw records, plus how each one normalizes and classifies. If a column is mapped wrong, add a `fields:` override in `sources.yaml`. When the output looks right, set `enabled: true`, then run `docker compose restart web worker`.
+## 5. Coverage and Source Scout
 
-### Chesapeake eBUILD (Accela)
-
-This source needs a headless browser in the image:
+`sources.yaml` seeds Hampton Roads. Every other area is added by Source Scout when a customer requests it, or manually:
 
 ```bash
-echo "INSTALL_BROWSER=true" >> .env
-docker compose build && docker compose up -d
-docker compose exec web leadengine inspect chesapeake-permits --days 7
+docker compose exec web pegasus scout 51550       # county FIPS (Chesapeake, VA)
 ```
 
-The same adapter works for any city on Accela Citizen Access. Copy the block in `sources.yaml` and change `base_url`.
+Proposals show up in Mission Control → Scout for approval. Configs scoring at least `SCOUT_AUTO_APPROVE` (default 0.85) go live automatically. Set it to `1.01` to review everything.
 
-### Homeowner requests by email
-
-1. In Gmail, create a label named `Leads` and a filter that applies it to lead emails: Craigslist saved-search alerts ("services wanted"), Angi/Thumbtack/HomeAdvisor, your website's contact form, Facebook group notifications.
-2. Turn on 2-step verification, then create an **App password** (Google Account → Security → App passwords).
-3. Put the address and app password in `.env` as `IMAP_USER` and `IMAP_PASSWORD`, then set `enabled: true` on `email-requests`.
-
-### New subdivisions (planning agendas)
-
-Find your city's planning commission agenda page (most Hampton Roads cities use a CivicPlus "Agenda Center"). Uncomment the `agenda_pdf` block, set `index` to that page, and set `link_pattern` to match the PDF links. Agenda items that mention subdivisions, plats, rezonings for homes or townhomes become leads.
-
-## Notifications (free)
-
-- **Email digest**: Gmail SMTP with an app password (`SMTP_*`, `DIGEST_TO`).
-- **Phone push**: install the free **ntfy** app, subscribe to a hard-to-guess topic such as `blackwell-leads-8f3k2`, and set `NTFY_URL=https://ntfy.sh/blackwell-leads-8f3k2`.
-
-## Optional: free local AI classifier
-
-The rule-based classifier handles most permits. For odd wording, run a small local model:
+Check a source's raw records and classification:
 
 ```bash
-docker compose --profile ai up -d
-docker compose exec ollama ollama pull llama3.2:3b
-echo "OLLAMA_URL=http://ollama:11434" >> .env && docker compose up -d
+docker compose exec web pegasus inspect norfolk-permits
 ```
 
-## Backups
-
-All data lives in one SQLite file in the `leads_data` volume:
+Sources that need a headless browser (Accela portals such as Chesapeake eBUILD) need the browser build:
 
 ```bash
-docker compose exec web python -c "import sqlite3; s=sqlite3.connect('/data/leads.db'); d=sqlite3.connect('/data/backup.db'); s.backup(d)"
-docker compose cp web:/data/backup.db ./leads-$(date +%F).db
+echo "INSTALL_BROWSER=true" >> .env && docker compose up -d --build
 ```
 
-## Updating
+## 6. Stripe webhook
+
+In Stripe, add the endpoint `https://YOUR_DOMAIN/api/stripe/webhook` with the events listed in `marketing/automation/stripe.md`, then put the signing secret in `STRIPE_WEBHOOK_SECRET` and run `docker compose up -d`.
+
+## 7. Backups
+
+The `backup` service writes a compressed `pg_dump` to `/opt/pegasus/backups` every 24 hours and keeps the last 14 (`BACKUP_KEEP`). **Copy them off the server.** For example, Backblaze B2 with rclone (about $1/month):
 
 ```bash
-git pull && docker compose up -d --build
+sudo apt install rclone && rclone config          # add a "b2" remote
+crontab -e
+# 30 3 * * *  rclone copy /opt/pegasus/backups b2:pegasus-backups --max-age 2d
 ```
+
+Restore:
+
+```bash
+docker compose stop web worker
+docker compose exec -T postgres pg_restore -U pegasus -d pegasus --clean --if-exists < backups/pegasus-YYYYMMDD-HHMM.dump
+docker compose start web worker
+```
+
+## 8. Updating
+
+```bash
+cd /opt/pegasus && git pull
+docker compose up -d --build       # web applies new migrations before serving
+```
+
+To change the schema: edit `pegasus/models.py`, run `pegasus db revision -m "what changed"` against a development Postgres, review the generated file in `pegasus/migrations/versions/`, and commit it. The test suite fails if a model change has no migration.
+
+## 9. Monitoring
+
+- `https://YOUR_DOMAIN/healthz` returns 200 when the app and database are up. Point a free uptime monitor (UptimeRobot, Better Stack) at it.
+- Mission Control → Sources shows failing sources. The worker re-checks source health daily and re-scouts broken ones.
+- `docker compose logs --since 1h worker` shows the scheduler and job output.
+
+## Optional extras
+
+- **Local AI fallback** (no Anthropic key): `docker compose --profile ai up -d`, then `docker compose exec ollama ollama pull llama3.2:3b` and set `OLLAMA_URL=http://ollama:11434`.
+- **Umami analytics, Listmonk, Postiz**: see `marketing/automation/`. Run them as extra compose projects and add a site block for each in `deploy/Caddyfile`.
+- **Scaling past one box**: move Postgres to a managed instance (set `DATABASE_URL`), run more `worker` replicas (jobs are claimed atomically), and raise `WEB_WORKERS`.
 
 ## Without Docker (systemd)
 
 ```bash
-sudo useradd -r -m -d /opt/blackwell-lead-engine leadengine
-sudo -u leadengine git clone https://github.com/tidewaterrepair-code/blackwell-lead-engine.git /opt/blackwell-lead-engine
-cd /opt/blackwell-lead-engine
-sudo -u leadengine python3 -m venv .venv
-sudo -u leadengine .venv/bin/pip install .
-sudo -u leadengine cp .env.example .env    # edit it; add LEADENGINE_DATA_DIR=/opt/blackwell-lead-engine/data
-sudo cp deploy/leadengine-*.service /etc/systemd/system/
-sudo systemctl daemon-reload && sudo systemctl enable --now leadengine-web leadengine-worker
+sudo apt install python3.12-venv postgresql nodejs npm caddy
+sudo -u postgres createuser pegasus -P && sudo -u postgres createdb -O pegasus pegasus
+sudo useradd -r -m -d /opt/pegasus pegasus
+sudo -u pegasus git clone https://github.com/tidewaterrepair-code/blackwell-lead-engine.git /opt/pegasus
+cd /opt/pegasus
+sudo -u pegasus sh -c "cd frontend && npm ci && npm run build"
+sudo -u pegasus python3 -m venv .venv && sudo -u pegasus .venv/bin/pip install .
+sudo -u pegasus cp .env.example .env   # also set DATABASE_URL=postgresql://pegasus:PASS@localhost/pegasus
+sudo cp deploy/pegasus-*.service /etc/systemd/system/
+sudo systemctl daemon-reload && sudo systemctl enable --now pegasus-web pegasus-worker
 ```
 
-Then put Caddy (`sudo apt install caddy`) or nginx in front of `127.0.0.1:8000`.
+Then point Caddy at `127.0.0.1:8000` (see `deploy/Caddyfile`, replacing `web:8000`).
 
-## No domain? Use an SSH tunnel
+## A database from before migrations
 
-Start only the app (`docker compose up -d web worker`). Then on your laptop run `ssh -L 8000:127.0.0.1:8000 you@your-vps` and open http://localhost:8000.
+If you ran an early build that created tables without migrations, mark it current once with `pegasus db stamp`. After that, `pegasus db upgrade` works as normal.

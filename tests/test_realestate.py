@@ -5,8 +5,8 @@ import pytest
 from sqlalchemy import select
 
 from pegasus.db import session_scope, utcnow
-from pegasus.models import Contact, Listing, MLSConnection, Org, OrgLead, Property, Signal
-from tests.conftest import add_source, ingest, make_org
+from pegasus.models import Listing, MLSConnection, Org, OrgLead, Property
+from tests.conftest import ingest, make_org
 
 VB_SALES = {"type": "arcgis", "kind": "sale", "url": "https://h/FeatureServer/1", "city": "Virginia Beach",
             "state": "VA", "county_fips": "51810",

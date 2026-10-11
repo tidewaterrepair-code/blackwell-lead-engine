@@ -1,0 +1,14 @@
+[Unit]
+Description=Pegasus background worker (ingest, scoring, alerts, email, Source Scout)
+After=network-online.target pegasus-web.service
+
+[Service]
+User=pegasus
+WorkingDirectory=/opt/pegasus
+EnvironmentFile=/opt/pegasus/.env
+Environment=PEGASUS_ENV=production
+ExecStart=/opt/pegasus/.venv/bin/pegasus worker
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

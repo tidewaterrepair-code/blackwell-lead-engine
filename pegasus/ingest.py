@@ -497,3 +497,23 @@ def sync_seed_sources(session: Session) -> int:
         n += 1
     session.flush()
     return n
+
+
+def sync_seed_sources_safely(attempts: int = 3) -> int:
+    """sync_seed_sources in its own transaction, tolerating a concurrent first boot.
+
+    Several web workers (and the worker service) start at once; on an empty database they race
+    to insert the same rows. The loser gets an IntegrityError and simply retries, by which time
+    the rows exist and the upsert path runs.
+    """
+    from sqlalchemy.exc import IntegrityError
+
+    for attempt in range(attempts):
+        try:
+            with session_scope() as s:
+                return sync_seed_sources(s)
+        except IntegrityError:
+            if attempt == attempts - 1:
+                raise
+    return 0
+

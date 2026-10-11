@@ -1,61 +1,56 @@
-# Blackwell Lead Engine: Build Plan
+# Pegasus: build plan and status
 
-## Goal
-One dashboard that finds construction leads in **Hampton Roads, VA** for decks, garage and house framing, new construction, additions, and kitchen and bath remodels. It covers both **homeowners** (direct work) and **builders/GCs** (framing subcontract work).
+Pegasus grew out of the single-user Blackwell Lead Engine (a Hampton Roads construction lead finder) and is now a multi-tenant SaaS for any trade and for real estate agents and investors. This page records what was planned, what was built and where the build differs from the plan.
 
-**Constraint:** it runs on your own VPS using only free tools. No paid APIs, no hosted database, no subscriptions.
+## Decisions
 
-## Stack (all free, self-hosted)
-| Need | Choice |
+| Question | Decision |
 |---|---|
-| App + dashboard | Python 3.11+, FastAPI, server-rendered Jinja pages (no JS build step) |
-| Database | SQLite (one file, WAL mode). Works with Postgres via `DATABASE_URL` if ever needed |
-| Scheduler | APScheduler `worker` process (imports at 6:05 & 14:05, digest at 7:30) |
-| Browser scraping | Playwright + headless Chromium (optional image build, for Accela portals) |
-| Classification | Keyword + permit-field rules; optional local LLM via **Ollama** |
-| Map | Leaflet (bundled in the repo) + OpenStreetMap tiles |
-| Geocoding | US Census Bureau geocoder (free, no key, cached) |
-| Email digest | Any SMTP, e.g. a Gmail app password |
-| Phone alerts | ntfy (free app / free server) |
-| HTTPS | Caddy + Let's Encrypt |
-| Deploy | Docker Compose (web, worker, caddy, optional ollama) or systemd |
+| Market | Customers pick their own area anywhere in the US. Source Scout builds connectors for new areas |
+| Data spend | Pay as you grow. Paid data (skip trace, parcels) is resold as credits. Agents connect their own MLS feed |
+| Hosting | Your VPS, Python kept |
+| Brand | Pegasus · data & lead technology |
+| Launch ad budget | $500–1,500/month |
 
-## Lead sources
-| Kind | Source | Adapter | State |
-|---|---|---|---|
-| Permits | Norfolk: `data.norfolk.gov` dataset `fahm-yuh4` | `socrata` | enabled |
-| Permits | Virginia Beach: `Building_Permits_Applications_view` FeatureServer | `arcgis` | enabled |
-| Permits | Chesapeake: eBUILD (`aca-prod.accela.com/CHESAPEAKE`) | `accela` | needs browser image |
-| Permits | Suffolk, Portsmouth, Hampton, Newport News… | `accela` / `socrata` / `arcgis` | add per city with `inspect` |
-| Bids | CivicPlus bid RSS (Norfolk, Hampton, Suffolk) | `rss` | verify, then enable |
-| Bids | eVA and other bid pages | `html_list` (CSS selectors) | template |
-| Homeowner requests | Gmail label: Craigslist alerts, Angi/Thumbtack, web form, FB/Nextdoor notifications | `imap` | needs app password |
-| Homeowner requests | Referrals, calls, social posts | Quick Add form | done |
-| New subdivisions | Planning commission agenda PDFs | `agenda_pdf` | template |
+## Architecture as built
 
-No scraping of Facebook, Nextdoor or Craigslist pages (their terms forbid it). Their email alerts go through the inbox instead.
-
-## Data model
-`sources` (run health) · `raw_records` (untouched payloads, unique per source+id) · `leads` (normalized, classified, scored, status) · `activities` (notes, calls, quotes, status changes) · `geocode_cache`.
-
-## Classification and scoring
-- **Job types:** new_construction, house_framing, garage_framing, addition, deck, kitchen, bath, remodel. Trade-only work (electrical, HVAC, plumbing, roofing, solar, fences, pools, signs, demolition) is dropped unless the description names our work.
-- **Customer:** bid → public; subdivision → builder; request → homeowner; permit with a named contractor, new home or commercial → builder; otherwise homeowner.
-- **Score 0–100:** job type (≤30) + value (≤25) + recency (≤20) + distance from base (≤15) + bonuses (owner-pulled permit, active request, open bid), minus a commercial penalty. Expired bids score 0.
-- **Dedupe:** normalized street address + job type within 90 days across sources.
-- User edits (status, job type, contact info) are never overwritten by re-imports.
+| Layer | Built with | Note vs. original plan |
+|---|---|---|
+| API and site | FastAPI, Jinja (marketing site), JSON API | as planned |
+| App | React 18, Vite, TypeScript, Tailwind, Framer Motion, Leaflet; served at `/app` | as planned |
+| Database | Postgres 16 (SQLite for dev/tests), SQLAlchemy 2, Alembic | **No PostGIS**: territory matching (radius, polygon, ZIP, county, city) runs in Python on indexed lat/lng and FIPS. Add PostGIS when one metro passes about 1M signals |
+| Jobs | DB-backed queue (atomic claim) + APScheduler worker | **No Redis/Arq**: one less service; scale by running more worker replicas |
+| AI | Claude API (models set in `.env`), server-side fallback, structured JSON output; Ollama or templates without a key | Model choice moved to config instead of being fixed per task |
+| Learning | Bayesian updates of timeline and likely-to-sell weights from won/lost outcomes, nightly | **Instead of LightGBM**: works from the first few dozen outcomes. Swap in gradient boosting once there are thousands |
+| Billing | Stripe Checkout, Portal, webhooks (idempotent) | as planned |
+| Email | SMTP (any provider) for transactional and lifecycle; Listmonk for broadcasts | as planned |
+| Edge | Caddy (automatic HTTPS) | as planned |
 
 ## Phases
-- [x] **Phase 0: Recon.** Norfolk Socrata and VB ArcGIS endpoints identified; Chesapeake Accela confirmed.
-- [x] **Phase 1: MVP.** Package, schema, Norfolk + VB adapters, rule classifier, lead feed with filters and status.
-- [x] **Phase 2: Smarts.** Scoring, dedupe, Census geocoding, map, lead detail, notes, optional Ollama fallback.
-- [x] **Phase 3: Coverage.** Accela adapter, RSS and HTML bid adapters, Bids, Builders and Sources pages.
-- [x] **Phase 4: Workflow.** Pipeline board, email digest, ntfy hot-lead pushes, Quick Add, CSV export.
-- [x] **Phase 5: Expansion.** IMAP homeowner-request intake, planning-agenda subdivision watcher.
-- [ ] **Phase 5b: Go-live on the VPS.** Run `leadengine inspect` on each source against live data, fix `fields:` mappings, enable bids/Chesapeake/agendas.
-- [ ] **Phase 6: Enrichment (optional).** Owner name and mailing address from city assessor/GIS parcel data, contractor license status from the Virginia DPOR lookup, more cities.
 
-## Verification
-- `pytest`: 57 offline tests with recorded fixtures for every adapter (Socrata, ArcGIS, Accela grid, RSS, HTML list, agenda text, email), classifier cases, scoring, idempotent re-runs, cross-source dedupe, preserved user edits, a failing source, every dashboard page, CSRF and login.
-- `leadengine run --dry-run`: fetch and classify against live sources without saving.
-- `leadengine inspect <source>`: check a live feed's columns and classification before enabling it.
+| # | Phase | Status |
+|---|---|---|
+| 1 | Foundation: rename to `pegasus`, accounts (password + magic link), orgs, teams, invites, territories, shared signals → private `org_leads`, job queue | done |
+| 2 | Trades engine: taxonomy and 25 trade profiles, classifier, scoring, predicted "next job" timelines, storm/deed/code-violation adapters | done |
+| 3 | Real estate: properties, distress stack, motivation score, likely-to-sell, deal analyzer, farm stats and market reports, skip trace with DNC/litigator flags, RESO MLS sync + CSV import, expired-listing leads | done |
+| 4 | Billing: plans, trial, plan limits, credits, add-ons, exclusive ZIPs, founding pricing, referral commissions | done |
+| 5 | Source Scout (discover → probe → map → validate → approve) and Mission Control | done |
+| 6 | App UI: design system, Lead Stream with swipe, radar map, pipeline, deals, areas, gamification, recap, onboarding, installable web-app manifest | done |
+| 7 | Marketing site, SEO pages, launch toolkit, lifecycle email | done |
+| 8 | Deploy: Docker image, compose stack, migrations, backups, docs | done |
+| 9 | Learning loop at scale: calibration reports, gradient-boosted models once outcome volume allows | ongoing |
+
+## Verification done
+
+- 116 automated tests pass on both SQLite and Postgres 16. They cover tenancy isolation, adapters on recorded fixtures, classification, predictions, billing webhooks, credits, Scout, real estate, MLS, the site, the toolkit, lifecycle email, and migrations matching the models.
+- The production Docker stack was built and run: migrations, two web workers, the worker, the backup job, Caddy HTTPS and the live event stream through the proxy.
+- UI screenshots were checked at phone and desktop sizes in light and dark mode. Rendered banners and emails were checked visually.
+
+## Before launch
+
+1. **Live data check on the VPS.** City open-data hosts were blocked in the build sandbox, so the adapters were built against recorded and documented responses. Run `pegasus inspect` on each Hampton Roads source and enable the ones that look right.
+2. **Attorney review** of the Terms, Privacy, Acceptable Use and Data Sources drafts. Also confirm TCPA, CAN-SPAM and Virginia rules for your outreach features.
+3. **Stripe** products, coupon and webhook (`marketing/automation/stripe.md`), tested end to end with a test card.
+4. **MLS**: apply for data licenses with the vendor that serves your local MLS (e.g. REIN in Hampton Roads) before advertising MLS connect.
+5. **Ad import templates**: Meta and Google change bulk-import columns from time to time. Compare `dist/ads/*.csv` with a freshly downloaded template before the first import.
+6. **Beta**: invite 10–20 founding members and watch Mission Control (trial activity, sources, Scout queue) daily for two weeks.

@@ -1,41 +1,60 @@
-# Blackwell Lead Engine: dashboard + scheduler + HTTPS reverse proxy.
-#   cp .env.example .env   # then edit it
+# Pegasus on one VPS: Postgres, web app, background worker, HTTPS, nightly backups.
+#   cp .env.example .env    # fill it in (docs/DEPLOY.md)
 #   docker compose up -d --build
 services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: pegasus
+      POSTGRES_DB: pegasus
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pegasus -d pegasus"]
+      interval: 10s
+      retries: 10
+    restart: unless-stopped
+
   web:
     build:
       context: .
       args:
         INSTALL_BROWSER: ${INSTALL_BROWSER:-false}
-    image: blackwell-lead-engine
+    image: pegasus
     env_file: .env
     environment:
+      DATABASE_URL: postgresql://pegasus:${POSTGRES_PASSWORD}@postgres:5432/pegasus
       TZ: ${TZ:-America/New_York}
     volumes:
-      - leads_data:/data
+      - pegasus_data:/data
       - ./sources.yaml:/app/sources.yaml:ro
     ports:
-      - "127.0.0.1:8000:8000"   # only reachable through Caddy (or an SSH tunnel)
+      - "127.0.0.1:8000:8000"   # reachable only through Caddy (or an SSH tunnel)
+    depends_on:
+      postgres: {condition: service_healthy}
     restart: unless-stopped
 
   worker:
-    image: blackwell-lead-engine
-    command: ["leadengine", "worker"]
+    image: pegasus
+    command: ["pegasus", "worker"]
     env_file: .env
     environment:
+      DATABASE_URL: postgresql://pegasus:${POSTGRES_PASSWORD}@postgres:5432/pegasus
       TZ: ${TZ:-America/New_York}
     volumes:
-      - leads_data:/data
+      - pegasus_data:/data
       - ./sources.yaml:/app/sources.yaml:ro
-    depends_on: [web]
+    healthcheck: {disable: true}
+    depends_on:
+      web: {condition: service_healthy}   # web applies migrations first
     restart: unless-stopped
 
-  # Free automatic HTTPS (Let's Encrypt). Needs a domain pointed at the VPS;
-  # set DOMAIN in .env. Skip it with: docker compose up -d web worker
+  # Free automatic HTTPS (Let's Encrypt). Point DOMAIN's DNS A record at the VPS first.
   caddy:
     image: caddy:2-alpine
     environment:
-      DOMAIN: ${DOMAIN:-localhost}
+      DOMAIN: ${DOMAIN:?set DOMAIN in .env}
     ports:
       - "80:80"
       - "443:443"
@@ -46,19 +65,36 @@ services:
     depends_on: [web]
     restart: unless-stopped
 
-  # Optional free local AI classifier for records the rules can't place.
-  # Needs ~4 GB RAM. Enable with: docker compose --profile ai up -d
-  # then: docker compose exec ollama ollama pull llama3.2:3b
-  # and set OLLAMA_URL=http://ollama:11434 in .env
+  # Nightly pg_dump into ./backups (keeps 14). Copy them off the server: docs/DEPLOY.md.
+  backup:
+    image: postgres:16-alpine
+    environment:
+      PGHOST: postgres
+      PGUSER: pegasus
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: pegasus
+      KEEP: ${BACKUP_KEEP:-14}
+    volumes:
+      - ./backups:/backups
+      - ./deploy/backup.sh:/backup.sh:ro
+    entrypoint: ["/bin/sh", "/backup.sh"]
+    depends_on:
+      postgres: {condition: service_healthy}
+    restart: unless-stopped
+
+  # Optional free local AI fallback when ANTHROPIC_API_KEY isn't set. Needs ~4 GB RAM.
+  #   docker compose --profile ai up -d && docker compose exec ollama ollama pull llama3.2:3b
+  #   then set OLLAMA_URL=http://ollama:11434 in .env
   ollama:
-    image: ollama/ollama
+    image: ollama/ollama:latest
     profiles: ["ai"]
     volumes:
       - ollama:/root/.ollama
     restart: unless-stopped
 
 volumes:
-  leads_data:
+  pgdata:
+  pegasus_data:
   caddy_data:
   caddy_config:
   ollama:

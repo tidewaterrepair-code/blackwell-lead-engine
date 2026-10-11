@@ -1,4 +1,11 @@
 {$DOMAIN} {
-	encode gzip
-	reverse_proxy web:8000
+	encode zstd gzip
+	reverse_proxy web:8000 {
+		flush_interval -1   # stream the live lead ticker (server-sent events) without buffering
+	}
 }
+
+# Optional extra sites on the same server (see marketing/automation/):
+# stats.{$DOMAIN} {
+# 	reverse_proxy umami:3000
+# }
