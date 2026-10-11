@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import re
 from datetime import timedelta
 from pathlib import Path
@@ -18,7 +19,7 @@ from ..config import get_settings
 from ..db import utcnow
 from ..intel.scoring import normalize_address
 from ..intel.taxonomy import tag_label, trades as trade_defs
-from ..models import OptOut, Signal, WaitlistSignup
+from ..models import EmailSuppression, OptOut, Signal, WaitlistSignup
 from ..plans import FOUNDING_SEATS, public_catalog
 
 HERE = Path(__file__).parent
@@ -41,7 +42,8 @@ def money(value) -> str:
 
 
 templates.env.filters.update(money=money, slugify=slugify)
-templates.env.globals.update(tag_label=tag_label, public_url=lambda: get_settings().public_url)
+templates.env.globals.update(tag_label=tag_label, public_url=lambda: get_settings().public_url,
+                             umami=lambda: (os.environ.get("UMAMI_SRC"), os.environ.get("UMAMI_WEBSITE_ID")))
 
 
 def page(request: Request, name: str, **ctx) -> HTMLResponse:
@@ -56,7 +58,7 @@ def render_error(request: Request, status: int) -> str:
 
 
 def _utm(request: Request) -> dict:
-    return {k: v for k, v in request.query_params.items() if k.startswith("utm_") or k == "ref"}
+    return {k: v for k, v in request.query_params.items() if k.startswith("utm_") or k in ("ref", "gclid", "fbclid")}
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -84,15 +86,29 @@ def trade_page(trade_key: str, request: Request):
     return page(request, "trade.html", trade=trade, plans=public_catalog())
 
 
+def _public_signals():
+    return select(Signal).where(Signal.duplicate_of_id.is_(None), ~Signal.source_id.like("manual:%"),
+                                ~Signal.source_id.like("mls:%"), Signal.kind.in_(("permit", "bid", "subdivision", "storm")))
+
+
+@router.get("/leads", response_class=HTMLResponse)
+def seo_index(request: Request, db: Session = Depends(get_db)):
+    """Every covered city with live public activity in the last 30 days."""
+    sub = _public_signals().where(Signal.created_at >= utcnow() - timedelta(days=30), Signal.city.is_not(None),
+                                  Signal.state.is_not(None)).subquery()
+    rows = db.execute(select(sub.c.state, sub.c.city, func.count()).group_by(sub.c.state, sub.c.city)
+                      .order_by(func.count().desc()).limit(500)).all()
+    cities = [{"state": st, "city": c, "count": n, "url": f"/leads/{st.lower()}/{slugify(c)}"} for st, c, n in rows]
+    return page(request, "seo_index.html", cities=cities)
+
+
 @router.get("/leads/{state}/{city_slug}", response_class=HTMLResponse)
 @router.get("/leads/{state}/{city_slug}/{tag}", response_class=HTMLResponse)
 def seo_city(state: str, city_slug: str, request: Request, tag: str | None = None, db: Session = Depends(get_db)):
     """Programmatic SEO: live, data-rich pages like /leads/va/virginia-beach/deck."""
     state = state.upper()[:2]
     since = utcnow() - timedelta(days=30)
-    stmt = select(Signal).where(Signal.state == state, Signal.created_at >= since, Signal.duplicate_of_id.is_(None),
-                                ~Signal.source_id.like("manual:%"), ~Signal.source_id.like("mls:%"),
-                                Signal.kind.in_(("permit", "bid", "subdivision", "storm")))
+    stmt = _public_signals().where(Signal.state == state, Signal.created_at >= since)
     rows = [s for s in db.scalars(stmt.order_by(Signal.created_at.desc()).limit(3000))
             if slugify(s.city or "") == city_slug]
     if tag:
@@ -165,6 +181,18 @@ async def optout_submit(request: Request, db: Session = Depends(get_db)):
     return page(request, "optout.html", done=True)
 
 
+@router.get("/email/unsubscribe", response_class=HTMLResponse)
+@router.post("/email/unsubscribe", response_class=HTMLResponse)
+def email_unsubscribe(request: Request, t: str = "", db: Session = Depends(get_db)):
+    """One-click unsubscribe (GET from the footer link, POST from List-Unsubscribe-Post)."""
+    from ..lifecycle import read_unsubscribe_token
+
+    email = read_unsubscribe_token(t)
+    if email and not db.get(EmailSuppression, email):
+        db.add(EmailSuppression(email=email))
+    return page(request, "unsubscribed.html", ok=bool(email))
+
+
 @router.get("/robots.txt", response_class=PlainTextResponse)
 def robots():
     return f"User-agent: *\nDisallow: /app\nDisallow: /api\nSitemap: {get_settings().public_url}/sitemap.xml\n"
@@ -173,7 +201,7 @@ def robots():
 @router.get("/sitemap.xml")
 def sitemap(db: Session = Depends(get_db)):
     base = get_settings().public_url
-    urls = [f"{base}/", f"{base}/pricing"] + [f"{base}/for/{k.replace('_', '-')}" for k in trade_defs()]
+    urls = [f"{base}/", f"{base}/pricing", f"{base}/leads"] + [f"{base}/for/{k.replace('_', '-')}" for k in trade_defs()]
     cities = db.execute(select(Signal.state, Signal.city).where(Signal.state.is_not(None), Signal.city.is_not(None),
                                                                 Signal.created_at >= utcnow() - timedelta(days=30))
                         .distinct().limit(5000)).all()

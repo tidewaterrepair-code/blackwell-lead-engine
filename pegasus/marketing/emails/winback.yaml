@@ -1,0 +1,39 @@
+# Win-back: anchored on the date a paid plan was canceled. Stops if they resubscribe.
+sequence: winback
+audience: org
+anchor: canceled_at
+stop_if: [paid]
+emails:
+  - id: wb1-sorry
+    day: 3
+    subject: "Sorry to see you go"
+    preview: "Your data is saved if you come back."
+    body: |
+      Hi {first_name},
+
+      Your Pegasus subscription has ended. Your pipeline, notes and territories are saved, so if you come back everything is where you left it.
+
+      If you have a minute, reply and tell me what didn't work. It goes straight into what we build next.
+    cta: [Reactivate, "{pricing_url}"]
+
+  - id: wb2-new
+    day: 14
+    subject: "What's new since you left"
+    preview: "More counties, more trades, sharper scores."
+    body: |
+      Hi {first_name},
+
+      Pegasus adds new counties every week through Source Scout, and the scoring model retrains nightly on real outcomes. Your area may look different now than it did when you left.
+
+      Take a look at the free weekly snapshot for your city, no login needed.
+    cta: [See this week's projects, "{city_url}"]
+
+  - id: wb3-offer
+    day: 30
+    subject: "An open door"
+    preview: "Come back to the plan you had."
+    body: |
+      Hi {first_name},
+
+      Last note from me. If the timing's better now, you can pick up exactly where you left off. Reply if you'd like a hand setting your area up again.
+    cta: [Come back to Pegasus, "{pricing_url}"]

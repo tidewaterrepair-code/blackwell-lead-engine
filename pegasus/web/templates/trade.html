@@ -1,0 +1,21 @@
+{% extends "base_site.html" %}
+{% block title %}{{ trade.label }} leads · Pegasus{% endblock %}
+{% block description %}Pegasus finds {{ trade.label|lower }} leads from public permits, bids, sales and storms, predicts upcoming jobs, and delivers them every morning.{% endblock %}
+{% block content %}
+<section class="hero"><div class="wrap hero-grid">
+  <div>
+    <span class="chip">For {{ trade.label|lower }}</span>
+    <h1 style="margin-top:20px">{% if trade.group == "realestate" %}Find motivated sellers <span class="grad">before they list.</span>{% else %}{{ trade.label }} jobs, <span class="grad">before they're posted.</span>{% endif %}</h1>
+    <p class="lead">Pegasus ranks every relevant public record in your area for {{ trade.label|lower }} and forecasts the jobs that come next, so you call first.</p>
+    <div class="ctas"><a class="btn btn-primary" href="/app/signup">Start free: 14 days</a><a class="btn" href="/pricing">Pricing</a></div>
+  </div>
+  <div class="card">
+    <div class="kicker">What Pegasus watches for you</div>
+    <ul style="margin:14px 0 0;padding-left:18px" class="muted">
+      {% for t in trade.tags|sort %}<li>{{ tag_label(t) }}</li>{% endfor %}
+      {% for k in trade.kinds|sort %}<li>{{ k|replace("_", " ")|title }} records</li>{% endfor %}
+    </ul>
+    <p class="small muted" style="margin-top:14px">Typical job: ${{ "{:,}".format(trade.ticket) }}. One win typically covers years of Pegasus.</p>
+  </div>
+</div></section>
+{% endblock %}

@@ -1,0 +1,53 @@
+# Trial to paid: anchored on the trial end date. Stops once the org has a paid subscription.
+sequence: trial
+audience: org
+anchor: trial_ends_at
+stop_if: [paid]
+emails:
+  - id: tr1-three-days
+    day: -3
+    subject: "Your trial ends in 3 days"
+    preview: "Keep your leads, pipeline and founding price."
+    body: |
+      Hi {first_name},
+
+      Your Pegasus Growth trial ends on {trial_end}. After that your account moves to the free Scout plan: one trade, a small area and leads shown a week late.
+
+      To keep real-time leads, predictions and your pipeline exactly as they are, pick a plan. Founding members keep 40% off for life.
+    cta: [Choose a plan, "{pricing_url}"]
+
+  - id: tr2-tomorrow
+    day: -1
+    subject: "Trial ends tomorrow"
+    preview: "One click keeps everything."
+    body: |
+      Hi {first_name},
+
+      Quick reminder: your trial ends tomorrow. Nothing is lost if you upgrade today. Your leads, notes and territories stay put.
+
+      Not sure which plan fits? Pro covers one trade and one county. Growth adds three trades, predictions, deal tools and five seats.
+    cta: [Keep my leads, "{pricing_url}"]
+
+  - id: tr3-ended
+    day: 0
+    subject: "Your trial has ended"
+    preview: "You're on the free plan. Upgrade any time."
+    body: |
+      Hi {first_name},
+
+      Your trial is over and {org_name} is now on the free Scout plan. You still get a weekly look at what's happening in your area, just delayed.
+
+      Everything you built during the trial is saved. Upgrading brings it all back instantly.
+    cta: [Upgrade now, "{pricing_url}"]
+
+  - id: tr4-check-in
+    day: 4
+    subject: "Was something missing?"
+    preview: "Tell me and I'll look into it."
+    body: |
+      Hi {first_name},
+
+      You tried Pegasus and didn't upgrade. That's useful to know, and I'd like to know why. Was your area thin on data, a trade missing, or the price wrong?
+
+      Reply with one line. If it's coverage, I'll have Source Scout look at your county first.
+    cta: [See plans, "{pricing_url}"]

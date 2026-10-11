@@ -1,0 +1,21 @@
+# Launch blast: a one-off broadcast to the waitlist. Not sent automatically:
+# `pegasus marketing emails` renders it to HTML for Listmonk (or any ESP).
+sequence: launch
+audience: broadcast
+emails:
+  - id: launch-blast
+    day: 0
+    subject: "Pegasus is live"
+    preview: "Your founding seat is open. 14 days free."
+    body: |
+      Hi {first_name},
+
+      Pegasus is open. Starting today you can:
+
+      - Pick your trade, or Realty mode, and draw your area anywhere in the US.
+      - Get the Morning Drop: every new permit, bid, sale and storm, ranked for you at 7am.
+      - See predicted jobs before they're permitted, with the window when your trade gets hired.
+      - Agents and investors: likely-to-sell scores, the deal analyzer and MLS connect.
+
+      Founding members keep 40% off for life. There are {founding_left} seats left, and the trial is 14 days with no card.
+    cta: [Claim my founding seat, "{signup_url}"]

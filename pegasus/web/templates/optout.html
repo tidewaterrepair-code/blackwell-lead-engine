@@ -1,0 +1,18 @@
+{% extends "base_site.html" %}
+{% block title %}Opt out · Pegasus{% endblock %}
+{% block content %}
+<section class="hero"><div class="wrap prose">
+  <h1>Opt out / do not sell</h1>
+  {% if done %}
+  <p class="lead muted" style="margin-top:16px">Done. We'll suppress matching records from contact lookups and outreach within 10 business days.</p>
+  {% else %}
+  <p class="lead muted" style="margin-top:16px">Pegasus uses public records. If you'd like your property address, phone number or email suppressed from contact lookups, tell us below. We don't need anything else.</p>
+  <form method="post" style="display:grid;gap:12px;margin-top:24px;max-width:520px">
+    <input class="input" name="address" placeholder="Property address">
+    <input class="input" name="phone" placeholder="Phone number">
+    <input class="input" name="email" type="email" placeholder="Email address">
+    <button class="btn btn-primary">Submit request</button>
+  </form>
+  {% endif %}
+</div></section>
+{% endblock %}

@@ -516,6 +516,17 @@ class WaitlistSignup(Base):
     trade: Mapped[str | None] = mapped_column(String(64))
     city: Mapped[str | None] = mapped_column(String(100))
     utm: Mapped[dict] = mapped_column(JSON, default=dict)
+    emails_sent: Mapped[list] = mapped_column(JSON, default=list)  # lifecycle email ids already sent
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+
+class EmailSuppression(Base):
+    """Addresses that unsubscribed from marketing and lifecycle email (CAN-SPAM)."""
+
+    __tablename__ = "email_suppressions"
+
+    email: Mapped[str] = mapped_column(String(254), primary_key=True)
+    reason: Mapped[str] = mapped_column(String(32), default="unsubscribe")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
 

@@ -1,0 +1,9 @@
+{% extends "base_site.html" %}
+{% block title %}{{ title }} · Pegasus{% endblock %}
+{% block content %}
+<section class="hero"><div class="wrap" style="text-align:center">
+  <div class="kicker">{{ status }}</div><h1 style="margin-top:12px">{{ title }}</h1>
+  <p class="lead muted" style="margin:16px auto 0">That page flew off. Try the home page.</p>
+  <div class="ctas" style="justify-content:center"><a class="btn btn-primary" href="/">Home</a></div>
+</div></section>
+{% endblock %}

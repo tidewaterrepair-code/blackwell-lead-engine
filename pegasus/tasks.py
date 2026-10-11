@@ -73,6 +73,7 @@ def daily(_payload: dict) -> dict:
     from .ingest import rescore_open_leads
     from .intel.learn import nightly
     from .jobs import prune
+    from .lifecycle import run_lifecycle
     from .notify import push_hot_leads, send_digest
 
     out = {}
@@ -86,6 +87,7 @@ def daily(_payload: dict) -> dict:
     with session_scope() as s:
         out["digests"] = sum(send_digest(s, org) for org in s.scalars(select(Org)))
         out["pushes"] = push_hot_leads(s)
+        out["lifecycle_emails"] = run_lifecycle(s)
         for conn in s.scalars(select(MLSConnection).where(MLSConnection.status == "active")):
             enqueue(s, "sync_mls", {"connection_id": conn.id}, unique_key=f"mls:{conn.id}")
     return out

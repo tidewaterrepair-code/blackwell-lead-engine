@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ stats.territory.name }} market report · {{ org.name }}</title>
+<link rel="stylesheet" href="/static/site.css">
+<style>
+  body { background: #fff; color: #0A0F2C; } .card { background: #fff; border-color: #e6e8f2; }
+  .hdr { background: {{ brand }}; color: #fff; padding: 28px; border-radius: 18px; }
+  .big { font-family: "Space Grotesk Variable", system-ui; font-size: 34px; font-weight: 700; }
+  @media print { .noprint { display: none; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style></head>
+<body><div class="wrap" style="padding:32px 20px">
+  <div class="hdr"><div class="kicker" style="color:rgba(255,255,255,.8)">Market report · {{ stats.as_of }}</div>
+    <h1 style="font-size:40px;margin-top:8px">{{ stats.territory.name }}</h1>
+    <div style="margin-top:8px">Prepared by {{ user.name or user.email }} · {{ org.name }}{% if org.settings.company_phone %} · {{ org.settings.company_phone }}{% endif %}</div></div>
+  <div class="grid g4" style="margin-top:18px">
+    <div class="card"><div class="kicker">Homes sold (12 mo)</div><div class="big">{{ stats.sales_12mo }}</div></div>
+    <div class="card"><div class="kicker">Median sale price</div><div class="big">{{ stats.median_sale_price|money or "—" }}</div></div>
+    <div class="card"><div class="kicker">Turnover</div><div class="big">{{ "%.1f%%"|format(stats.turnover_rate * 100) if stats.turnover_rate is not none else "—" }}</div></div>
+    <div class="card"><div class="kicker">Median days on market</div><div class="big">{{ stats.mls.median_dom or "—" }}</div></div>
+  </div>
+  <div class="grid g2" style="margin-top:18px">
+    <div class="card"><div class="kicker">Most active streets</div><table><tbody>{% for s in stats.hottest_streets %}<tr><td>{{ s.street }}</td><td class="num">{{ s.activity }}</td></tr>{% endfor %}</tbody></table></div>
+    <div class="card"><div class="kicker">What it means for you</div><p style="margin-top:10px">Thinking about selling or renovating? Homes in {{ stats.territory.name }} are moving. I'll send you a free, no-pressure valuation and a list of recent nearby sales. Just reply or call.</p></div>
+  </div>
+  <p class="small" style="margin-top:18px;color:#6b7280">Source: public records and MLS data where available. Figures are estimates. Not an appraisal.</p>
+  <button class="btn btn-primary noprint" style="margin-top:14px" onclick="window.print()">Print / save as PDF</button>
+</div></body></html>

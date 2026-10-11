@@ -1,0 +1,96 @@
+# Onboarding: sent to the owner of every new account, anchored on signup.
+# Placeholders: {first_name} {org_name} {app_url} {pricing_url} {trial_end}
+sequence: onboarding
+audience: org
+anchor: created_at
+emails:
+  - id: ob1-welcome
+    day: 0
+    subject: "Welcome to Pegasus, {first_name}"
+    preview: "Three things to do in your first five minutes."
+    body: |
+      Welcome aboard. Your Growth trial runs until {trial_end}.
+
+      Do these three things first:
+
+      - Pick your trades (or Realty mode) so scores reflect the jobs you actually want.
+      - Draw your area. Radius, ZIPs, counties or a hand-drawn shape all work.
+      - Turn on the Morning Drop so the best new leads land on your phone at 7am.
+
+      Then open the Stream and swipe. Right saves to your pipeline, left passes.
+    cta: [Open Pegasus, "{app_url}"]
+
+  - id: ob2-area
+    day: 1
+    skip_if: [has_territory]
+    subject: "Your area is still blank"
+    preview: "Leads appear the minute you draw it."
+    body: |
+      Hi {first_name},
+
+      Pegasus doesn't know where you work yet, so your Stream is empty. Drawing an area takes about 20 seconds: drop a pin and pick a radius, or type your ZIPs.
+
+      If your county isn't covered yet, Source Scout starts looking for its data straight away and you'll get an email when it's live.
+    cta: [Draw my area, "{app_url}/areas"]
+
+  - id: ob3-first-call
+    day: 2
+    skip_if: [has_contacted]
+    subject: "The first call is the one that wins"
+    preview: "How to work a Pegasus lead in under two minutes."
+    body: |
+      Hi {first_name},
+
+      A simple routine that works:
+
+      - Open the top three leads in your Stream each morning.
+      - Read "Why this lead" and the predicted timeline.
+      - Call or knock, then mark it Contacted. That logs it and earns XP toward your streak.
+
+      Leads you mark Won teach Pegasus what good looks like for you, and your scores get sharper every week.
+    cta: [Work today's leads, "{app_url}"]
+
+  - id: ob4-predictions
+    day: 4
+    subject: "Leads that haven't happened yet"
+    preview: "Predicted jobs show up before the permit does."
+    body: |
+      Hi {first_name},
+
+      Look for the "Predicted" badge in your Stream. Those leads come from a project that's already underway, where your trade's window opens soon.
+
+      Each one shows the trigger (for example, a new-home permit six weeks ago) and the window when your trade usually gets hired. Being early on those is how small crews beat big ones.
+    cta: [See predicted jobs, "{app_url}"]
+
+  - id: ob5-team
+    day: 6
+    subject: "Bring your crew or your team"
+    preview: "Growth includes 5 seats."
+    body: |
+      Hi {first_name},
+
+      Growth includes five seats. Invite your estimator, partner or office manager and everyone works the same pipeline, with notes, follow-ups and a team leaderboard.
+    cta: [Invite teammates, "{app_url}/settings"]
+
+  - id: ob6-realty
+    day: 8
+    only_if: [mode_realestate]
+    subject: "Run a deal in five seconds"
+    preview: "ARV, repairs, max offer and a grade."
+    body: |
+      Hi {first_name},
+
+      Open any property and tap Analyze. Pegasus pulls comparable sales, estimates repairs from age, size and violations, and gives you ARV, a 70% max offer, the spread and a deal grade.
+
+      Agents: connect your MLS under Settings so expired and withdrawn listings in your farm show up as private leads.
+    cta: [Open Deals, "{app_url}/deals"]
+
+  - id: ob7-recap
+    day: 10
+    subject: "Your first recap is ready"
+    preview: "What Pegasus found for you so far."
+    body: |
+      Hi {first_name},
+
+      The recap card at the top of your Stream shows what Pegasus surfaced for you, what you worked, and the value of the jobs in your pipeline. You can share it as a card, and every share earns you 5 credits.
+    cta: [See my recap, "{app_url}"]

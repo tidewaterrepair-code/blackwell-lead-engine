@@ -40,7 +40,7 @@ pegasus = "pegasus.cli:main"
 include = ["pegasus*"]
 
 [tool.setuptools.package-data]
-pegasus = ["web/templates/*.html", "web/templates/**/*.html", "web/static/**/*", "data/*.json", "intel/data/*.yaml"]
+pegasus = ["web/templates/*.html", "web/templates/**/*.html", "web/static/**/*", "data/*.json", "intel/data/*.yaml", "marketing/emails/*.yaml"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

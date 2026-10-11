@@ -1,0 +1,9 @@
+{% extends "base_site.html" %}
+{% block content %}
+<section class="hero"><div class="wrap prose">
+  <div class="kicker">Legal</div>
+  <h1 style="margin-top:10px">{% block doc_title %}{% endblock %}</h1>
+  <div class="draft">Draft for attorney review. Have a licensed attorney in your state review and finalize this document before launch.</div>
+  {% block doc %}{% endblock %}
+</div></section>
+{% endblock %}

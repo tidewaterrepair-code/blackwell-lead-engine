@@ -12,7 +12,7 @@
   make-admin EMAIL       give a user platform-admin (Mission Control) access
   daily                  run the daily job now (rescore, digests, learning)
   demo                   seed demo data + demo accounts (dev/staging only)
-  marketing ...          launch toolkit (render banners, export ads, calendar)
+  marketing ...          launch toolkit (banners, ads, calendar, weekly posts, emails)
 """
 
 from __future__ import annotations
@@ -239,7 +239,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--threads", type=int, default=3)
     p.set_defaults(func=cmd_worker)
     p = sub.add_parser("marketing", help="launch toolkit")
-    p.add_argument("action", choices=["render", "ads", "calendar", "weekly-posts", "all"])
+    p.add_argument("action", choices=["render", "ads", "calendar", "weekly-posts", "emails", "all"])
     p.add_argument("--out", default="marketing/dist")
     p.add_argument("--city")
     p.add_argument("--state", default="VA")

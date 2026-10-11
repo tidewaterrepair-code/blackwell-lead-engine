@@ -1,0 +1,19 @@
+{% extends "base_site.html" %}
+{% block title %}{{ count }} new {% if tag %}{{ tag_label(tag)|lower }} {% endif %}construction leads in {{ city }}, {{ state }} · Pegasus{% endblock %}
+{% block description %}{{ count }} new {% if tag %}{{ tag_label(tag)|lower }} {% endif %}permits, bids and projects in {{ city }}, {{ state }} in the last 30 days, worth about {{ total_value|money }}. Updated daily by Pegasus.{% endblock %}
+{% block content %}
+<section class="hero"><div class="wrap">
+  <div class="kicker">{{ city }}, {{ state }} · last 30 days</div>
+  <h1 style="margin-top:12px"><span class="grad">{{ count }}</span> new {% if tag %}{{ tag_label(tag)|lower }} {% endif %}projects in {{ city }}</h1>
+  <p class="lead muted" style="margin-top:16px">Worth about <b>{{ total_value|money }}</b>, from public permits and bids. Pegasus scores every one for your trade and predicts the work that follows.</p>
+  <div class="ctas" style="margin-top:24px"><a class="btn btn-primary" href="/app/signup">Get these leads with addresses</a></div>
+  <div class="grid g2" style="margin-top:44px">
+    <div class="card"><div class="kicker">By type</div>
+      <table><tbody>{% for t, n in counts %}<tr><td><a href="/leads/{{ state|lower }}/{{ city_slug }}/{{ t }}">{{ tag_label(t) }}</a></td><td class="num">{{ n }}</td></tr>{% endfor %}</tbody></table></div>
+    <div class="card"><div class="kicker">Latest (street only; full details in the app)</div>
+      <table><thead><tr><th>Job</th><th>Street</th><th>Value</th></tr></thead><tbody>
+        {% for r in teaser %}<tr><td>{{ r.job }}</td><td>{{ r.street or "—" }}</td><td class="num">{{ r.value|money }}</td></tr>{% endfor %}
+      </tbody></table></div>
+  </div>
+</div></section>
+{% endblock %}

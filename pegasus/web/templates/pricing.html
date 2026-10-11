@@ -1,0 +1,15 @@
+{% extends "base_site.html" %}
+{% block title %}Pricing · Pegasus{% endblock %}
+{% block content %}
+<section class="hero"><div class="wrap">
+  <div class="kicker">Pricing</div>
+  <h1 style="margin-top:12px">Simple plans. <span class="grad">One job</span> pays for a year.</h1>
+  <p class="lead muted" style="margin-top:16px;max-width:680px">Every plan starts with a 14-day free trial of Growth. No card required. The first 100 customers keep 40% off for life.</p>
+  {% include "_plans.html" %}
+  <div class="grid g3" style="margin-top:44px">
+    <div class="card"><h3>Contact credits</h3><p class="muted small" style="margin-top:8px">1 credit unlocks an owner's phone and email, with Do Not Call and litigator flags. Packs: 100 for $25 · 450 for $100 · 1,250 for $250.</p></div>
+    <div class="card"><h3>Exclusive ZIP codes</h3><p class="muted small" style="margin-top:8px">Lock a ZIP for your trade: nobody else on Pegasus gets those leads. $149/mo per ZIP, first come first served.</p></div>
+    <div class="card"><h3>Refer & earn 30%</h3><p class="muted small" style="margin-top:8px">Coaches, associations and suppliers earn 30% of every payment from every customer they refer, for life.</p></div>
+  </div>
+</div></section>
+{% endblock %}

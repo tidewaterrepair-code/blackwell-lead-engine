@@ -1,0 +1,162 @@
+{% extends "base_site.html" %}
+{% from "_icons.html" import icon %}
+{% block content %}
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="chip chip-gold">⚡ Founding members: {{ founding_left }} of 100 seats left · 40% off for life</span>
+      <h1 style="margin-top:22px">See the job <span class="grad">before</span> your competition does.</h1>
+      <p class="lead">Pegasus watches permits, bids, property sales, storms and distressed properties in your area, predicts the work that comes next, and hands you a ranked list every morning.</p>
+      <div class="ctas">
+        <a class="btn btn-primary" href="/app/signup{% if utm %}?{{ utm|urlencode }}{% endif %}">Start free: 14 days, no card</a>
+        <a class="btn" href="#how">See how it works</a>
+      </div>
+      <div class="proof">
+        <span><b>{{ "{:,}".format(signals_week) }}</b> public records scored this week</span>
+        <span><b>26</b> trades + real estate</span>
+        <span><b>Any</b> US city or county</span>
+      </div>
+    </div>
+    <div class="radar" aria-hidden="true">
+      <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div><div class="sweep"></div>
+      <span class="ping" style="left:28%;top:34%"></span><span class="ping" style="left:64%;top:22%;animation-delay:.6s"></span>
+      <span class="ping" style="left:70%;top:62%"></span><span class="ping" style="left:38%;top:72%"></span>
+      <div class="card card-float" style="left:-4%;top:12%"><span class="score">92</span><b style="display:inline">New home permit · $468k</b><div class="muted">Framing window opens next week</div></div>
+      <div class="card card-float" style="right:-6%;top:44%;animation-delay:1.2s"><span class="score">88</span><b style="display:inline">Hail 1.75″ near Kempsville</b><div class="muted">Roofs in the swath: claims open now</div></div>
+      <div class="card card-float" style="left:6%;bottom:4%;animation-delay:2.1s"><span class="score">81</span><b style="display:inline">Behind on taxes · 64% equity</b><div class="muted">High likelihood to sell this year</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="kicker">How it works</div>
+    <h2 style="margin-top:10px">Public records in. <span class="grad">Your next job</span> out.</h2>
+    <div class="grid g4" style="margin-top:36px">
+      {% for ico, title, body in [
+        ("map", "Pick your trade & area", "Any city, county, ZIP or radius in the US. If we don't cover it yet, Source Scout maps the local data for you."),
+        ("radar", "Pegasus scans everything", "Permits, bids, property sales, storms, code violations, tax and foreclosure records, planning agendas: all scored daily."),
+        ("brain", "It predicts what's next", "A new home means framing in 2 weeks, roofing in 6, a deck in a year. A pool means a fence. A storm means roofs."),
+        ("bolt", "You get the Morning Drop", "A ranked feed on your phone at 7am with AI briefs and ready-to-send openers. Swipe right to save.")] %}
+      <div class="card"><div class="icon">{{ icon(ico) }}</div><h3>{{ title }}</h3><p class="muted small" style="margin-top:8px">{{ body }}</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap grid g2" style="align-items:center;gap:48px">
+    <div>
+      <div class="kicker">Deep logic</div>
+      <h2 style="margin-top:10px">One permit. <span class="grad">Fourteen</span> trades notified at the right moment.</h2>
+      <p class="muted" style="margin-top:16px">Every project follows a sequence. Pegasus models it, so each trade hears about the job when it's actually buyable, not after someone else has signed the contract. The forecasts sharpen every night as customers mark leads won or lost.</p>
+      <a class="btn btn-primary" style="margin-top:24px" href="/app/signup">See predictions in your area</a>
+    </div>
+    <div class="card">
+      <div class="kicker">New single-family permit · Virginia Beach</div>
+      <div class="timeline">
+        {% for trade, start, width, label in [("Concrete", 0, 18, "Now"), ("Framing", 6, 22, "Week 1–6"), ("Roofing", 22, 20, "Week 5–10"),
+           ("HVAC · Plumbing · Electric", 28, 24, "Week 6–12"), ("Insulation & drywall", 40, 18, "Week 9–14"), ("Flooring & paint", 52, 30, "Month 3–5"),
+           ("Deck · Fence · Landscaping", 62, 38, "Month 4–12")] %}
+        <div class="tl-row"><span class="small">{{ trade }}</span><div class="tl-bar"><div class="tl-fill" style="left:{{ start }}%;width:{{ width }}%">{{ label }}</div></div></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="trades">
+  <div class="wrap">
+    <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:end;justify-content:space-between">
+      <div><div class="kicker">Built for</div><h2 style="margin-top:10px">Your trade. Your market. <span class="grad">Your edge.</span></h2></div>
+      <div class="tabs" role="tablist">
+        <button role="tab" aria-selected="true" data-tab="trades">Trades</button>
+        <button role="tab" aria-selected="false" data-tab="realestate">Real estate</button>
+      </div>
+    </div>
+    <div data-panel="trades" class="grid g3" style="margin-top:32px">
+      {% for ico, title, body in [
+        ("home", "Builders & framers", "New-home starts, plats and teardowns the day they're filed, plus which GCs are pulling the most permits."),
+        ("cloud", "Roofing & exterior", "Hail and wind swaths mapped to your area within hours, plus every reroof, siding and window permit."),
+        ("bolt", "HVAC, plumbing & electrical", "Rough-in windows on every new build, panel upgrades, solar, EV chargers, water heaters."),
+        ("sparkles", "Remodelers, kitchen & bath", "New owners in their first 18 months, remodel permits, water and fire damage."),
+        ("map", "Outdoor: decks, pools, fences, landscaping", "Predicted first-year projects for every new home; the fence every new pool legally needs."),
+        ("users", "Suppliers & lumber yards", "Every builder and project in your trade area, so your reps call first.")] %}
+      <div class="card"><div class="icon">{{ icon(ico) }}</div><h3>{{ title }}</h3><p class="muted small" style="margin-top:8px">{{ body }}</p></div>
+      {% endfor %}
+    </div>
+    <div data-panel="realestate" id="realestate" class="grid g3" style="margin-top:32px" hidden>
+      {% for ico, title, body in [
+        ("key", "Off-market deals", "Tax delinquency, pre-foreclosure, probate, evictions, code violations and vacancy stacked into one motivation score."),
+        ("chart", "Likely-to-sell predictions", "Who in your farm is most likely to list in the next 12 months, and why. Fair-housing safe: property facts only."),
+        ("trophy", "Deal analyzer", "ARV from comps, repair estimate, max allowable offer and a deal grade in seconds."),
+        ("lock", "Connect your MLS", "Merge your MLS feed with public data. Expired and withdrawn listings become leads instantly, private to you."),
+        ("map", "Farm intelligence", "Turnover, absentee share, hottest streets and a branded monthly market report you can send."),
+        ("phone", "Compliant outreach", "Owner contacts with Do Not Call and litigator flags, plus AI openers that never mention distress.")] %}
+      <div class="card"><div class="icon">{{ icon(ico) }}</div><h3>{{ title }}</h3><p class="muted small" style="margin-top:8px">{{ body }}</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="kicker">Pricing</div>
+    <h2 style="margin-top:10px">Pays for itself with <span class="grad">one job</span>.</h2>
+    {% include "_plans.html" %}
+  </div>
+</section>
+
+<section>
+  <div class="wrap grid g2" style="gap:48px">
+    <div><div class="kicker">FAQ</div><h2 style="margin-top:10px">Straight answers</h2></div>
+    <div>
+      {% for q, a in [
+        ("Where does the data come from?", "Public records: city and county permit portals and open-data APIs, government bid boards, recorded property sales, treasurer tax lists, court and code-enforcement records, planning agendas and NOAA storm reports. Agents can also connect their own MLS feed. See the data sources page for details."),
+        ("Do you cover my area?", "Pick any US city, county or ZIP. Where we already have sources, leads start immediately. Where we don't, Source Scout finds and maps the local data, usually within a few days, and you'll see the coverage meter fill in."),
+        ("What are predicted jobs?", "Forecasts of the next trade a property will need, based on the project sequence (new build → framing → roofing → HVAC → finishes → deck/fence/landscape), storms, sales and more. They're scored by probability and timing, and they get better as customers report outcomes."),
+        ("Is this legal and compliant?", "Pegasus uses public records and licensed feeds. Owner phone numbers come with Do Not Call and litigator flags, the AI follows fair-housing rules, and Pegasus isn't a consumer reporting agency, so it can't be used for credit, employment or tenant screening."),
+        ("What are credits?", "Credits unlock owner contact details (phone and email). Every paid plan includes credits each month, and you can top up any time. Sharing your weekly recap earns free credits."),
+        ("Can I cancel?", "Any time, in two clicks. Founding member pricing stays locked as long as you stay subscribed.")] %}
+      <details><summary>{{ q }}</summary><p>{{ a }}</p></details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="card" style="text-align:center;padding:56px 24px;background:linear-gradient(135deg,color-mix(in srgb,var(--violet) 22%,transparent),color-mix(in srgb,var(--cyan) 14%,transparent))">
+      <h2>Tomorrow's jobs are already on file.</h2>
+      <p class="muted" style="margin:14px auto 0;max-width:560px">Start free and get your first Morning Drop tomorrow at 7am. Not ready? Get the free weekly "Hot permits in your city" email.</p>
+      <div style="margin-top:26px"><a class="btn btn-primary" href="/app/signup">Start free</a></div>
+      <form id="waitlist" class="form-row" style="max-width:560px;margin:22px auto 0">
+        <input class="input" type="email" name="email" required placeholder="you@company.com" aria-label="Email">
+        <input class="input" name="city" placeholder="Your city" aria-label="City">
+        <button class="btn">Send me hot permits</button>
+      </form>
+      <p id="waitlist-msg" class="small muted" style="margin-top:10px" role="status"></p>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.querySelectorAll(".tabs button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll(".tabs button").forEach(function (x) { x.setAttribute("aria-selected", x === b); });
+      document.querySelectorAll("[data-panel]").forEach(function (p) { p.hidden = p.dataset.panel !== b.dataset.tab; });
+    });
+  });
+  if (location.hash === "#realestate") document.querySelector('[data-tab="realestate"]').click();
+  document.getElementById("waitlist").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var f = new FormData(e.target), utm = {};
+    new URLSearchParams(location.search).forEach(function (v, k) { if (k.indexOf("utm_") === 0) utm[k] = v; });
+    var r = await fetch("/api/waitlist", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: f.get("email"), city: f.get("city"), utm: utm }) });
+    document.getElementById("waitlist-msg").textContent = r.ok ? "You're on the list. First report lands Monday." : "Check that email and try again.";
+    if (r.ok) e.target.reset();
+  });
+</script>
+{% endblock %}

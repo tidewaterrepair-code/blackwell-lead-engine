@@ -185,6 +185,12 @@ def _org_from(session: Session, obj: dict) -> Org | None:
     return None
 
 
+def _mark_canceled(org: Org) -> None:
+    """Remember when a paid plan ended (anchors the win-back email sequence)."""
+    if not (org.settings or {}).get("canceled_at"):
+        org.settings = {**(org.settings or {}), "canceled_at": utcnow().isoformat()}
+
+
 def apply_event(session: Session, event: dict) -> str:
     """Apply one Stripe event (idempotent on event id)."""
     if session.get(BillingEvent, event["id"]):
@@ -217,9 +223,12 @@ def apply_event(session: Session, event: dict) -> str:
         org.plan_status = {"active": "active", "trialing": "active", "past_due": "past_due",
                            "unpaid": "past_due", "canceled": "canceled",
                            "incomplete_expired": "canceled"}.get(status, org.plan_status)
+        if org.plan_status == "canceled":
+            _mark_canceled(org)
     elif etype == "customer.subscription.deleted" and org:
         if obj.get("id") == org.stripe_subscription_id:
             org.plan, org.plan_status, org.stripe_subscription_id = "free", "active", None
+            _mark_canceled(org)
     elif etype == "invoice.paid" and org:
         amount = int(obj.get("amount_paid") or 0)
         ref = session.scalar(select(Referral).where(Referral.referred_org_id == org.id))

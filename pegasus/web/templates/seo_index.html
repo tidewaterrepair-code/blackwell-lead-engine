@@ -1,0 +1,18 @@
+{% extends "base_site.html" %}
+{% block title %}New construction leads by city · Pegasus{% endblock %}
+{% block description %}Live counts of new building permits, bids and projects by city from public records, updated daily by Pegasus.{% endblock %}
+{% block content %}
+<section class="hero"><div class="wrap">
+  <div class="kicker">Last 30 days · updated daily</div>
+  <h1 style="margin-top:12px">What's being built, <span class="grad">city by city</span></h1>
+  <p class="lead muted" style="margin-top:16px">Public permits, bids, plats and storm reports, counted by city. Pick yours to see the breakdown, or sign up to get every one with the address, scored for your trade.</p>
+  <div class="ctas" style="margin-top:24px"><a class="btn btn-primary" href="/app/signup">Get leads for my area</a></div>
+  {% if cities %}
+  <div class="card" style="margin-top:44px"><table><thead><tr><th>City</th><th>State</th><th>Projects</th></tr></thead><tbody>
+    {% for c in cities %}<tr><td><a href="{{ c.url }}">{{ c.city }}</a></td><td>{{ c.state }}</td><td class="num">{{ c.count }}</td></tr>{% endfor %}
+  </tbody></table></div>
+  {% else %}
+  <p class="muted" style="margin-top:44px">No public activity yet. Coverage grows every time a new area signs up.</p>
+  {% endif %}
+</div></section>
+{% endblock %}

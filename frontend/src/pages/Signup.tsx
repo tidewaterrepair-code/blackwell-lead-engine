@@ -25,7 +25,7 @@ export function Signup({ invite = false, onboardingOnly = false }: { invite?: bo
 
   const options = useMemo(() => (catalog?.trades ?? []).filter((t) => t.group === audience), [catalog, audience]);
   const ref = params.get("ref") ?? document.cookie.match(/pegasus_ref=([^;]+)/)?.[1] ?? undefined;
-  const utm = Object.fromEntries([...params.entries()].filter(([k]) => k.startsWith("utm_")));
+  const utm = Object.fromEntries([...params.entries()].filter(([k]) => k.startsWith("utm_") || k === "gclid" || k === "fbclid"));
 
   const toggle = (k: string) => setTrades((t) => t.includes(k) ? t.filter((x) => x !== k) : t.length >= 3 ? t : [...t, k]);
 

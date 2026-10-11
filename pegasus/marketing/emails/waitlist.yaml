@@ -1,0 +1,84 @@
+# Waitlist nurture: sent to people who joined the waitlist but have no account yet.
+# Placeholders: {first_name} {city} {founding_left} {signup_url} {pricing_url} {site_url}
+sequence: waitlist
+audience: waitlist
+anchor: created_at
+stop_if: [has_account]
+emails:
+  - id: wl1-welcome
+    day: 0
+    subject: "You're on the Pegasus list"
+    preview: "Here's what happens next, and why permits beat bought leads."
+    body: |
+      Hi {first_name},
+
+      Thanks for joining the Pegasus waitlist. Quick version of what you signed up for:
+
+      - Every morning, Pegasus reads the public record in your area: building permits, bids, property sales, storm reports, tax and court filings.
+      - It ranks what it finds for your trade, or for listings and deals if you're an agent or investor.
+      - It predicts the jobs that come next, so you can call before anyone else is hired.
+
+      Founding members keep 40% off for life. There are {founding_left} founding seats left.
+
+      Reply to this email and tell me your trade and city. I read every reply.
+    cta: [Claim a founding seat, "{signup_url}"]
+
+  - id: wl2-one-permit
+    day: 2
+    subject: "One permit, 14 trades"
+    preview: "A new-home permit is a schedule. Here's how to read it."
+    body: |
+      Hi {first_name},
+
+      When a new single-family home gets permitted, about 14 trades will be hired over the next year. They're hired in a predictable order:
+
+      - Framing: weeks 1 to 6
+      - Roofing: weeks 6 to 10
+      - HVAC, plumbing and electrical rough-in: weeks 8 to 12
+      - Drywall, flooring, cabinets: weeks 12 to 20
+      - Deck, fence, landscaping, pool, blinds: 3 to 12 months after move-in
+
+      Pegasus turns each permit into that timeline and tells each trade when its window opens. That's the difference between "a list of permits" and "who to call this week".
+    cta: [See how it works, "{site_url}/#how"]
+
+  - id: wl3-local
+    day: 5
+    subject: "What's being built in {city}"
+    preview: "Public data, ranked. No shared leads."
+    body: |
+      Hi {first_name},
+
+      Most contractors buy leads that 3 to 5 competitors bought too. Permits, plats and bids are public, earlier, and almost nobody works them.
+
+      Pegasus publishes a free weekly snapshot for covered cities. Have a look at what was filed near you, then imagine getting it every morning, scored for your trade, with the address and owner context attached.
+
+      If your county isn't covered yet, Source Scout goes looking for its data as soon as someone there signs up.
+    cta: [See this week's projects, "{city_url}"]
+
+  - id: wl4-founding
+    day: 9
+    subject: "{founding_left} founding seats left"
+    preview: "40% off for life, 14 days free, no card."
+    body: |
+      Hi {first_name},
+
+      Founding pricing is 40% off any plan for as long as you stay. It's limited to the first 100 customers and there are {founding_left} left.
+
+      - 14-day free trial of Growth, no card required
+      - Cancel any time from the billing page
+      - Your price never goes up while you stay subscribed
+
+      Sign up, pick your trade and draw your area. Your first leads appear in about a minute.
+    cta: [Start free, "{signup_url}"]
+
+  - id: wl5-last-call
+    day: 14
+    subject: "Last note from me"
+    preview: "After this, just the weekly permit snapshot."
+    body: |
+      Hi {first_name},
+
+      This is the last email in this series. From here on you'll only hear from us when there's something worth your time.
+
+      If now isn't the right time, no problem. If it is, your founding seat is one signup away and the trial costs nothing.
+    cta: [Start my free trial, "{signup_url}"]

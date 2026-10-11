@@ -24,16 +24,19 @@ OUTBOX: list[dict] = []  # captured messages when SMTP isn't configured (dev + t
 BRAND_GRADIENT = "linear-gradient(135deg,#7C5CFF,#22D3EE)"
 
 
-def send_email(to: str, subject: str, text: str, html_body: str | None = None) -> bool:
+def send_email(to: str, subject: str, text: str, html_body: str | None = None,
+               headers: dict[str, str] | None = None) -> bool:
     s = get_settings()
     msg = EmailMessage()
     msg["Subject"], msg["From"], msg["To"] = subject, s.mail_from, to
     msg["Message-ID"] = make_msgid(domain="pegasusleads.com")
+    for k, v in (headers or {}).items():
+        msg[k] = v
     msg.set_content(text)
     if html_body:
         msg.add_alternative(html_body, subtype="html")
     if not s.smtp_host:
-        OUTBOX.append({"to": to, "subject": subject, "text": text, "html": html_body})
+        OUTBOX.append({"to": to, "subject": subject, "text": text, "html": html_body, "headers": headers or {}})
         log.info("email (not sent, SMTP not configured) to=%s subject=%s", to, subject)
         return False
     conn = smtplib.SMTP_SSL(s.smtp_host, s.smtp_port, timeout=30) if s.smtp_port == 465 else \
@@ -59,7 +62,8 @@ def send_push(topic: str, title: str, message: str, url: str | None = None, prio
     return True
 
 
-def wrap_html(title: str, body_html: str, cta_label: str | None = None, cta_url: str | None = None) -> str:
+def wrap_html(title: str, body_html: str, cta_label: str | None = None, cta_url: str | None = None,
+              footer_html: str | None = None) -> str:
     cta = (f"<p style='margin:28px 0'><a href='{html.escape(cta_url)}' style='background:#7C5CFF;color:#fff;"
            f"padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:600'>{html.escape(cta_label)}</a></p>"
            if cta_label and cta_url else "")
@@ -71,7 +75,8 @@ def wrap_html(title: str, body_html: str, cta_label: str | None = None, cta_url:
         f"<div style='padding:28px;color:#0A0F2C;font-size:15px;line-height:1.55'><h2 style='margin:0 0 12px'>"
         f"{html.escape(title)}</h2>{body_html}{cta}</div>"
         "<div style='padding:16px 28px;color:#6b7280;font-size:12px;border-top:1px solid #eef0f6'>"
-        "Pegasus · data &amp; lead technology · You can change email settings in the app.</div></div></div>"
+        f"{footer_html or 'Pegasus · data &amp; lead technology · You can change email settings in the app.'}"
+        "</div></div></div>"
     )
 
 

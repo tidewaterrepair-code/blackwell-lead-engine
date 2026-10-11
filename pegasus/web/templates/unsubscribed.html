@@ -1,0 +1,13 @@
+{% extends "base_site.html" %}
+{% block title %}Email preferences · Pegasus{% endblock %}
+{% block content %}
+<section class="hero"><div class="wrap prose">
+  {% if ok %}
+  <h1>You're unsubscribed</h1>
+  <p class="lead muted" style="margin-top:16px">You won't get marketing or onboarding emails from Pegasus any more. Account emails you ask for, like sign-in links and your Morning Drop, still arrive and can be turned off in the app.</p>
+  {% else %}
+  <h1>That link didn't work</h1>
+  <p class="lead muted" style="margin-top:16px">The unsubscribe link is invalid. Reply to any Pegasus email with "unsubscribe" and we'll remove you by hand.</p>
+  {% endif %}
+</div></section>
+{% endblock %}

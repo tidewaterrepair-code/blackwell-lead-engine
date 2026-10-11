@@ -1,0 +1,58 @@
+# Banner copy. Render every banner in every size with:  pegasus marketing render
+# Output: marketing/dist/banners/<id>-<size>.png
+# Sizes: feed 1080x1080, portrait 1080x1350, story 1080x1920, link 1200x628,
+#        display 300x250, leaderboard 728x90, skyscraper 160x600, og 1200x630
+
+sizes: [1080x1080, 1080x1350, 1080x1920, 1200x628, 300x250, 728x90, 160x600]
+
+banners:
+  - id: founding
+    kicker: Founding members
+    headline: "40% off. For life."
+    sub: "Leads from every permit, bid, sale and storm in your area. First 100 customers only."
+    cta: Claim a seat
+    stat: {value: "100", label: "seats"}
+  - id: hero-trades
+    kicker: Pegasus Trades
+    headline: "See the job before your competition does."
+    sub: "Permits, bids and storms, ranked for your trade every morning."
+    cta: Start free
+    stat: {value: "7:00", label: "Morning Drop"}
+  - id: storm
+    kicker: Storm alerts
+    headline: "Hail last night? Your map is ready."
+    sub: "NOAA hail and wind swaths matched to your area within hours."
+    cta: Get storm leads
+    stat: {value: "1.75″", label: "hail"}
+    accent: gold
+  - id: timeline
+    kicker: Predicted jobs
+    headline: "One permit. 14 trades. Your window, predicted."
+    sub: "Framing week 1. Roof week 6. HVAC week 8. Deck year one."
+    cta: Find your window
+    stat: {value: "14", label: "trades"}
+  - id: farm
+    kicker: Pegasus Realty
+    headline: "Know who's selling before they list."
+    sub: "Likely-to-sell scores, expired listings and farm heat maps."
+    cta: Start free
+    stat: {value: "12 mo", label: "forecast"}
+  - id: exclusive
+    kicker: Exclusive ZIPs
+    headline: "Your ZIP. Your trade. Nobody else."
+    sub: "Lock a ZIP code so no other Pegasus customer in your trade gets those leads."
+    cta: Check your ZIP
+    stat: {value: "1", label: "per ZIP"}
+    accent: gold
+  - id: launch
+    kicker: Now live
+    headline: "Pegasus is live in Hampton Roads."
+    sub: "And any US county through Source Scout. 14 days free."
+    cta: Start free
+    stat: {value: "26", label: "trades"}
+  - id: og-image
+    kicker: Pegasus · data & lead technology
+    headline: "See the job before your competition does."
+    sub: "Permits, bids, sales, storms and off-market homes, predicted and ranked."
+    cta: pegasusleads.com
+    sizes: [1200x630]

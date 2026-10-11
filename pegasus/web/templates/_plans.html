@@ -1,0 +1,14 @@
+<div class="grid g4" style="margin-top:34px">
+  {% for p in plans if p.key != "free" %}
+  <div class="card plan {% if p.key == 'growth' %}popular{% endif %}">
+    {% if p.key == "growth" %}<span class="chip" style="margin-bottom:10px">Most popular</span>{% endif %}
+    <h3>{{ p.label }}</h3>
+    <div class="muted small">{{ p.tagline }}</div>
+    <div class="price" style="margin-top:12px">${{ p.founding_monthly }}<s>${{ p.monthly }}</s><span class="small muted" style="font-weight:500">/mo</span></div>
+    <div class="small" style="color:var(--gold)">Founding price, locked for life</div>
+    <ul>{% for h in p.highlights %}<li>{{ h }}</li>{% endfor %}</ul>
+    <a class="btn {% if p.key == 'growth' %}btn-primary{% endif %}" style="width:100%" href="/app/signup">Start free</a>
+  </div>
+  {% endfor %}
+</div>
+<p class="muted small" style="margin-top:18px">Free plan available (1 ZIP, 15 leads/month, 7-day delay). Annual billing: 2 months free. Add-ons: extra area $29/mo · exclusive ZIP $149/mo · contact credits from $25.</p>

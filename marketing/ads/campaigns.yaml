@@ -1,0 +1,90 @@
+# Source of truth for paid campaigns. Export with:  pegasus marketing ads
+# -> marketing/dist/ads/meta_bulk.csv, google_ads_editor.csv, utm_links.csv
+#
+# Budgets below are the $1,000/month tier (see launch/plan.md for $500 and $1,500).
+# Geography: launch metro. Change `geo` when expanding.
+
+landing: https://pegasusleads.com
+geo:
+  name: Hampton Roads
+  city: Virginia Beach
+  region: Virginia
+  country: US
+  radius_miles: 35
+
+meta:
+  - campaign: PG | Trades | Trial
+    objective: OUTCOME_LEADS
+    daily_budget: 12
+    ad_sets:
+      - name: Contractors 25-65 | Interests
+        age: [25, 65]
+        interests: [Construction, General contractor, Home improvement, Carpentry, Roofing, Remodeling, Small business owners]
+        ads:
+          - {name: V01 Every permit is public, video: video/01, primary: "Every deck, addition and new home in your area files a permit before anyone gets hired. Pegasus reads them all every morning and ranks the ones for your trade. You call first.", headline: "See the job before they do", cta: SIGN_UP}
+          - {name: V02 One permit 14 trades, video: video/02, primary: "One new-home permit hires 14 companies. Pegasus tells each trade exactly when it's their turn, before the GC calls anyone else.", headline: "Your next job, predicted", cta: SIGN_UP}
+          - {name: B Founding 40 off, image: banners/founding, primary: "Founding members keep 40% off Pegasus for life. 14-day free trial, no card. Leads from public permits, bids and storms in your area.", headline: "40% off for life. 100 seats.", cta: SIGN_UP}
+      - name: Roofers & exterior | Storm
+        age: [25, 65]
+        interests: [Roofing, Roofer, Siding, Gutter, Storm damage, Insurance adjuster]
+        ads:
+          - {name: V08 Three roof signals, video: video/08, primary: "Hail in the swath. A 20-year-old roof. A new owner. Pegasus scores all three every morning so you knock first.", headline: "Storm leads by morning", cta: SIGN_UP}
+          - {name: B Storm map, image: banners/storm, primary: "Pegasus maps NOAA hail and wind reports to your service area within hours, then ranks the roofs most likely to need you.", headline: "Hail hit last night?", cta: SIGN_UP}
+  - campaign: PG | Realty | Trial
+    objective: OUTCOME_LEADS
+    daily_budget: 8
+    ad_sets:
+      - name: Agents 25-60 | Interests
+        age: [25, 60]
+        interests: [Real estate agent, Realtor, Real estate broker, National Association of Realtors, Real estate marketing]
+        ads:
+          - {name: V07 Expired listings, video: video/07, primary: "Connect your MLS and every expired, withdrawn or cancelled listing in your farm becomes a lead the moment it changes, plus public-record context. Private to you.", headline: "Know who's selling first", cta: SIGN_UP}
+          - {name: B Farm heatmap, image: banners/farm, primary: "Turnover, absentee owners, hottest streets and a branded market report for your farm. Likely-to-sell scores built only on property facts.", headline: "Your farm, as a heat map", cta: SIGN_UP}
+      - name: Investors | Interests
+        age: [25, 65]
+        interests: [Real estate investing, Wholesaling, House flipping, BiggerPockets, Rental property]
+        ads:
+          - {name: V03 Off-market no driving, video: video/03, primary: "Tax liens, pre-foreclosures, probate, code violations, long ownership and high equity, stacked into one motivation score. Then ARV and max offer in 5 seconds.", headline: "Off-market deals, ranked", cta: SIGN_UP}
+          - {name: V10 Deal in 5 seconds, video: video/10, primary: "Comps-based ARV, repair estimate, 70% MAO and a deal grade in five seconds, plus DNC-flagged owner contact.", headline: "Run a deal in 5 seconds", cta: SIGN_UP}
+  - campaign: PG | Retargeting
+    objective: OUTCOME_SALES
+    daily_budget: 3
+    ad_sets:
+      - name: Site visitors 30d (no signup)
+        age: [21, 65]
+        custom_audience: Website visitors 30 days, excluding Signups
+        interests: []
+        ads:
+          - {name: V09 Pegasus in 60, video: video/09, primary: "Still thinking about it? Your first Morning Drop is one signup away. 14 days free, then founding pricing locked for life.", headline: "Your leads are waiting", cta: SIGN_UP}
+
+google:
+  - campaign: PG Search | Trades
+    daily_budget: 6
+    bid_strategy: Maximize conversions
+    ad_groups:
+      - name: Permit leads
+        keywords: ["building permit leads", "construction leads", "new construction leads", "contractor leads", "permit data for contractors", "building permit list"]
+        headlines: ["Building Permit Leads Daily", "See the Job Before Others", "Leads From Public Permits", "Scored for Your Trade", "Predicted Jobs by Trade", "Any US County Covered", "14-Day Free Trial", "No Credit Card Needed", "Founding Price: 40% Off", "First Call Wins the Job", "New Homes, Adds, Remodels", "Morning Drop at 7am"]
+        descriptions: ["Every permit, bid and storm in your area, ranked for your trade every morning.", "Pegasus predicts the next job at every new build. Call first. Try it free.", "Stop buying shared leads. Public permits are first and almost nobody uses them.", "Founding members keep 40% off for life. 14 days free, no card required."]
+        path: [permit-leads, free-trial]
+      - name: Roofing leads
+        keywords: ["roofing leads", "storm damage leads", "hail leads for roofers", "roofing sales leads"]
+        headlines: ["Roofing Leads by Morning", "Hail Swath Mapped Overnight", "Storm Leads for Roofers", "Reroof Permits Daily", "See the Roof Before Others", "14-Day Free Trial", "Founding Price: 40% Off", "Scored Roofing Leads"]
+        descriptions: ["NOAA hail and wind reports matched to your area, plus every reroof permit.", "Pegasus ranks roofs by storm exposure, roof age and new owners. Try free."]
+        path: [roofing, leads]
+    negatives: [jobs, hiring, salary, "permit application", "how to get a permit", course, license exam]
+  - campaign: PG Search | Realty
+    daily_budget: 4
+    bid_strategy: Maximize conversions
+    ad_groups:
+      - name: Off-market
+        keywords: ["off market properties", "motivated seller leads", "tax delinquent property list", "pre foreclosure list", "probate leads"]
+        headlines: ["Off-Market Deals, Ranked", "Motivated Seller Leads", "Tax Lien + Probate Lists", "Likely-to-Sell Scores", "ARV and MAO in 5 Seconds", "14-Day Free Trial", "DNC-Flagged Contacts", "Built for Wholesalers"]
+        descriptions: ["Tax liens, pre-foreclosures, probate and code violations stacked into one score.", "Deal analyzer, likely-to-sell predictions and compliant contacts. Try free."]
+        path: [off-market, deals]
+      - name: Expired listings
+        keywords: ["expired listing leads", "listing leads for realtors", "realtor prospecting tool", "farming tool for realtors"]
+        headlines: ["Expired Listing Leads", "Know Who's Selling First", "Connect Your MLS", "Farm Heat Map + Reports", "Likely-to-Sell Scores", "14-Day Free Trial"]
+        descriptions: ["Expired and withdrawn listings in your farm the minute they change, private to you.", "Public records plus your MLS, merged into one ranked prospect list. Try it free."]
+        path: [agents, listings]
+    negatives: [jobs, salary, "real estate license", course, "for rent"]

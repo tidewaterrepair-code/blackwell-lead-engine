@@ -1,0 +1,16 @@
+{% extends "_legal_base.html" %}
+{% block title %}Data sources · Pegasus{% endblock %}
+{% block doc_title %}Where our data comes from{% endblock %}
+{% block doc %}
+<ul>
+  <li><b>Building permits</b> from city and county open-data portals (Socrata, ArcGIS) and public permit portals.</li>
+  <li><b>Bids and RFPs</b> from public procurement postings.</li>
+  <li><b>Property sales, assessments and parcels</b> from county assessor and recorder open data, and from licensed parcel data providers.</li>
+  <li><b>Tax delinquency, code enforcement, court and probate filings</b> from public government sources where publication and reuse is permitted.</li>
+  <li><b>Planning and subdivision activity</b> from published planning commission and council agendas.</li>
+  <li><b>Storms</b> from NOAA Storm Prediction Center local storm reports.</li>
+  <li><b>Owner contact details</b> from licensed data providers, only on customer request, with Do Not Call flags.</li>
+  <li><b>MLS listings</b> only from a customer's own licensed MLS feed, visible only to that customer.</li>
+</ul>
+<p>We access public sources politely, respect each site's terms and robots rules, and remove sources that ask us to stop. To report an issue with a record, email data@pegasusleads.com.</p>
+{% endblock %}
