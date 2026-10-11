@@ -9,15 +9,17 @@ export function AuthFrame({ children, aside }: { children: React.ReactNode; asid
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       <div className="flex flex-col p-6 sm:p-10">
-        <a href="/"><Logo /></a>
+        <a href="/" aria-label="Pegasus home" className="self-start"><Logo width={128} /></a>
         <div className="flex-1 grid place-items-center py-10"><div className="w-full max-w-md">{children}</div></div>
       </div>
-      <div className="hidden lg:flex relative overflow-hidden items-center justify-center bg-wing-soft border-l border-line/10">
-        <div className="absolute h-[620px] w-[620px] rounded-full border border-brand/20" />
-        <div className="absolute h-[420px] w-[420px] rounded-full border border-ember/20" />
-        <div className="absolute h-[620px] w-[620px] rounded-full animate-sweep"
-             style={{ background: "conic-gradient(from 0deg, transparent 0deg, rgb(var(--brand) / 0.25) 40deg, transparent 70deg)" }} />
-        <div className="relative max-w-sm p-8">{aside}</div>
+      <div className="hidden lg:flex relative overflow-hidden flex-col items-center justify-center gap-6 bg-[#050403] border-l border-line/10 text-[#F6EFE2]">
+        <div className="absolute inset-0"
+             style={{ background: "radial-gradient(55% 45% at 50% 40%, rgba(226,178,90,0.18), transparent 70%)" }} />
+        <div className="absolute h-[640px] w-[640px] rounded-full animate-sweep opacity-60"
+             style={{ background: "conic-gradient(from 0deg, transparent 0deg, rgba(226,178,90,0.16) 40deg, transparent 70deg)" }} />
+        <img src="/static/brand/splash.png" alt="Pegasus · data & lead technology" draggable={false}
+             className="relative w-[min(36vw,560px)] h-auto select-none" />
+        <div className="relative max-w-md px-8 text-center">{aside}</div>
       </div>
     </div>
   );
@@ -56,9 +58,10 @@ export function Login() {
 
   return (
     <AuthFrame aside={<div>
-      <div className="kicker mb-3">Pegasus</div>
-      <div className="font-display text-4xl font-bold leading-tight">See the job <span className="gradient-text">before</span> your competition does.</div>
-      <p className="mt-4 text-ink2">Permits, bids, sales, storms and distressed properties: scored, predicted and delivered to you every morning.</p>
+      <div className="text-[11px] uppercase tracking-[0.3em] font-semibold text-[#E2B25A] mb-3">Real data. Real people. Real jobs.</div>
+      <div className="font-display text-3xl font-bold leading-tight uppercase">Higher quality <span className="gold-text">leads.</span><br />
+        More projects. <span className="gold-text">Bigger business.</span></div>
+      <p className="mt-4 text-[#C9BAA0]">Permits, bids, sales, storms and distressed properties: scored, predicted and delivered to you every morning.</p>
     </div>}>
       <h1 className="font-display text-3xl font-bold">Welcome back</h1>
       <p className="text-ink2 mt-1 mb-6">Your leads are waiting.</p>

@@ -87,6 +87,7 @@ h1, h2, h3, .font-display { font-family: "Oswald Variable", "Arial Narrow", syst
   .skeleton { background: linear-gradient(90deg, rgb(var(--surface-2)) 0px, rgb(var(--line) / 0.08) 80px, rgb(var(--surface-2)) 160px); background-size: 800px 100%; @apply animate-shimmer rounded-lg; }
   .scrollbar-none { scrollbar-width: none; }
   :root:not(.dark) .gradient-text, :root:not(.dark) .gold-text { background-image: linear-gradient(180deg, #C9902F 0%, #9A6420 60%, #6E4210 100%); }
+  :root:not(.dark) .bg-\[\#050403\] .gold-text { background-image: linear-gradient(180deg, #FFE7B0 0%, #E2B25A 55%, #A86E24 100%); }
   .scrollbar-none::-webkit-scrollbar { display: none; }
 }
 

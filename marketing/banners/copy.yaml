@@ -27,10 +27,10 @@ banners:
     side_words: [Construction, Real estate, Data, Leads, Opportunity]
     cta: Start free
     pins:
-      - {x: 18, y: 30, title: New build, sub: Permit issued, meta: 3 days ago}
-      - {x: 36, y: 43, title: Storm swath, sub: Hail 1.75 in, meta: 6 hours ago}
-      - {x: 66, y: 27, title: Addition, sub: Permit approved, meta: 1 day ago, label_side: left}
-      - {x: 84, y: 41, title: Pre-foreclosure, sub: High equity, meta: 4 hours ago, label_side: left}
+      - {x: 8, y: 22, title: New build, sub: Permit issued, meta: 3 days ago}
+      - {x: 10, y: 50, title: Storm swath, sub: Hail 1.75 in, meta: 6 hours ago}
+      - {x: 92, y: 40, title: Addition, sub: Permit approved, meta: 1 day ago, label_side: left}
+      - {x: 90, y: 62, title: Pre-foreclosure, sub: High equity, meta: 4 hours ago, label_side: left}
     features:
       - [target, Real-time lead data]
       - [file, Permits & projects]

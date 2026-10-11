@@ -8,11 +8,29 @@
 - **Short hooks:** "Leads with lift." · "Get there first." · "Your unfair head start."
 
 ## Logo
-- **Mark:** a gold heraldic Pegasus: horse head in profile with a three-tier wing rising behind it. Files: `logo-mark.svg` (gold), `logo-mark-mono-gold.svg` and `logo-mark-mono-black.svg` (single-color print, embroidery, stamps), `logo-app-icon.svg` (black tile with a gold rim).
-- **Wordmark lockups:** `logo-horizontal-dark.svg` (gold on black) and `logo-horizontal-light.svg` (black on ivory). "PEGASUS" is set in Cinzel; the descriptor "DATA & LEAD TECHNOLOGY" in Inter, letter-spaced.
-- Every logo file is generated from `pegasus/marketing/brand.py` (`pegasus marketing brand`), so the site, app, emails, icons and ads always match. Don't edit the SVGs by hand.
-- Clear space: the height of the horse's ear on every side. Minimum size: 20 px for the mark, 140 px wide for the lockup.
-- Don't recolor the gold, stretch the mark, or set the gold logo on a light busy photo. On photos, use a dark scrim behind it.
+The brand artwork is the supplied image pack. Sources live in `marketing/brand/source/`:
+
+| Source | What it is |
+|---|---|
+| `logo-primary.png` | **Primary logo**: gold Pegasus in a ring above PEGASUS / DATA & LEAD TECHNOLOGY. The logo in the app's top corner. |
+| `brand-pack.webp` | **Brand pack sheet**: the ornate rearing Pegasus with globe (splash screens), app icon, social profile, social cover and website hero. |
+
+`pegasus marketing brand` (needs Pillow) cuts them into ready-to-use files: the black backgrounds are keyed out so the gold sits on any surface.
+
+| File (`pegasus/web/static/brand/`) | Use |
+|---|---|
+| `logo.png` | Primary logo, transparent: sidebar top corner, login page corner |
+| `logo-mark.png` | Emblem only: phone header, empty states, small spaces |
+| `logo-wordmark.png` | PEGASUS + descriptor: ad footers, email header (`email-wordmark.png`) |
+| `splash.png` | Ornate Pegasus from the pack: app splash screen, login art, hero ads |
+| `pegasus-512/192.png`, `apple-touch-icon.png` | App icon from the pack (home screen, PWA) |
+| `pegasus-32.png` | Favicon (the emblem on black) |
+
+Pack pieces for later (`marketing/brand/pack/`): `social-profile.png`, `social-cover.png`, `website-hero.png` (the website splash design), `app-icon-rounded.png`.
+
+**Higher resolution:** the sheet's pieces are small (the splash art is about 440 px wide, the app icon about 240 px). When you have the full-size originals, replace the files in `source/` and run `pegasus marketing brand` again; crop positions scale automatically.
+
+Rules: don't recolor the gold, stretch the logo, or place it on a busy light photo. Keep clear space equal to the height of the horse's head around it.
 
 ## Color
 | Role | Hex | Use |

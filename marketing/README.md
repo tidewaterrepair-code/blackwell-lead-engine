@@ -5,7 +5,7 @@ Everything needed to launch and market Pegasus. Copy and data live in plain file
 | Folder | What's in it | How it's used |
 |---|---|---|
 | `launch/plan.md` | Positioning, audiences, offer, week-by-week timeline, budget splits for $500, $1,000 and $1,500 a month, KPIs | Read first |
-| `brand/` | Brand guide (colors, type, voice) and SVG logos | Profile pictures, headers, decks |
+| `brand/` | Brand guide, the supplied logo and brand pack (`source/`), and pack pieces for social (`pack/`) | Profile pictures, covers, decks |
 | `content/calendar.csv` | 30 days × 3 posts (90 captions) for both audiences, with hooks, hashtags, CTAs, asset references and UTM tags | Scheduler import (see `automation/social.md`) |
 | `video/` | 12 video scripts (15/30/60s): shot lists, voiceover, on-screen text and text-to-video prompts | Film them yourself, or generate them with an AI video tool |
 | `ads/campaigns.yaml` | Meta and Google campaigns, ad sets, audiences, keywords, negatives, headlines | `pegasus marketing ads` → import files |
@@ -18,7 +18,7 @@ Everything needed to launch and market Pegasus. Copy and data live in plain file
 ## Commands
 
 ```bash
-pegasus marketing brand         # logo kit: emblem, wordmarks, app icon, favicons, email header (from pegasus/marketing/brand.py)
+pegasus marketing brand         # cut the brand pack (marketing/brand/source) into logos, splash art, app icons and favicons
 pegasus marketing render        # banners: 13 designs × 7 sizes + the social share image → dist/banners/*.png
 pegasus marketing ads           # dist/ads/meta_bulk.csv, google_ads_editor.csv, utm_links.csv (validates char limits)
 pegasus marketing calendar      # checks the 30-day calendar (coverage, X length limits)

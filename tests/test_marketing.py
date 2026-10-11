@@ -101,14 +101,38 @@ def test_every_banner_in_copy_renders_to_html():
             assert escape(lines[0].replace("*", "")) in html, (b["id"], size)
 
 
-def test_brand_kit_svgs(tmp_path):
-    from pegasus.marketing.brand import app_icon_svg, emblem_svg, wordmark_svg
+def test_brand_pack_assets_are_in_place():
+    """The app, site, emails and ads all use artwork cut from marketing/brand/source."""
+    brand = ROOT / "pegasus/web/static/brand"
+    for name in ("logo.png", "logo-mark.png", "logo-wordmark.png", "splash.png", "email-wordmark.png",
+                 "pegasus-32.png", "pegasus-192.png", "pegasus-512.png", "apple-touch-icon.png"):
+        assert (brand / name).stat().st_size > 500, name
+    assert (ROOT / "marketing/brand/source/logo-primary.png").exists()
+    assert (ROOT / "marketing/brand/source/brand-pack.webp").exists()
 
-    assert emblem_svg().startswith("<svg") and 'id="pgh"' in emblem_svg()
-    assert 'id="xh"' in emblem_svg(p="x")  # prefixed ids: several emblems can share one page
-    assert "PEGASUS" in wordmark_svg() and "DATA &amp; LEAD TECHNOLOGY" in wordmark_svg()
-    assert "DATA &amp;" not in wordmark_svg(tagline=False)
-    assert 'rx="112"' in app_icon_svg()
+
+def test_brand_pack_importer(tmp_path, monkeypatch):
+    pytest.importorskip("PIL")
+    from PIL import Image
+
+    from pegasus.marketing import brand_pack
+
+    monkeypatch.setattr(brand_pack, "STATIC", tmp_path / "static")
+    monkeypatch.setattr(brand_pack, "PACK_OUT", tmp_path / "pack")
+    written = {p.name for p in brand_pack.main()}
+    assert {"logo.png", "logo-mark.png", "splash.png", "pegasus-512.png", "website-hero.png"} <= written
+    logo = Image.open(tmp_path / "static" / "logo.png")
+    assert logo.mode == "RGBA" and logo.getpixel((0, 0))[3] == 0  # black background keyed out
+    assert Image.open(tmp_path / "static" / "pegasus-512.png").size == (512, 512)
+
+
+def test_banners_embed_brand_artwork():
+    from pegasus.marketing.banners import banner_html
+
+    square = banner_html({"id": "t", "headline": ["Hi"], "cta": "Go"}, "1080x1080")
+    assert 'class="lockup"' in square and square.count("data:image/png;base64,") >= 2
+    hero = banner_html({"id": "t", "layout": "hero", "headline": ["Hi"], "tagline": ["A", "*B*"]}, "1080x1080")
+    assert "data:image/png;base64," in hero
 
 
 # ------------------------------------------------------------------ weekly data posts

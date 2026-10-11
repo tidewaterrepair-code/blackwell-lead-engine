@@ -31,7 +31,8 @@ dependencies = [
 
 [project.optional-dependencies]
 browser = ["playwright>=1.44"]
-dev = ["pytest>=8"]
+dev = ["pytest>=8", "pillow>=10"]
+brand = ["pillow>=10"]
 
 [project.scripts]
 pegasus = "pegasus.cli:main"

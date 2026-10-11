@@ -87,10 +87,10 @@ export function Signup({ invite = false, onboardingOnly = false }: { invite?: bo
 
   return (
     <AuthFrame aside={<div className="space-y-4">
-      <div className="font-display text-3xl font-bold leading-tight">Every permit, sale and storm in your area. <span className="gradient-text">Ranked for you.</span></div>
+      <div className="font-display text-3xl font-bold leading-tight uppercase">Every permit, sale and storm in your area. <span className="gold-text">Ranked for you.</span></div>
       {["Leads from public records in your area, updated daily", "Predicted jobs before they're permitted",
         "AI briefs and ready-to-send openers", "14 days free. No card."].map((t) => (
-        <div key={t} className="flex gap-2 text-sm"><Check size={18} className="text-good shrink-0" />{t}</div>
+        <div key={t} className="flex gap-2 text-sm text-left text-[#E8DCC6]"><Check size={18} className="text-[#E2B25A] shrink-0" />{t}</div>
       ))}
     </div>}>
       <div className="h-1.5 rounded-full bg-line/10 mb-8 overflow-hidden">

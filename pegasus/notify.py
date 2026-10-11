@@ -73,7 +73,7 @@ def wrap_html(title: str, body_html: str, cta_label: str | None = None, cta_url:
         "<div style='max-width:560px;margin:0 auto;background:#FFFDF8;border-radius:16px;overflow:hidden;"
         "border:1px solid #3A2A12'>"
         "<div style='background:#0B0A08;padding:18px 28px;border-bottom:2px solid #B9802F'>"
-        f"<img src='{get_settings().public_url}/static/brand/email-wordmark.png' width='220' height='58' "
+        f"<img src='{get_settings().public_url}/static/brand/email-wordmark.png' width='220' height='40' "
         "alt='PEGASUS' style='display:block;border:0;color:#E2B25A;font:600 22px Georgia,serif;letter-spacing:3px'></div>"
         f"<div style='padding:28px;color:#17120A;font-size:15px;line-height:1.55'><h2 style='margin:0 0 12px'>"
         f"{html.escape(title)}</h2>{body_html}{cta}</div>"

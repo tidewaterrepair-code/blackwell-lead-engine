@@ -18,7 +18,6 @@ from pathlib import Path
 
 import yaml
 
-from .brand import emblem_svg, wordmark_svg
 
 STATIC = Path(__file__).resolve().parents[1] / "web" / "static"
 PLATES = Path.cwd() / "marketing" / "banners" / "plates"
@@ -100,6 +99,18 @@ def plate_path(name: str | None) -> Path | None:
 def _data_uri(path: Path) -> str:
     mime = mimetypes.guess_type(path.name)[0] or "image/jpeg"
     return f"data:{mime};base64,{base64.b64encode(path.read_bytes()).decode()}"
+
+
+def brand_img(name: str, cls: str = "") -> str:
+    """Brand artwork from the image pack (pegasus/web/static/brand, cut by `pegasus marketing brand`)."""
+    path = STATIC / "brand" / name
+    src = _data_uri(path) if path.exists() else ""
+    return f'<img class="{cls}" src="{src}" alt="Pegasus">'
+
+
+def lockup() -> str:
+    """Horizontal logo for ad footers: the emblem beside the wordmark."""
+    return f'<span class="lockup">{brand_img("logo-mark.png", "lk-mark")}{brand_img("logo-wordmark.png", "lk-word")}</span>'
 
 
 def fallback_scene(w: int, h: int, seed: str, scene: str = "city") -> str:
@@ -288,11 +299,13 @@ def banner_html(b: dict, size: str) -> str:
     cta = (f'<span class="cta"{cta_style}>{html.escape(cta_text)}{icon("arrow", "arr") if mode not in ("strip", "tower") else ""}</span>'
            if cta_text else "")
     if mode == "strip":
-        logo = f'<div class="mark">{emblem_svg(p="mk", size=round(h * .62))}</div>'
+        logo = f'<div class="mark" style="width:{h * .7:.0f}px">{brand_img("logo-mark.png")}</div>'
     elif mode in ("tower", "small"):
-        logo = f'<div class="logo">{wordmark_svg("dark", p="lg" + mode, tagline=False)}</div>'
+        logo = f'<div class="logo">{brand_img("logo-wordmark.png")}</div>'
+    elif t == "hero":
+        logo = f'<div class="logo">{brand_img("splash.png")}</div>'
     else:
-        logo = f'<div class="logo">{wordmark_svg("dark", p="lg")}</div>'
+        logo = f'<div class="logo">{lockup()}</div>'
     side = b.get("side_words") if t == "hero" and mode in ("square", "wide") else None
     side_html = ('<div class="side">' + "".join(f"<span>{html.escape(s)}</span>" for s in side) + "</div>") if side else ""
     tagline = (f'<div class="tagline">{headline_html(b["tagline"])}</div>'
@@ -326,7 +339,7 @@ h1{{font:700 {hsize:.1f}px/1.0 Oswald,sans-serif;text-transform:uppercase;letter
   color:#1A1206;background:var(--gold);padding:calc(var(--u)*1.8) calc(var(--u)*3.4);border-radius:calc(var(--u)*1);
   box-shadow:0 0 0 1px #FFE7B0 inset,0 10px 30px -8px rgba(240,138,44,.65);white-space:nowrap}}
 .arr{{width:1.1em;height:1.1em}}
-.logo svg{{display:block;width:100%;height:auto}}
+.logo img,.mark img{{display:block;width:100%;height:auto}} .lockup{{display:flex;align-items:center;gap:4%}} .lockup .lk-mark{{width:24%;flex:none}} .lockup .lk-word{{width:72%}}
 .ic{{width:calc(var(--u)*4.2);height:calc(var(--u)*4.2);color:#E9BC66;flex:none}}
 .bullets{{list-style:none;margin-top:calc(var(--u)*3);display:grid;gap:calc(var(--u)*1.6)}}
 .bullets li{{display:flex;align-items:center;gap:calc(var(--u)*1.8);font:600 calc(var(--u)*2.3)/1.2 Inter;text-transform:uppercase;letter-spacing:.06em;text-shadow:0 1px 6px rgba(0,0,0,.8)}}
@@ -417,8 +430,9 @@ def _mode_css(mode: str, t: str, w: int, h: int) -> str:
                 f".bottom{{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:10px}} .logo{{width:38%;flex:none}}"
                 f".cta{{padding:{w * .03:.0f}px {w * .035:.0f}px}} .frame{{inset:4px}}")
     if t == "hero":
-        top = {"square": 46, "tall": 50, "wide": 36}[mode]
-        lw = {"square": 72, "tall": 86, "wide": 50}[mode]
+        portrait = h > w * 1.1
+        top = {"square": 24 if portrait else 22, "tall": 33, "wide": 14}[mode]
+        lw = {"square": 60 if portrait else 52, "tall": 82, "wide": 36}[mode]
         extra = f".hero-lock .cta{{margin-top:calc({u}*3)}}" if mode == "wide" else ""
         return (f".hero-lock{{top:{top}%;width:{lw}%}} .hero-lock .logo{{width:100%}} .features .ic{{width:calc({u}*4.6);height:calc({u}*4.6)}}"
                 f"{extra}")

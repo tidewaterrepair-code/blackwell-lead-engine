@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { useApp } from "../lib/store";
-import { Logo } from "./Logo";
+import { Logo, PegasusMark } from "./Logo";
 import { LevelRing, Streak } from "./Meters";
 
 const SHORT: Record<string, string> = { "/": "Leads", "/map": "Radar", "/pipeline": "Pipeline", "/deals": "Deals",
@@ -33,7 +33,7 @@ export function Shell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen lg:pl-64">
       <aside className="hidden lg:flex fixed inset-y-0 left-0 w-64 flex-col gap-1 border-r border-line/10 bg-surface/60 backdrop-blur-xl p-4">
-        <div className="px-2 py-3"><Logo /></div>
+        <a href="/app/" className="flex justify-center px-2 pt-1 pb-2" aria-label="Pegasus home"><Logo width={170} /></a>
         <nav className="flex flex-col gap-1 mt-2">
           {nav.map(({ to, label, icon: Icon, end }) => (
             <NavLink key={to} to={to} end={end}
@@ -69,7 +69,7 @@ export function Shell({ children }: { children: ReactNode }) {
 
       <header className="sticky top-0 z-[900] border-b border-line/10 bg-page/70 backdrop-blur-xl">
         <div className="mx-auto max-w-6xl flex items-center gap-3 px-4 h-14">
-          <div className="lg:hidden"><Logo size={26} withWord={false} /></div>
+          <div className="lg:hidden"><PegasusMark size={36} /></div>
           <div className="font-display font-semibold truncate">{me.org.name}</div>
           <span className="chip hidden sm:inline-flex">{me.plan.label}</span>
           <div className="ml-auto flex items-center gap-2">

@@ -86,11 +86,10 @@ def run(args) -> int:
         written = write_weekly(cities, out / "weekly", polish=True)
         print("weekly posts:", ", ".join(str(p) for p in written) or "no data this week")
     if action in ("brand", "all"):
-        from .brand import render_pngs, write_svgs
+        from .brand_pack import main as import_pack
 
-        svgs = write_svgs(ROOT / "brand")
-        pngs = render_pngs()
-        print(f"brand: {len(svgs)} SVGs, {len(pngs)} PNG icons")
+        written = import_pack()
+        print(f"brand: {len(written)} assets cut from marketing/brand/source")
     if action in ("emails", "all"):
         written = render_emails(out / "email")
         print(f"emails: {len(written)} previews + waitlist_listmonk.csv in {out / 'email'}")
