@@ -1,0 +1,130 @@
+# Job tags: what a signal is about. A signal can carry several tags.
+# Building-work tags (new_construction ... remodel) come from the tuned
+# construction rules in classify.py. The trade tags below are plain regex
+# packs matched against the signal text plus its structured permit fields.
+#
+#   label:     shown in the UI
+#   patterns:  case-insensitive regexes (any match = tag applies)
+#   unless:    optional regexes that cancel the tag for this text
+
+building:
+  new_construction: {label: New construction}
+  house_framing: {label: Framing / structural}
+  garage_framing: {label: Garage / accessory building}
+  addition: {label: Addition}
+  deck: {label: Deck / porch}
+  kitchen: {label: Kitchen remodel}
+  bath: {label: Bath remodel}
+  remodel: {label: Remodel / renovation}
+
+trade:
+  roofing:
+    label: Roofing
+    patterns: ['\bre-?roof', '\broof(s|ing)?\b', '\bshingles?\b', '\bmetal roof', '\btpo\b', '\bepdm\b']
+    unless: ['\broof deck(ing)? coating']
+  siding:
+    label: Siding / exterior
+    patterns: ['\bsiding\b', '\bhardie', '\bvinyl siding', '\bstucco\b', '\bsoffit', '\bfascia\b']
+  windows_doors:
+    label: Windows & doors
+    patterns: ['\bwindows?\b', '\bdoors?\b', '\bsliding glass', '\bstorm door', '\bfenestration']
+    unless: ['\bgarage doors?\b', '\boverhead doors?\b']
+  garage_door:
+    label: Garage doors
+    patterns: ['\bgarage doors?\b', '\boverhead doors?\b']
+  hvac:
+    label: HVAC
+    patterns: ['\bhvac\b', '\bheat pump', '\bfurnace', '\bair handler', '\bmini[- ]?split', '\bductwork', '\bduct\b', '\ba/?c\b', '\bair condition', '\bmechanical\b', '\bcondenser']
+  plumbing:
+    label: Plumbing
+    patterns: ['\bplumbing\b', '\brepipe', '\bsewer (line|lateral)', '\bwater (line|service)', '\bfixtures?\b', '\bbackflow']
+  water_heater:
+    label: Water heater
+    patterns: ['\bwater heater', '\btankless']
+  electrical:
+    label: Electrical
+    patterns: ['\belectric(al)?\b', '\bpanel (upgrade|change|replacement)', '\bservice upgrade', '\b\d{3}\s?a(mp)?s?\b', '\brewire', '\bsub-?panel', '\bcircuits?\b']
+  generator:
+    label: Generators
+    patterns: ['\bgenerator', '\bgenerac', '\btransfer switch']
+  ev_charger:
+    label: EV chargers
+    patterns: ['\bev charg', '\belectric vehicle', '\btesla wall', '\blevel 2 charg']
+  solar:
+    label: Solar
+    patterns: ['\bsolar\b', '\bphotovoltaic', '\bpv (system|array|panels?)', '\bbattery storage', '\bpowerwall']
+  pool:
+    label: Pools & spas
+    patterns: ['\bswimming pool', '\bin-?ground pool', '\babove-?ground pool', '\bpool\b', '\bhot tub', '\bspa\b']
+    unless: ['\bcar ?pool']
+  fence:
+    label: Fencing
+    patterns: ['\bfenc(e|es|ing)\b', '\bpool barrier', '\bprivacy fence', '\bgates?\b']
+  landscaping:
+    label: Landscaping & hardscape
+    patterns: ['\blandscap', '\bhardscap', '\bpavers?\b', '\bretaining wall', '\birrigation', '\bsod\b', '\bpatio\b', '\boutdoor kitchen']
+  concrete:
+    label: Concrete & masonry
+    patterns: ['\bconcrete\b', '\bdriveway', '\bslab\b', '\bfooting', '\bfoundation\b', '\bmasonry', '\bblock wall', '\bsidewalk', '\bflatwork']
+  foundation_repair:
+    label: Foundation & crawlspace repair
+    patterns: ['\bfoundation (repair|stabiliz)', '\bunderpinning', '\bpiers? (install|repair)', '\bcrawl ?space', '\bencapsulat', '\bwaterproof']
+  painting:
+    label: Painting
+    patterns: ['\bpaint(ing)?\b', '\bstain(ing)?\b', '\brepaint']
+  flooring:
+    label: Flooring
+    patterns: ['\bfloor(ing|s)?\b', '\bhardwood', '\blvp\b', '\bcarpet', '\btile\b']
+    unless: ['\bfloor joists?', '\bfloor plan', '\bflood']
+  drywall:
+    label: Drywall & interior finish
+    patterns: ['\bdrywall', '\bsheetrock', '\bplaster', '\binterior finish']
+  insulation:
+    label: Insulation
+    patterns: ['\binsulat', '\bspray foam', '\battic (insulation|ventilation)']
+  gutters:
+    label: Gutters
+    patterns: ['\bgutters?\b', '\bdownspouts?\b', '\bleaf guard']
+  demolition:
+    label: Demolition
+    patterns: ['\bdemo(lition|lish)?\b', '\braze\b', '\btear ?down']
+  tree_service:
+    label: Tree service
+    patterns: ['\btree (removal|service|trimming)', '\bfallen trees?', '\bstump', '\bdowned limbs?']
+  dock_marine:
+    label: Docks, piers & bulkheads
+    patterns: ['\bdocks?\b', '\bpiers?\b', '\bbulkhead', '\bboat ?lift', '\bboathouse', '\briprap', '\bliving shoreline', '\bwharf']
+    unless: ['\bloading dock']
+  cabinets_counters:
+    label: Cabinets & countertops
+    patterns: ['\bcabinet', '\bcounter ?tops?', '\bgranite', '\bquartz']
+  commercial_fitout:
+    label: Commercial fit-out
+    patterns: ['\btenant (improvement|fit)', '\bupfit', '\bup-fit', '\bfit-?out', '\bbuild-?out', '\bwhite box']
+  multifamily:
+    label: Multifamily
+    patterns: ['\bmulti-?family', '\bapartments?\b', '\bduplex', '\btriplex', '\bquadplex', '\btownho(me|use)s?']
+  mobile_home:
+    label: Manufactured homes
+    patterns: ['\bmobile home', '\bmanufactured home', '\bmodular home', '\bsingle-?wide', '\bdouble-?wide']
+  fire_water_restoration:
+    label: Fire & water restoration
+    patterns: ['\bfire damage', '\bwater damage', '\bflood(ed|ing)? damage', '\bmold (remediation|removal)', '\bsmoke damage', '\brestoration']
+
+# Real estate signals are tagged by kind (re_<kind>) in classify.py.
+realestate:
+  re_sale: {label: Recently sold}
+  re_violation: {label: Code violation}
+  re_tax_delinquent: {label: Tax delinquent}
+  re_foreclosure: {label: Pre-foreclosure}
+  re_probate: {label: Probate / estate}
+  re_eviction: {label: Eviction filing}
+  re_expired: {label: Expired / withdrawn listing}
+  re_listing: {label: MLS listing}
+  re_fsbo: {label: For sale by owner}
+  re_vacant: {label: Vacant}
+  re_absentee: {label: Absentee owner}
+  re_subdivision: {label: New subdivision}
+  storm_hail: {label: Hail}
+  storm_wind: {label: Damaging wind}
+  storm_flood: {label: Flooding}

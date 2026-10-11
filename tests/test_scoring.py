@@ -1,23 +1,37 @@
 from datetime import timedelta
 
-from leadengine.db import utcnow
-from leadengine.scoring import dedupe_key, normalize_address, score_lead
+from pegasus.db import utcnow
+from pegasus.intel.scoring import ScoreInput, dedupe_key, normalize_address, score
 
 
 def test_bigger_newer_closer_scores_higher():
     now = utcnow()
-    base = dict(kind="permit", customer_type="homeowner", base_lat=36.85, base_lng=-76.13, now=now)
-    strong = score_lead(job_type="new_construction", est_value=400_000, posted_at=now, lat=36.86, lng=-76.12, **base)
-    weak = score_lead(job_type="remodel", est_value=3_000, posted_at=now - timedelta(days=60),
-                      lat=37.5, lng=-77.4, **base)
-    assert 0 <= weak < strong <= 100
+    strong = score(ScoreInput(kind="permit", est_value=400_000, posted_at=now, lat=36.86, lng=-76.12),
+                   base_lat=36.85, base_lng=-76.13, now=now)
+    weak = score(ScoreInput(kind="permit", est_value=3_000, posted_at=now - timedelta(days=60), lat=37.5, lng=-77.4,
+                            contractor_listed=True), base_lat=36.85, base_lng=-76.13, now=now)
+    assert 0 <= weak.value < strong.value <= 100
+    assert "Close by" in strong.reasons and "Fresh" in strong.reasons
 
 
-def test_other_and_expired_bids_score_zero():
+def test_predictions_score_by_probability_and_window():
     now = utcnow()
-    assert score_lead(job_type="other", kind="permit", customer_type="homeowner", est_value=None, posted_at=now) == 0
-    assert score_lead(job_type="deck", kind="bid", customer_type="public", est_value=None, posted_at=now,
-                      due_at=now - timedelta(days=1)) == 0
+    open_now = score(ScoreInput(kind="permit", est_value=None, posted_at=now, window_start=now - timedelta(days=1),
+                                window_end=now + timedelta(days=20), probability=0.85), now=now)
+    far_off = score(ScoreInput(kind="permit", est_value=None, posted_at=now, window_start=now + timedelta(days=200),
+                               window_end=now + timedelta(days=400), probability=0.2), now=now)
+    assert open_now.value > far_off.value
+    assert "Window open now" in open_now.reasons
+
+
+def test_closed_bids_score_zero_and_motivation_drives_real_estate():
+    now = utcnow()
+    assert score(ScoreInput(kind="bid", est_value=None, posted_at=now, due_at=now - timedelta(days=1)), now=now).value == 0
+    hot = score(ScoreInput(kind="foreclosure", est_value=None, posted_at=now, trade_group="realestate", motivation=90),
+                now=now)
+    cold = score(ScoreInput(kind="sale", est_value=None, posted_at=now, trade_group="realestate", motivation=0),
+                 now=now)
+    assert hot.value > cold.value and "Highly motivated" in hot.reasons
 
 
 def test_address_normalization_and_dedupe_key():

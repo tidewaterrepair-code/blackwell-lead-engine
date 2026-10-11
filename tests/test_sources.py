@@ -3,11 +3,11 @@ from datetime import timedelta
 
 import httpx
 
-from leadengine.db import utcnow
-from leadengine.sources import build_adapter
-from leadengine.sources.accela import AccelaAdapter, parse_aca_results
-from leadengine.sources.agendas import development_items
-from leadengine.sources.inbox import IMAPAdapter, parse_message
+from pegasus.db import utcnow
+from pegasus.sources import build_adapter
+from pegasus.sources.accela import AccelaAdapter, parse_aca_results
+from pegasus.sources.agendas import development_items
+from pegasus.sources.inbox import IMAPAdapter, parse_message
 
 
 def mock_client(handler):
@@ -121,3 +121,45 @@ def test_email_request(fixture_bytes):
     assert lead.email == "mike.h@example.com"
     assert lead.city == "Chesapeake"
     assert "deck" in lead.description
+
+
+def test_noaa_storm_reports(fixture_text):
+    def handler(request):
+        if "hail" in str(request.url) and "today" in str(request.url):
+            return httpx.Response(200, text=fixture_text("spc_hail.csv"))
+        return httpx.Response(404)
+
+    adapter = build_adapter("noaa", {"type": "noaa_storms", "kind": "storm", "days": ["today"]},
+                            client=httpx.Client(transport=httpx.MockTransport(handler)))
+    items = [adapter.normalize(r.payload) for r in adapter.fetch(utcnow())]
+    kept = [i for i in items if i]
+    assert len(items) == 2 and len(kept) == 1  # penny-size hail filtered out
+    assert kept[0].title.startswith("Hail 1.75 in") and kept[0].radius_miles == 5.0 and kept[0].kind == "storm"
+
+
+def test_csv_and_excel_tax_lists():
+    import io
+
+    from openpyxl import Workbook
+
+    from pegasus.sources.tabular import read_table
+
+    csv_rows = read_table(b"GPIN,Property Address,Amount Due\n123,5 Elm St,\"$1,200.00\"\n")
+    assert csv_rows == [{"GPIN": "123", "Property Address": "5 Elm St", "Amount Due": "$1,200.00"}]
+    wb = Workbook()
+    ws = wb.active
+    ws.append(["Delinquent list as of Oct 1"])
+    ws.append(["GPIN", "Property Address", "Amount Due"])
+    ws.append(["456", "9 Oak St", 845.5])
+    buf = io.BytesIO()
+    wb.save(buf)
+    content = buf.getvalue()
+    rows = read_table(content, url="list.xlsx", skip_rows=1)
+    assert rows == [{"GPIN": "456", "Property Address": "9 Oak St", "Amount Due": 845.5}]
+    adapter = build_adapter("tax", {"type": "csv", "kind": "tax_delinquent", "url": "https://x/list.xlsx",
+                                    "skip_rows": 1, "city": "Norfolk",
+                                    "fields": {"address": "Property Address", "amount_due": "Amount Due",
+                                               "parcel_id": "GPIN"}},
+                            client=httpx.Client(transport=httpx.MockTransport(lambda r: httpx.Response(200, content=content))))
+    item = adapter.normalize(next(iter(adapter.fetch(utcnow()))).payload)
+    assert item.kind == "tax_delinquent" and item.address == "9 Oak St" and item.facts["amount_due"] == 845.5

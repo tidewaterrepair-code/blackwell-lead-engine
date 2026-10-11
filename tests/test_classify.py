@@ -1,6 +1,6 @@
 import pytest
 
-from leadengine.classify import classify, is_contractor_listed
+from pegasus.intel.classify import classify, is_contractor_listed
 
 
 @pytest.mark.parametrize("text,expected", [
@@ -22,17 +22,32 @@ def test_positive_job_types(text, expected):
     assert c.job_type == expected
 
 
-@pytest.mark.parametrize("text,permit_type", [
-    ("Replace garage door", None),
-    ("Reroof with architectural shingles", None),
-    ("200A service upgrade", "Electrical"),
-    ("HVAC changeout", "Residential Mechanical"),
-    ("In-ground swimming pool", None),
-    ("6ft privacy fence", None),
-    ("Janitorial services", None),
+@pytest.mark.parametrize("text,permit_type,tag", [
+    ("Replace garage door", None, "garage_door"),
+    ("Reroof with architectural shingles", None, "roofing"),
+    ("200A service upgrade", "Electrical", "electrical"),
+    ("HVAC changeout", "Residential Mechanical", "hvac"),
+    ("In-ground swimming pool", None, "pool"),
+    ("6ft privacy fence", None, "fence"),
+    ("Install 10kW rooftop solar PV system", None, "solar"),
+    ("Replace 40 ft bulkhead and add boat lift", None, "dock_marine"),
 ])
-def test_noise_is_dropped(text, permit_type):
-    assert not classify(kind="permit", title=text, permit_type=permit_type).relevant
+def test_trade_work_gets_trade_tags_not_building_tags(text, permit_type, tag):
+    c = classify(kind="permit", title=text, permit_type=permit_type)
+    assert tag in c.tags
+    assert not set(c.matched)  # no building-work tag: a framer or deck builder won't see it
+
+
+def test_unrelated_work_is_dropped():
+    assert not classify(kind="bid", title="Janitorial services").relevant
+    assert not classify(kind="bid", title="Office supplies annual contract").relevant
+
+
+def test_real_estate_and_storm_kinds():
+    assert classify(kind="foreclosure", title="Trustee sale notice").tags == ["re_foreclosure"]
+    assert classify(kind="sale", title="Sold").customer_type == "owner"
+    storm = classify(kind="storm", title="Hail 1.75 in and thunderstorm wind gust 65 mph")
+    assert {"storm_hail", "storm_wind"} <= set(storm.tags)
 
 
 def test_trade_permit_still_counts_when_description_names_our_work():

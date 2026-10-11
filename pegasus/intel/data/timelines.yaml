@@ -1,0 +1,116 @@
+# Predictive "next job" rules. When a signal carrying `when` tags arrives,
+# Pegasus forecasts the downstream work and alerts each trade *before* the
+# job is permitted or posted. Windows are days after the trigger date.
+#
+#   when:     job tags (any) on the trigger signal
+#   kinds:    optional; limit to these signal kinds
+#   next:     [trade, tag, start_day, end_day, probability, reason]
+#
+# Probabilities are starting priors. The learning loop (pegasus/intel/learn.py)
+# re-weights them nightly from customers' won/lost outcomes.
+
+rules:
+  - name: new_home_sequence
+    when: [new_construction]
+    kinds: [permit]
+    next:
+      - [framer, house_framing, 7, 42, 0.85, "New home permit: framing usually starts 1-6 weeks after issue"]
+      - [concrete, concrete, 0, 30, 0.75, "Footings and slab come first on a new home"]
+      - [roofer, roofing, 35, 75, 0.8, "Roof goes on once framing is dried in (about 5-10 weeks)"]
+      - [hvac, hvac, 45, 90, 0.85, "HVAC rough-in follows framing (about 6-12 weeks)"]
+      - [plumber, plumbing, 40, 90, 0.85, "Plumbing rough-in follows framing (about 6-12 weeks)"]
+      - [electrician, electrical, 45, 90, 0.85, "Electrical rough-in follows framing (about 6-12 weeks)"]
+      - [insulation, insulation, 60, 100, 0.75, "Insulation goes in after rough-in inspections"]
+      - [siding_windows, siding, 50, 100, 0.7, "Windows and siding go on after dry-in"]
+      - [gutters, gutters, 80, 140, 0.55, "Gutters are one of the last exterior items"]
+      - [flooring, flooring, 80, 150, 0.7, "Flooring goes in near the end of a new build"]
+      - [painter, painting, 75, 150, 0.75, "Interior paint follows drywall"]
+      - [kitchen_bath, cabinets_counters, 85, 160, 0.6, "Cabinets and counters go in near completion"]
+      - [deck_builder, deck, 120, 450, 0.35, "New homeowners often add a deck in the first year"]
+      - [fence, fence, 120, 400, 0.45, "Fences are a top first-year purchase for new homes"]
+      - [landscaper, landscaping, 110, 400, 0.5, "Landscaping and hardscape follow move-in"]
+      - [pool_builder, pool, 180, 600, 0.12, "Some new-home buyers add a pool in year 1-2"]
+      - [solar, solar, 150, 700, 0.1, "New homeowners are prime solar prospects"]
+  - name: addition_sequence
+    when: [addition]
+    kinds: [permit]
+    next:
+      - [framer, house_framing, 0, 30, 0.8, "Additions start with framing within weeks of the permit"]
+      - [roofer, roofing, 14, 60, 0.6, "Additions need roof tie-in"]
+      - [electrician, electrical, 14, 60, 0.75, "New rooms need circuits"]
+      - [hvac, hvac, 14, 70, 0.55, "Additions often need HVAC extension or a mini-split"]
+      - [flooring, flooring, 30, 100, 0.55, "New space needs flooring"]
+      - [painter, painting, 35, 110, 0.6, "New space needs paint"]
+  - name: kitchen_bath_trades
+    when: [kitchen, bath]
+    kinds: [permit]
+    next:
+      - [plumber, plumbing, 0, 45, 0.7, "Kitchen and bath remodels move plumbing"]
+      - [electrician, electrical, 0, 45, 0.6, "Remodels add circuits and lighting"]
+      - [flooring, flooring, 10, 75, 0.6, "Tile and flooring follow rough-in"]
+      - [kitchen_bath, cabinets_counters, 15, 80, 0.55, "Cabinets and counters are ordered early, installed late"]
+  - name: pool_barrier
+    when: [pool]
+    next:
+      - [fence, fence, 15, 120, 0.8, "Code requires a pool barrier fence before final inspection"]
+      - [concrete, concrete, 0, 90, 0.6, "Pool decks and patios"]
+      - [landscaper, landscaping, 30, 150, 0.55, "Landscaping is redone after pool construction"]
+      - [electrician, electrical, 0, 60, 0.7, "Pool pumps and lighting need electrical work"]
+  - name: solar_roof
+    when: [solar]
+    next:
+      - [roofer, roofing, -30, 30, 0.25, "Older roofs are often replaced right before solar goes on"]
+      - [electrician, electrical, 0, 45, 0.5, "Panel upgrades and battery storage"]
+  - name: new_roof_extras
+    when: [roofing]
+    kinds: [permit]
+    next:
+      - [gutters, gutters, 0, 45, 0.45, "New roofs often get new gutters"]
+      - [insulation, insulation, 0, 60, 0.2, "Roof work exposes attic insulation needs"]
+  - name: demolition_rebuild
+    when: [demolition]
+    next:
+      - [home_builder, new_construction, 30, 270, 0.55, "Teardowns are usually followed by a rebuild"]
+      - [framer, house_framing, 45, 300, 0.45, "Rebuilds after demolition need framers"]
+  - name: subdivision_pipeline
+    when: [re_subdivision]
+    next:
+      - [home_builder, new_construction, 60, 540, 0.6, "Approved lots become home starts"]
+      - [framer, house_framing, 90, 600, 0.55, "Each new lot is a framing package"]
+      - [concrete, concrete, 60, 540, 0.55, "Each lot needs foundations and driveways"]
+      - [supplier, new_construction, 60, 540, 0.55, "Builders need materials for every lot"]
+      - [real_estate_agent, re_subdivision, 120, 720, 0.5, "New homes will need buyers"]
+  - name: new_owner_projects
+    when: [re_sale]
+    kinds: [sale]
+    next:
+      - [painter, painting, 0, 90, 0.45, "New owners repaint before or right after moving in"]
+      - [flooring, flooring, 0, 120, 0.4, "New owners replace flooring early"]
+      - [remodeler, remodel, 30, 540, 0.3, "Most remodels happen in the first 18 months of ownership"]
+      - [kitchen_bath, kitchen, 60, 540, 0.25, "Kitchen updates follow a purchase"]
+      - [hvac, hvac, 0, 365, 0.15, "Inspection reports often flag HVAC"]
+      - [fence, fence, 14, 365, 0.2, "Fences are a common first project (pets, kids)"]
+      - [landscaper, landscaping, 14, 240, 0.25, "Curb appeal projects after moving in"]
+  - name: storm_damage
+    when: [storm_hail, storm_wind]
+    kinds: [storm]
+    next:
+      - [roofer, roofing, 0, 60, 0.6, "Hail and high wind damage roofs; insurance claims open now"]
+      - [siding_windows, siding, 0, 60, 0.45, "Hail dents and cracks siding"]
+      - [gutters, gutters, 0, 45, 0.45, "Gutters dent and detach in storms"]
+      - [tree_service, tree_service, 0, 10, 0.6, "Downed trees and limbs need removal now"]
+      - [fence, fence, 0, 45, 0.35, "Wind knocks fences down"]
+      - [restoration, fire_water_restoration, 0, 21, 0.3, "Storm leaks lead to water damage"]
+  - name: flood_damage
+    when: [storm_flood]
+    kinds: [storm]
+    next:
+      - [restoration, fire_water_restoration, 0, 14, 0.7, "Flooding means water mitigation and drywall tear-out"]
+      - [flooring, flooring, 14, 90, 0.45, "Flooded floors get replaced"]
+      - [remodeler, remodel, 21, 150, 0.35, "Flood rebuilds"]
+  - name: distress_to_flip
+    when: [re_foreclosure, re_tax_delinquent, re_probate]
+    next:
+      - [investor, re_foreclosure, 0, 120, 0.4, "Distressed owner: acquisition window before auction or sale"]
+      - [real_estate_agent, re_probate, 30, 365, 0.35, "Estates and distressed owners often list within a year"]
+      - [remodeler, remodel, 120, 540, 0.25, "Distressed properties get rehabbed after they change hands"]

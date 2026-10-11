@@ -20,6 +20,9 @@ sources:
     domain: data.norfolk.gov
     dataset: fahm-yuh4            # "Permits", Development Service Center, updated daily
     city: Norfolk
+    state: VA
+    county_fips: "51710"
+    jurisdiction: "51710"
     # date_field: issue_date      # optional; default uses Socrata's :updated_at system field
     # fields:                     # override column names if `inspect` shows different ones
     #   description: work_description
@@ -32,6 +35,9 @@ sources:
     enabled: true
     url: https://services2.arcgis.com/CyVvlIiUfRBmMQuu/arcgis/rest/services/Building_Permits_Applications_view/FeatureServer/0
     city: Virginia Beach
+    state: VA
+    county_fips: "51810"
+    jurisdiction: "51810"
     date_field: ApplicationDate
     fields:
       external_id: PermitNumber
@@ -47,12 +53,26 @@ sources:
     base_url: https://aca-prod.accela.com/CHESAPEAKE
     module: Building
     city: Chesapeake
+    state: VA
+    county_fips: "51550"
+    jurisdiction: "51550"
     window_days: 7
 
   # Other Accela cities follow the same pattern; find the agency code in the
   # portal URL (aca-prod.accela.com/<CODE>) and copy the block above.
   # Suffolk, Portsmouth, Hampton and Newport News each run their own portal;
   # run `leadengine inspect` after adding one.
+
+  # ---------------------------------------------------------------- storms (nationwide, free)
+
+  noaa-storms:
+    name: NOAA storm reports (hail, wind, tornado)
+    type: noaa_storms
+    kind: storm
+    enabled: true
+    days: [today, yesterday]
+    min_hail_inches: 1.0
+    min_wind_mph: 58
 
   # ---------------------------------------------------------------- bids / RFPs
   # Many Hampton Roads city sites run on CivicPlus, which publishes bid postings
@@ -66,6 +86,9 @@ sources:
     enabled: false
     url: https://www.norfolk.gov/RSSFeed.aspx?ModID=76&CID=All-bids.xml
     city: Norfolk
+    state: VA
+    county_fips: "51710"
+    jurisdiction: "51710"
 
   hampton-bids:
     name: Hampton bid postings
@@ -74,6 +97,9 @@ sources:
     enabled: false
     url: https://www.hampton.gov/RSSFeed.aspx?ModID=76&CID=All-bids.xml
     city: Hampton
+    state: VA
+    county_fips: "51650"
+    jurisdiction: "51650"
 
   suffolk-bids:
     name: Suffolk bid postings
@@ -82,6 +108,9 @@ sources:
     enabled: false
     url: https://www.suffolkva.us/RSSFeed.aspx?ModID=76&CID=All-bids.xml
     city: Suffolk
+    state: VA
+    county_fips: "51800"
+    jurisdiction: "51800"
 
   # eVA (Virginia's state + local procurement site). Fill in the CSS selectors
   # after looking at the public opportunities page in your browser's inspector.

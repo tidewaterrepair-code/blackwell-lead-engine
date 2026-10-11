@@ -1,0 +1,176 @@
+# Trade packs: who the customer is and which job tags are leads for them.
+# Add a trade by adding a block here. No code change needed.
+#
+#   group:  trades | realestate
+#   tags:   job tags (tags.yaml) that are direct leads for this trade
+#   kinds:  optional signal kinds that are always leads (e.g. bids, distress)
+#   ticket: typical job size in dollars (used when a signal has no value)
+
+trades:
+  general_contractor:
+    label: General contractor
+    group: trades
+    icon: hammer
+    ticket: 85000
+    tags: [new_construction, addition, remodel, kitchen, bath, garage_framing, commercial_fitout, multifamily, fire_water_restoration, house_framing]
+    kinds: [bid, subdivision]
+  home_builder:
+    label: Home builder
+    group: trades
+    icon: home
+    ticket: 380000
+    tags: [new_construction, multifamily, demolition, re_subdivision]
+    kinds: [subdivision]
+  framer:
+    label: Framing
+    group: trades
+    icon: ruler
+    ticket: 28000
+    tags: [new_construction, house_framing, addition, garage_framing, multifamily, deck]
+  deck_builder:
+    label: Decks & porches
+    group: trades
+    icon: deck
+    ticket: 18000
+    tags: [deck]
+  remodeler:
+    label: Remodeling
+    group: trades
+    icon: wrench
+    ticket: 45000
+    tags: [remodel, kitchen, bath, addition, fire_water_restoration, drywall]
+  kitchen_bath:
+    label: Kitchen & bath
+    group: trades
+    icon: sink
+    ticket: 38000
+    tags: [kitchen, bath, cabinets_counters]
+  roofer:
+    label: Roofing
+    group: trades
+    icon: roof
+    ticket: 14000
+    tags: [roofing, storm_hail, storm_wind]
+  siding_windows:
+    label: Siding, windows & doors
+    group: trades
+    icon: window
+    ticket: 16000
+    tags: [siding, windows_doors, storm_hail]
+  hvac:
+    label: HVAC
+    group: trades
+    icon: fan
+    ticket: 9500
+    tags: [hvac]
+  plumber:
+    label: Plumbing
+    group: trades
+    icon: pipe
+    ticket: 4500
+    tags: [plumbing, water_heater, bath, kitchen]
+  electrician:
+    label: Electrical
+    group: trades
+    icon: bolt
+    ticket: 5500
+    tags: [electrical, generator, ev_charger, solar]
+  solar:
+    label: Solar & batteries
+    group: trades
+    icon: sun
+    ticket: 26000
+    tags: [solar]
+  pool_builder:
+    label: Pools & spas
+    group: trades
+    icon: pool
+    ticket: 65000
+    tags: [pool]
+  fence:
+    label: Fencing
+    group: trades
+    icon: fence
+    ticket: 7500
+    tags: [fence, storm_wind]
+  landscaper:
+    label: Landscaping & hardscape
+    group: trades
+    icon: leaf
+    ticket: 12000
+    tags: [landscaping]
+  concrete:
+    label: Concrete & masonry
+    group: trades
+    icon: brick
+    ticket: 11000
+    tags: [concrete, foundation_repair]
+  painter:
+    label: Painting
+    group: trades
+    icon: brush
+    ticket: 6500
+    tags: [painting]
+  flooring:
+    label: Flooring
+    group: trades
+    icon: tiles
+    ticket: 9000
+    tags: [flooring]
+  insulation:
+    label: Insulation & energy
+    group: trades
+    icon: shield
+    ticket: 4500
+    tags: [insulation]
+  gutters:
+    label: Gutters
+    group: trades
+    icon: drop
+    ticket: 2500
+    tags: [gutters, storm_hail]
+  tree_service:
+    label: Tree service
+    group: trades
+    icon: tree
+    ticket: 2800
+    tags: [tree_service, storm_wind]
+  marine:
+    label: Docks, piers & bulkheads
+    group: trades
+    icon: anchor
+    ticket: 42000
+    tags: [dock_marine]
+  restoration:
+    label: Fire & water restoration
+    group: trades
+    icon: flame
+    ticket: 15000
+    tags: [fire_water_restoration, storm_flood, storm_wind]
+  demolition:
+    label: Demolition
+    group: trades
+    icon: bulldozer
+    ticket: 18000
+    tags: [demolition]
+  supplier:
+    label: Building supplier / lumber yard
+    group: trades
+    icon: truck
+    ticket: 30000
+    tags: [new_construction, addition, deck, remodel, house_framing, garage_framing, multifamily, roofing, siding]
+    kinds: [subdivision]
+  real_estate_agent:
+    label: Real estate agent
+    group: realestate
+    icon: key
+    ticket: 9000
+    tags: [re_sale, re_expired, re_fsbo, re_probate, re_foreclosure, re_tax_delinquent, re_violation, re_absentee, re_vacant, re_subdivision]
+    kinds: [sale, probate, foreclosure, tax_delinquent, listing]
+  investor:
+    label: Investor / wholesaler
+    group: realestate
+    icon: chart
+    ticket: 25000
+    tags: [re_foreclosure, re_tax_delinquent, re_probate, re_eviction, re_violation, re_vacant, re_absentee, re_expired, fire_water_restoration]
+    kinds: [foreclosure, tax_delinquent, probate, eviction, violation]
