@@ -13,10 +13,10 @@ export function AuthFrame({ children, aside }: { children: React.ReactNode; asid
         <div className="flex-1 grid place-items-center py-10"><div className="w-full max-w-md">{children}</div></div>
       </div>
       <div className="hidden lg:flex relative overflow-hidden items-center justify-center bg-wing-soft border-l border-line/10">
-        <div className="absolute h-[620px] w-[620px] rounded-full border border-violet/20" />
-        <div className="absolute h-[420px] w-[420px] rounded-full border border-cyan/20" />
+        <div className="absolute h-[620px] w-[620px] rounded-full border border-brand/20" />
+        <div className="absolute h-[420px] w-[420px] rounded-full border border-ember/20" />
         <div className="absolute h-[620px] w-[620px] rounded-full animate-sweep"
-             style={{ background: "conic-gradient(from 0deg, transparent 0deg, rgb(var(--violet) / 0.25) 40deg, transparent 70deg)" }} />
+             style={{ background: "conic-gradient(from 0deg, transparent 0deg, rgb(var(--brand) / 0.25) 40deg, transparent 70deg)" }} />
         <div className="relative max-w-sm p-8">{aside}</div>
       </div>
     </div>
@@ -64,7 +64,7 @@ export function Login() {
       <p className="text-ink2 mt-1 mb-6">Your leads are waiting.</p>
       {sent ? (
         <div className="card p-5 text-center">
-          <Mail className="mx-auto text-violet" />
+          <Mail className="mx-auto text-brand" />
           <div className="font-semibold mt-2">Check your email</div>
           <p className="text-sm text-ink2 mt-1">If {email} has an account, a sign-in link is on its way. It works for 30 minutes.</p>
         </div>
@@ -83,7 +83,7 @@ export function Login() {
           </button>
         </form>
       )}
-      <p className="text-sm text-ink2 mt-6 text-center">New to Pegasus? <Link to="/signup" className="text-violet font-semibold">Start free</Link></p>
+      <p className="text-sm text-ink2 mt-6 text-center">New to Pegasus? <Link to="/signup" className="text-brand font-semibold">Start free</Link></p>
     </AuthFrame>
   );
 }

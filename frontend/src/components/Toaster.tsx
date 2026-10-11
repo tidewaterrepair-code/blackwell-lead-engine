@@ -3,7 +3,7 @@ import { useApp } from "../lib/store";
 
 const TONES = {
   good: "border-good/40", gold: "border-gold/60 shadow-[0_0_30px_-8px_rgba(255,194,75,0.6)]", bad: "border-bad/50",
-  info: "border-violet/40",
+  info: "border-brand/40",
 };
 
 export function Toaster() {

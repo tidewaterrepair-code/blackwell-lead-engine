@@ -74,7 +74,7 @@ def render(email: dict, values: dict, to: str) -> tuple[str, str, str]:
     cta_label, cta_url = (fill(x, values) for x in email.get("cta") or ("", ""))
     unsub = unsubscribe_url(to)
     preview = html.escape(fill(email.get("preview", ""), values))
-    footer = (f"Pegasus · data &amp; lead technology · <a href='{html.escape(unsub)}' style='color:#6b7280'>"
+    footer = (f"Pegasus · data &amp; lead technology · <a href='{html.escape(unsub)}' style='color:#807058'>"
               "Unsubscribe</a>")
     hidden = f"<div style='display:none;max-height:0;overflow:hidden'>{preview}</div>"
     html_body = hidden + wrap_html(subject, body_html(body), cta_label or None, cta_url or None, footer)

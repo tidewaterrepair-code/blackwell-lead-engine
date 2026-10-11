@@ -10,7 +10,7 @@ import { useApp } from "../lib/store";
 import type { Lead } from "../lib/types";
 
 const COLUMNS = [
-  { key: "saved", label: "Saved", tone: "bg-violet" }, { key: "contacted", label: "Contacted", tone: "bg-cyan" },
+  { key: "saved", label: "Saved", tone: "bg-brand" }, { key: "contacted", label: "Contacted", tone: "bg-ember" },
   { key: "quoted", label: "Quoted", tone: "bg-gold" }, { key: "won", label: "Won", tone: "bg-good" },
   { key: "lost", label: "Lost", tone: "bg-muted" },
 ];
@@ -45,7 +45,7 @@ export default function Pipeline() {
           return (
             <div key={col.key} onDragOver={(e) => { e.preventDefault(); setOver(col.key); }} onDragLeave={() => setOver(null)}
                  onDrop={() => { const l = leads.find((x) => x.id === dragId); setOver(null); if (l) move(l, col.key); }}
-                 className={`rounded-2xl p-3 min-h-[60vh] transition ${over === col.key ? "bg-wing-soft ring-2 ring-violet/50" : "bg-surface2/40"}`}>
+                 className={`rounded-2xl p-3 min-h-[60vh] transition ${over === col.key ? "bg-wing-soft ring-2 ring-brand/50" : "bg-surface2/40"}`}>
               <div className="flex items-center gap-2 mb-3 px-1">
                 <span className={`h-2.5 w-2.5 rounded-full ${col.tone}`} />
                 <span className="font-semibold text-sm">{col.label}</span>

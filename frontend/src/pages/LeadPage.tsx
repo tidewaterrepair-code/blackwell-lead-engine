@@ -95,7 +95,7 @@ export default function LeadPage() {
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap gap-1.5 mb-2">
               {s && <TagChip tag={lead.prediction?.tag ?? s.tag} label={lead.prediction?.tag_label ?? s.tag_label} size="md" />}
-              {lead.type === "prediction" && <span className="chip border-violet/50"><Sparkles size={12} className="text-violet" />Predicted job</span>}
+              {lead.type === "prediction" && <span className="chip border-brand/50"><Sparkles size={12} className="text-brand" />Predicted job</span>}
               {s && <span className="chip">{s.kind_label}</span>}
               {lead.trade_label && <span className="chip">For {lead.trade_label}</span>}
             </div>
@@ -104,8 +104,8 @@ export default function LeadPage() {
               {s?.address && <span className="inline-flex items-center gap-1"><MapPin size={14} />{s.address}{s.city ? `, ${s.city}` : ""}</span>}
               {s?.value ? <span className="font-semibold text-ink">{money(s.value, false)}</span> : null}
               <span>{ago(s?.posted_at)}</span>
-              {mapsUrl && <a className="text-violet inline-flex items-center gap-1" href={mapsUrl} target="_blank" rel="noreferrer">Map<ExternalLink size={12} /></a>}
-              {s?.url && <a className="text-violet inline-flex items-center gap-1" href={s.url} target="_blank" rel="noreferrer">Original record<ExternalLink size={12} /></a>}
+              {mapsUrl && <a className="text-brand inline-flex items-center gap-1" href={mapsUrl} target="_blank" rel="noreferrer">Map<ExternalLink size={12} /></a>}
+              {s?.url && <a className="text-brand inline-flex items-center gap-1" href={s.url} target="_blank" rel="noreferrer">Original record<ExternalLink size={12} /></a>}
             </div>
             {lead.reasons.length > 0 && <div className="mt-3 flex flex-wrap gap-1.5">{lead.reasons.map((r) => <span key={r} className="chip">{r}</span>)}</div>}
           </div>
@@ -175,7 +175,7 @@ export default function LeadPage() {
               <ol className="mt-3 relative border-l border-line/15 ml-2 space-y-4">
                 {lead.next_jobs!.slice(0, 12).map((j) => (
                   <li key={j.trade + j.tag_label} className="ml-4">
-                    <span className={`absolute -left-[7px] mt-1 h-3.5 w-3.5 rounded-full ${j.yours ? "bg-gold ring-4 ring-gold/20" : "bg-violet/60"}`} />
+                    <span className={`absolute -left-[7px] mt-1 h-3.5 w-3.5 rounded-full ${j.yours ? "bg-gold ring-4 ring-gold/20" : "bg-brand/60"}`} />
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="font-semibold text-sm">{j.trade_label}</span>
                       {j.yours && <span className="chip border-gold/60 text-gold text-[10px]">Your trade</span>}
@@ -258,7 +258,7 @@ export default function LeadPage() {
                       {(ph.dnc || ph.litigator) && <span className="chip border-bad/50 text-bad text-[10px]">{ph.litigator ? "Litigator: don't call" : "Do not call"}</span>}
                     </div>
                   ))}
-                  {c.emails.map((em) => <a key={em} href={`mailto:${em}`} className="block text-violet">{em}</a>)}
+                  {c.emails.map((em) => <a key={em} href={`mailto:${em}`} className="block text-brand">{em}</a>)}
                 </div>
               )) : (
                 <>

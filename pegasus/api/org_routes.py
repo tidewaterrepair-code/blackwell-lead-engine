@@ -136,7 +136,7 @@ def market_report(territory_id: int, request: Request, ctx: Ctx = Depends(requir
         raise HTTPException(404)
     return templates.TemplateResponse(request, "report_market.html", {
         "stats": farm_stats(db, terr, ctx.org.id), "org": ctx.org, "user": ctx.user,
-        "brand": (ctx.org.settings or {}).get("brand_color") or "#7C5CFF"})
+        "brand": (ctx.org.settings or {}).get("brand_color") or "#9A6420"})
 
 
 class MLSIn(BaseModel):

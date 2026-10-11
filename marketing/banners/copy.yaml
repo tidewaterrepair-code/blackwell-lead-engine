@@ -1,58 +1,224 @@
-# Banner copy. Render every banner in every size with:  pegasus marketing render
+# Banner copy and art direction. Render every banner in every size with:  pegasus marketing render
 # Output: marketing/dist/banners/<id>-<size>.png
+#
 # Sizes: feed 1080x1080, portrait 1080x1350, story 1080x1920, link 1200x628,
 #        display 300x250, leaderboard 728x90, skyscraper 160x600, og 1200x630
+#
+# Fields
+#   layout:   hero | phone | audience | cards | scene | offer | timeline
+#   headline: list of lines; *text* is gold
+#   plate:    background photo name in marketing/banners/plates/ (jpg/png/webp). Until the file exists,
+#             a code-drawn night-city scene is used. Prompts for each plate: marketing/banners/plates/README.md
+#   focus:    which part of the plate to keep when cropping (CSS background-position)
+#   pins:     gold map pins over the plate (x/y in % of the canvas), with optional label cards
+#   cards:    lead cards (cards and phone layouts). Illustrative examples of lead types, not real records.
 
 sizes: [1080x1080, 1080x1350, 1080x1920, 1200x628, 300x250, 728x90, 160x600]
 
 banners:
+  # ------------------------------------------------------------ the six reference designs
+  - id: brand-hero
+    layout: hero
+    plate: pegasus-sky
+    focus: "50% 35%"
+    headline: ["Pegasus", "*Find the opportunity*"]
+    short: ["See the job", "*before they do.*"]
+    tagline: ["Find the opportunity", "*before your competition does.*"]
+    side_words: [Construction, Real estate, Data, Leads, Opportunity]
+    cta: Start free
+    pins:
+      - {x: 18, y: 30, title: New build, sub: Permit issued, meta: 3 days ago}
+      - {x: 36, y: 43, title: Storm swath, sub: Hail 1.75 in, meta: 6 hours ago}
+      - {x: 66, y: 27, title: Addition, sub: Permit approved, meta: 1 day ago, label_side: left}
+      - {x: 84, y: 41, title: Pre-foreclosure, sub: High equity, meta: 4 hours ago, label_side: left}
+    features:
+      - [target, Real-time lead data]
+      - [file, Permits & projects]
+      - [pin, Listings & off-market]
+      - [users, All trades all markets]
+      - [chart, More jobs more growth]
+
+  - id: real-data
+    layout: phone
+    plate: aerial-dusk
+    focus: "40% 50%"
+    headline: ["Real data.", "Real projects.", "*Real payouts.*"]
+    cta_short: Get leads
+    sub: "Construction and real estate leads from public records, every morning."
+    cta: Get leads today
+    cards:
+      - {title: New construction, sub: Permit issued, meta: "Virginia Beach, VA"}
+      - {title: Room addition, sub: Permit approved, meta: "Chesapeake, VA"}
+      - {title: Roof replacement, sub: Storm swath, meta: "Norfolk, VA"}
+      - {title: Property listed, sub: New on market, meta: "Hampton, VA"}
+    features:
+      - [hammer, Construction leads]
+      - [home, Real estate leads]
+      - [file, Permit data]
+      - [layers, Property intelligence]
+
+  - id: contractors
+    layout: audience
+    plate: contractor
+    focus: "70% 40%"
+    ribbon: Contractors
+    headline: ["More jobs.", "*Less guesswork.*"]
+    sub: "Find active projects in your area before they hit the market."
+    bullets:
+      - [home, New builds]
+      - [layers, Additions]
+      - [hammer, Remodels]
+      - [roof, Roofing]
+      - [file, Siding]
+      - [tools, All trades]
+    cta: Get construction leads
+    cta_short: Get leads
+
+  - id: agents
+    layout: audience
+    plate: agent
+    focus: "72% 40%"
+    ribbon: Real estate agents
+    headline: ["Find more", "*listings.*"]
+    sub: "Off-market. Pre-foreclosure. Distressed. New construction."
+    bullets:
+      - [home, Off-market properties]
+      - [shield, Pre-foreclosure opportunities]
+      - [tag, New listings & price changes]
+      - [target, Motivated sellers]
+    cta: Get real estate leads
+    cta_short: Get leads
+
+  - id: data-dollars
+    layout: cards
+    plate: aerial-dusk
+    focus: "50% 60%"
+    headline: ["Turn data", "into *dollars.*"]
+    sub: "Permits. Properties. People. All in one platform."
+    cards:
+      - {title: Permit issued, sub: New construction, value: "$450K", meta: 3 days ago}
+      - {title: Off-market home, sub: Likely to sell, value: "$380K", meta: 1 day ago}
+      - {title: Roof replacement, sub: Storm swath, value: "$25K+", meta: 5 hours ago}
+    pins:
+      - {x: 18, y: 64}
+      - {x: 34, y: 78}
+      - {x: 52, y: 70}
+    footer: "Better data. Bigger opportunities."
+    cta: See your leads
+
+  - id: everywhere
+    layout: scene
+    plate: truck-overlook
+    focus: "50% 55%"
+    headline: ["Leads are", "*everywhere.*"]
+    sub: "We find them. You close them."
+    pins:
+      - {x: 58, y: 52}
+      - {x: 70, y: 46}
+      - {x: 80, y: 58}
+      - {x: 64, y: 64}
+    footer: "Construction  |  Real estate  |  Opportunity  |  Everywhere"
+    cta: Start free
+
+  # ------------------------------------------------------------ campaign designs, restyled
   - id: founding
-    kicker: Founding members
-    headline: "40% off. For life."
+    layout: offer
+    plate: pegasus-sky
+    focus: "60% 35%"
+    ribbon: Founding members
+    headline: ["40% off.", "*For life.*"]
     sub: "Leads from every permit, bid, sale and storm in your area. First 100 customers only."
     cta: Claim a seat
     stat: {value: "100", label: "seats"}
+
   - id: hero-trades
+    layout: scene
+    plate: contractor
+    focus: "70% 40%"
     kicker: Pegasus Trades
-    headline: "See the job before your competition does."
-    sub: "Permits, bids and storms, ranked for your trade every morning."
+    headline: ["See the job", "*before they do.*"]
+    sub: "Permits, bids and storms, ranked for your trade every morning at 7."
     cta: Start free
-    stat: {value: "7:00", label: "Morning Drop"}
+    pins:
+      - {x: 64, y: 58}
+      - {x: 78, y: 50}
+
   - id: storm
+    layout: cards
+    plate: storm-roofs
+    focus: "50% 45%"
     kicker: Storm alerts
-    headline: "Hail last night? Your map is ready."
+    headline: ["Hail last night?", "*Your map is ready.*"]
     sub: "NOAA hail and wind swaths matched to your area within hours."
+    cards:
+      - {title: Hail swath, sub: "1.75 in · Kempsville", meta: Reported overnight}
+      - {title: Roof age 20+ yrs, sub: Inside the swath, meta: Scored by morning}
+      - {title: New owner, sub: Bought this year, meta: Ready to call}
     cta: Get storm leads
-    stat: {value: "1.75″", label: "hail"}
-    accent: gold
+
   - id: timeline
+    layout: timeline
+    plate: aerial-dusk
+    focus: "50% 50%"
     kicker: Predicted jobs
-    headline: "One permit. 14 trades. Your window, predicted."
-    sub: "Framing week 1. Roof week 6. HVAC week 8. Deck year one."
+    headline: ["One permit.", "*14 trades.*"]
+    sub: "Pegasus predicts when each trade gets hired, so you call first."
+    timeline:
+      - [Framing, 0, 22, "Week 1–6"]
+      - [Roofing, 18, 18, "Week 5–10"]
+      - [HVAC · Plumbing · Electric, 26, 22, "Week 6–12"]
+      - [Flooring & paint, 48, 26, "Month 3–5"]
+      - [Deck · Fence · Pool, 62, 38, "Month 4–12"]
     cta: Find your window
-    stat: {value: "14", label: "trades"}
+
   - id: farm
-    kicker: Pegasus Realty
-    headline: "Know who's selling before they list."
-    sub: "Likely-to-sell scores, expired listings and farm heat maps."
+    layout: audience
+    plate: farm-street
+    focus: "65% 50%"
+    ribbon: Pegasus Realty
+    headline: ["Know who's selling", "*before they list.*"]
+    short: ["Know who's", "selling", "*before they list.*"]
+    sub: "Likely-to-sell scores built only on property facts."
+    bullets:
+      - [target, Likely-to-sell scores]
+      - [tag, Expired & withdrawn listings]
+      - [map, Farm heat maps]
+      - [file, Branded market reports]
     cta: Start free
-    stat: {value: "12 mo", label: "forecast"}
+
   - id: exclusive
-    kicker: Exclusive ZIPs
-    headline: "Your ZIP. Your trade. Nobody else."
-    sub: "Lock a ZIP code so no other Pegasus customer in your trade gets those leads."
+    layout: offer
+    plate: farm-street
+    focus: "60% 50%"
+    ribbon: Exclusive ZIPs
+    headline: ["Your ZIP.", "Your trade.", "*Nobody else.*"]
+    sub: "Lock a ZIP so no other Pegasus customer in your trade gets those leads."
     cta: Check your ZIP
     stat: {value: "1", label: "per ZIP"}
-    accent: gold
+
   - id: launch
+    layout: scene
+    plate: truck-overlook
+    focus: "50% 55%"
     kicker: Now live
-    headline: "Pegasus is live in Hampton Roads."
+    headline: ["Now live in", "*Hampton Roads.*"]
     sub: "And any US county through Source Scout. 14 days free."
+    pins:
+      - {x: 60, y: 54}
+      - {x: 74, y: 48}
+      - {x: 84, y: 60}
     cta: Start free
-    stat: {value: "26", label: "trades"}
+
+  # ------------------------------------------------------------ social share image for the website
   - id: og-image
-    kicker: Pegasus · data & lead technology
-    headline: "See the job before your competition does."
-    sub: "Permits, bids, sales, storms and off-market homes, predicted and ranked."
+    layout: hero
+    plate: pegasus-sky
+    focus: "50% 35%"
+    headline: ["Pegasus"]
+    tagline: ["Find the opportunity", "*before your competition does.*"]
+    side_words: [Construction, Real estate, Data, Leads]
     cta: pegasusleads.com
+    pins:
+      - {x: 18, y: 40, title: New build, sub: Permit issued}
+      - {x: 84, y: 44, title: Pre-foreclosure, sub: High equity, label_side: left}
     sizes: [1200x630]

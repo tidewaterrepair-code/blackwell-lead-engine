@@ -45,14 +45,14 @@ export function Shell({ children }: { children: ReactNode }) {
         </nav>
         <div className="mt-auto space-y-3">
           {trialDays !== null && (
-            <button onClick={() => navigate("/billing")} className="w-full text-left rounded-xl bg-wing-soft border border-violet/30 p-3">
+            <button onClick={() => navigate("/billing")} className="w-full text-left rounded-xl bg-wing-soft border border-brand/30 p-3">
               <div className="text-xs text-ink2">Free trial</div>
               <div className="font-semibold text-sm">{trialDays} day{trialDays === 1 ? "" : "s"} of {me.plan.label} left</div>
-              <div className="text-xs text-violet mt-1">Lock in founding pricing →</div>
+              <div className="text-xs text-brand mt-1">Lock in founding pricing →</div>
             </button>
           )}
           <div className="flex items-center gap-2 px-1">
-            <div className="h-9 w-9 rounded-full bg-wing grid place-items-center font-bold text-white">
+            <div className="h-9 w-9 rounded-full bg-wing grid place-items-center font-bold text-onbrand">
               {(me.user.name ?? me.user.email)[0].toUpperCase()}
             </div>
             <div className="min-w-0 flex-1">

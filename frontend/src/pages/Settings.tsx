@@ -77,10 +77,10 @@ export default function Settings() {
 
       <section className="card p-5 space-y-3">
         <div className="kicker flex items-center gap-1.5"><Bell size={12} />Alerts</div>
-        <label className="flex items-center gap-3 text-sm"><input type="checkbox" checked={alerts.digest} onChange={(e) => setAlerts({ ...alerts, digest: e.target.checked })} className="accent-[rgb(var(--violet))] h-4 w-4" />
+        <label className="flex items-center gap-3 text-sm"><input type="checkbox" checked={alerts.digest} onChange={(e) => setAlerts({ ...alerts, digest: e.target.checked })} className="accent-[rgb(var(--brand))] h-4 w-4" />
           Morning Drop email at {me.digest_hour}:00</label>
         <div><div className="flex justify-between text-xs text-ink2"><span>Instant phone alert for leads scoring</span><span className="font-semibold text-ink">{alerts.min}+</span></div>
-          <input type="range" min={50} max={95} value={alerts.min} onChange={(e) => setAlerts({ ...alerts, min: +e.target.value })} className="w-full accent-[rgb(var(--violet))]" /></div>
+          <input type="range" min={50} max={95} value={alerts.min} onChange={(e) => setAlerts({ ...alerts, min: +e.target.value })} className="w-full accent-[rgb(var(--brand))]" /></div>
         <label className="block"><span className="label">Phone alerts: your ntfy topic (free ntfy app, iOS/Android)</span>
           <input className="input mt-1" placeholder="pegasus-yourname-7k2" value={alerts.topic} onChange={(e) => setAlerts({ ...alerts, topic: e.target.value.replace(/[^\w-]/g, "") })} /></label>
         <p className="text-xs text-muted">Install ntfy, subscribe to the same topic name, and hot leads will buzz your phone.</p>
@@ -92,7 +92,7 @@ export default function Settings() {
         <div className="kicker flex items-center gap-1.5"><Users size={12} />Team · {team.data?.seats.used ?? 1}/{team.data?.seats.limit ?? me.plan.seats} seats</div>
         <ul className="divide-y divide-line/10">
           {team.data?.members.map((m: any) => <li key={m.id} className="py-2 flex items-center gap-3 text-sm">
-            <span className="h-8 w-8 rounded-full bg-wing grid place-items-center text-white font-bold">{(m.name ?? m.email)[0].toUpperCase()}</span>
+            <span className="h-8 w-8 rounded-full bg-wing grid place-items-center text-onbrand font-bold">{(m.name ?? m.email)[0].toUpperCase()}</span>
             <span className="flex-1">{m.name ?? m.email}<span className="block text-xs text-muted">{m.email}</span></span>
             <span className="chip capitalize">{m.role}</span><span className="text-xs text-ink2">{m.xp} XP · 🔥{m.streak}</span></li>)}
           {team.data?.invites.map((i: any) => <li key={i.id} className="py-2 text-sm text-ink2">{i.email} · invited {ago(i.created_at)}</li>)}

@@ -9,8 +9,8 @@
   <meta property="og:description" content="{{ self.description() }}">
   <meta property="og:image" content="{{ public_url() }}/static/brand/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#0A0F2C">
-  <link rel="icon" href="/static/brand/pegasus-mark.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#0B0A08">
+  <link rel="icon" href="/static/brand/pegasus-icon.svg" type="image/svg+xml">
   <link rel="canonical" href="{{ public_url() }}{{ request.url.path }}">
   <link rel="stylesheet" href="/static/site.css">
   {% set u = umami() %}{% if u[0] and u[1] %}<script defer src="{{ u[0] }}" data-website-id="{{ u[1] }}"></script>{% endif %}
@@ -19,7 +19,7 @@
 <body>
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="/">{{ mark(28) }}Pegasus</a>
+    <a class="brand" href="/">{{ mark(28) }}<span>PEGASUS</span></a>
     <nav class="nav-links">
       <a href="/#how">How it works</a><a href="/#trades">Trades</a><a href="/#realestate">Real estate</a><a href="/pricing">Pricing</a>
     </nav>
@@ -29,7 +29,7 @@
 {% block content %}{% endblock %}
 <footer>
   <div class="wrap cols">
-    <div><a class="brand" href="/">{{ mark(24) }}Pegasus</a><p class="small" style="margin-top:10px;max-width:320px">Data &amp; lead technology for the trades and real estate. Built from public records, scored for you.</p></div>
+    <div><a class="brand" href="/">{{ mark(24) }}<span>PEGASUS</span></a><p class="small" style="margin-top:10px;max-width:320px">Data &amp; lead technology for the trades and real estate. Built from public records, scored for you.</p></div>
     <div><b>Product</b><a href="/pricing">Pricing</a><a href="/app/signup">Start free</a><a href="/app/login">Log in</a></div>
     <div><b>For</b>{% for key in ["general_contractor","framer","deck_builder","roofer","remodeler","real_estate_agent","investor"] %}<a href="/for/{{ key|replace('_','-') }}">{{ trades[key].label }}</a>{% endfor %}</div>
     <div><b>Company</b><a href="/legal/terms">Terms</a><a href="/legal/privacy">Privacy</a><a href="/legal/acceptable-use">Acceptable use</a><a href="/legal/data-sources">Data sources</a><a href="/optout">Do not sell / opt out</a></div>

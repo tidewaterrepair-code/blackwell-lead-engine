@@ -132,8 +132,8 @@ export function Stream() {
               </p>
             </div>
             <div className="grid grid-cols-4 gap-2 w-full sm:w-auto">
-              {[{ l: "Hot", v: stats?.hot, I: Flame, c: "text-gold" }, { l: "Predicted", v: stats?.predicted, I: Sparkles, c: "text-violet" },
-                { l: "Follow-ups", v: stats?.follow_ups_due, I: Bell, c: "text-cyan" },
+              {[{ l: "Hot", v: stats?.hot, I: Flame, c: "text-gold" }, { l: "Predicted", v: stats?.predicted, I: Sparkles, c: "text-brand" },
+                { l: "Follow-ups", v: stats?.follow_ups_due, I: Bell, c: "text-ember" },
                 { l: "Pipeline", v: money(stats?.pipeline_value ?? 0), I: Trophy, c: "text-good" }].map(({ l, v, I, c }) => (
                 <div key={l} className="rounded-xl bg-surface2/60 px-3 py-2 min-w-[72px]">
                   <div className="flex items-center gap-1 text-[11px] text-ink2"><I size={12} className={c} />{l}</div>
@@ -150,7 +150,7 @@ export function Stream() {
           ))}
           <span className="w-px bg-line/10 mx-1" />
           {(stats?.radar ?? []).map((r) => (
-            <button key={r.tag} onClick={() => setTag(tag === r.tag ? null : r.tag)} className={tag === r.tag ? "rounded-full ring-2 ring-violet" : ""}>
+            <button key={r.tag} onClick={() => setTag(tag === r.tag ? null : r.tag)} className={tag === r.tag ? "rounded-full ring-2 ring-brand" : ""}>
               <TagChip tag={r.tag} label={`${r.label} · ${r.count}`} />
             </button>
           ))}

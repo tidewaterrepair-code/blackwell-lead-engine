@@ -107,12 +107,12 @@ export function Signup({ invite = false, onboardingOnly = false }: { invite?: bo
                   { k: "realestate" as const, t: "I'm in real estate", d: "Agents, investors and wholesalers looking for off-market and likely-to-sell homes", I: KeyRound }].map(({ k, t, d, I }) => (
                   <button key={k} onClick={() => { setAudience(k); setTrades([]); setStep("trades"); }}
                           className="card card-hover text-left p-5 flex gap-4 items-start">
-                    <span className="h-12 w-12 shrink-0 rounded-2xl bg-wing grid place-items-center text-white"><I /></span>
+                    <span className="h-12 w-12 shrink-0 rounded-2xl bg-wing grid place-items-center text-onbrand"><I /></span>
                     <span><span className="font-display font-bold text-lg block">{t}</span><span className="text-sm text-ink2">{d}</span></span>
                   </button>
                 ))}
               </div>
-              <p className="text-sm text-ink2 mt-6 text-center">Already have an account? <Link to="/login" className="text-violet font-semibold">Log in</Link></p>
+              <p className="text-sm text-ink2 mt-6 text-center">Already have an account? <Link to="/login" className="text-brand font-semibold">Log in</Link></p>
             </div>
           )}
 
@@ -126,8 +126,8 @@ export function Signup({ invite = false, onboardingOnly = false }: { invite?: bo
                   const on = trades.includes(t.key);
                   return (
                     <button key={t.key} onClick={() => toggle(t.key)}
-                            className={`card p-3 text-left text-sm font-medium flex flex-col gap-2 transition ${on ? "ring-2 ring-violet shadow-glow" : "hover:border-violet/40"}`}>
-                      <span className={`h-9 w-9 rounded-xl grid place-items-center ${on ? "bg-wing text-white" : "bg-surface2 text-ink2"}`}><Icon size={18} /></span>
+                            className={`card p-3 text-left text-sm font-medium flex flex-col gap-2 transition ${on ? "ring-2 ring-brand shadow-glow" : "hover:border-brand/40"}`}>
+                      <span className={`h-9 w-9 rounded-xl grid place-items-center ${on ? "bg-wing text-onbrand" : "bg-surface2 text-ink2"}`}><Icon size={18} /></span>
                       {t.label}
                     </button>
                   );
@@ -169,11 +169,11 @@ export function Signup({ invite = false, onboardingOnly = false }: { invite?: bo
           {step === "scan" && (
             <div className="text-center">
               <div className="relative mx-auto h-56 w-56 my-4">
-                <div className="absolute inset-0 rounded-full border border-violet/30" />
-                <div className="absolute inset-8 rounded-full border border-cyan/25" />
-                <div className="absolute inset-16 rounded-full border border-violet/20" />
+                <div className="absolute inset-0 rounded-full border border-brand/30" />
+                <div className="absolute inset-8 rounded-full border border-ember/25" />
+                <div className="absolute inset-16 rounded-full border border-brand/20" />
                 <div className="absolute inset-0 rounded-full animate-sweep"
-                     style={{ background: "conic-gradient(from 0deg, transparent 0deg, rgb(var(--violet) / 0.45) 50deg, transparent 80deg)" }} />
+                     style={{ background: "conic-gradient(from 0deg, transparent 0deg, rgb(var(--brand) / 0.45) 50deg, transparent 80deg)" }} />
                 {[...Array(Math.min(found ?? 0, 9))].map((_, i) => (
                   <span key={i} className="absolute h-2.5 w-2.5 rounded-full bg-gold animate-pulse"
                         style={{ left: `${20 + ((i * 37) % 60)}%`, top: `${18 + ((i * 53) % 64)}%` }} />

@@ -1,40 +1,44 @@
 @import "@fontsource-variable/inter";
-@import "@fontsource-variable/space-grotesk";
+@import "@fontsource-variable/oswald";
+@import "@fontsource/cinzel/600.css";
 @import "leaflet/dist/leaflet.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Pegasus design tokens (RGB triplets so Tailwind can apply opacity). */
+/* Pegasus design tokens: black and gold. RGB triplets so Tailwind can apply opacity.
+   Mirrored in pegasus/web/static/site.css and pegasus/marketing/brand.py. */
 :root {
-  --page: 246 247 253;
+  --page: 251 247 239;
   --surface: 255 255 255;
-  --surface-2: 238 240 250;
-  --line: 10 15 44;
-  --ink: 10 15 44;
-  --ink-2: 74 82 128;
-  --muted: 120 128 168;
-  --violet: 108 76 245;
-  --cyan: 8 176 207;
-  --gold: 214 150 20;
-  --good: 10 160 110;
-  --bad: 214 54 86;
+  --surface-2: 244 237 225;
+  --line: 23 18 10;
+  --ink: 23 18 10;
+  --ink-2: 92 78 58;
+  --muted: 128 112 88;
+  --brand: 154 100 32;       /* deep gold: passes contrast on ivory */
+  --ember: 196 98 18;
+  --gold: 176 120 20;
+  --onbrand: 26 18 6;
+  --good: 12 140 92;
+  --bad: 196 44 60;
   color-scheme: light;
 }
 .dark {
-  --page: 7 10 30;
-  --surface: 15 21 54;
-  --surface-2: 24 32 77;
-  --line: 255 255 255;
-  --ink: 244 246 255;
-  --ink-2: 169 176 214;
-  --muted: 118 126 168;
-  --violet: 124 92 255;
-  --cyan: 34 211 238;
-  --gold: 255 194 75;
-  --good: 46 230 166;
-  --bad: 255 92 122;
+  --page: 11 10 8;
+  --surface: 22 19 15;
+  --surface-2: 34 29 22;
+  --line: 255 240 210;
+  --ink: 246 239 226;
+  --ink-2: 201 186 160;
+  --muted: 140 128 108;
+  --brand: 226 178 90;
+  --ember: 240 138 44;
+  --gold: 255 211 110;
+  --onbrand: 26 18 6;
+  --good: 46 204 140;
+  --bad: 240 96 96;
   color-scheme: dark;
 }
 
@@ -42,13 +46,14 @@ html, body, #root { min-height: 100%; }
 body {
   font-family: "Inter Variable", system-ui, sans-serif;
   background:
-    radial-gradient(1200px 600px at 10% -10%, rgb(var(--violet) / 0.16), transparent 60%),
-    radial-gradient(900px 500px at 110% 10%, rgb(var(--cyan) / 0.10), transparent 60%),
+    radial-gradient(1100px 600px at 12% -12%, rgb(var(--brand) / 0.14), transparent 60%),
+    radial-gradient(900px 520px at 108% 8%, rgb(var(--ember) / 0.08), transparent 60%),
     rgb(var(--page));
   background-attachment: fixed;
   -webkit-tap-highlight-color: transparent;
 }
-h1, h2, h3, .font-display { font-family: "Space Grotesk Variable", system-ui, sans-serif; letter-spacing: -0.02em; }
+h1, h2, h3, .font-display { font-family: "Oswald Variable", "Arial Narrow", system-ui, sans-serif; letter-spacing: 0.005em; }
+.font-brand { font-family: "Cinzel", Georgia, serif; }
 
 @layer components {
   .card {
@@ -56,37 +61,38 @@ h1, h2, h3, .font-display { font-family: "Space Grotesk Variable", system-ui, sa
     border-color: rgb(var(--line) / 0.08);
   }
   .card-hover { @apply transition-all duration-200 hover:-translate-y-0.5; }
-  .card-hover:hover { border-color: rgb(var(--violet) / 0.45); box-shadow: 0 0 0 1px rgb(var(--violet) / 0.25), 0 18px 40px -20px rgb(var(--violet) / 0.55); }
+  .card-hover:hover { border-color: rgb(var(--brand) / 0.45); box-shadow: 0 0 0 1px rgb(var(--brand) / 0.25), 0 18px 40px -20px rgb(var(--brand) / 0.55); }
   .btn {
     @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition
            active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none select-none;
   }
-  .btn-primary { @apply btn text-white bg-wing shadow-glow hover:brightness-110; }
+  .btn-primary { @apply btn bg-wing shadow-glow hover:brightness-110; color: rgb(var(--onbrand)); }
   .btn-ghost { @apply btn text-ink border bg-surface2/60 hover:bg-surface2; border-color: rgb(var(--line) / 0.1); }
-  .btn-gold { @apply btn text-[#1b1300] hover:brightness-105; background: linear-gradient(135deg, #FFD36E, #FFAE2B); }
+  .btn-gold { @apply btn hover:brightness-105; color: rgb(var(--onbrand)); background: linear-gradient(180deg, #FFE3A3, #E2B25A 55%, #B9802F); }
   .btn-sm { @apply px-3 py-1.5 text-xs rounded-lg; }
   .chip {
     @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium border whitespace-nowrap;
     border-color: rgb(var(--line) / 0.1);
     background: rgb(var(--surface-2) / 0.6);
   }
-  .chip-active { background: rgb(var(--violet) / 0.18); border-color: rgb(var(--violet) / 0.55); color: rgb(var(--ink)); }
+  .chip-active { background: rgb(var(--brand) / 0.18); border-color: rgb(var(--brand) / 0.55); color: rgb(var(--ink)); }
   .input {
     @apply w-full rounded-xl border bg-surface2/50 px-3.5 py-2.5 text-sm text-ink placeholder:text-muted outline-none transition;
     border-color: rgb(var(--line) / 0.12);
   }
-  .input:focus { border-color: rgb(var(--violet) / 0.7); box-shadow: 0 0 0 3px rgb(var(--violet) / 0.18); }
+  .input:focus { border-color: rgb(var(--brand) / 0.7); box-shadow: 0 0 0 3px rgb(var(--brand) / 0.18); }
   .label { @apply text-xs font-medium text-ink2; }
   .kicker { @apply text-[11px] uppercase tracking-[0.14em] font-semibold text-muted; }
-  .gradient-text { background: linear-gradient(135deg, rgb(var(--violet)), rgb(var(--cyan))); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .gradient-text, .gold-text { background: linear-gradient(180deg, #FFE7B0 0%, #E2B25A 55%, #A86E24 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .skeleton { background: linear-gradient(90deg, rgb(var(--surface-2)) 0px, rgb(var(--line) / 0.08) 80px, rgb(var(--surface-2)) 160px); background-size: 800px 100%; @apply animate-shimmer rounded-lg; }
   .scrollbar-none { scrollbar-width: none; }
+  :root:not(.dark) .gradient-text, :root:not(.dark) .gold-text { background-image: linear-gradient(180deg, #C9902F 0%, #9A6420 60%, #6E4210 100%); }
   .scrollbar-none::-webkit-scrollbar { display: none; }
 }
 
 /* Leaflet theming */
 .leaflet-container { background: rgb(var(--surface-2)); font: inherit; }
-.dark .leaflet-tile-pane { filter: brightness(0.62) invert(1) contrast(0.92) hue-rotate(200deg) saturate(0.35) brightness(0.85); }
+.dark .leaflet-tile-pane { filter: brightness(0.6) invert(1) contrast(0.9) hue-rotate(180deg) sepia(0.35) saturate(0.6) brightness(0.8); }
 .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: rgb(var(--surface)); color: rgb(var(--ink)); }
 .leaflet-control-attribution { font-size: 10px; background: rgb(var(--surface) / 0.7) !important; color: rgb(var(--muted)); }
 .leaflet-control-attribution a { color: rgb(var(--ink-2)); }

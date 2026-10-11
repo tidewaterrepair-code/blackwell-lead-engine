@@ -21,7 +21,7 @@ from .models import Membership, Org, OrgLead, User
 log = logging.getLogger(__name__)
 OUTBOX: list[dict] = []  # captured messages when SMTP isn't configured (dev + tests)
 
-BRAND_GRADIENT = "linear-gradient(135deg,#7C5CFF,#22D3EE)"
+GOLD_BUTTON = "linear-gradient(180deg,#FFE3A3,#E2B25A 55%,#B9802F)"
 
 
 def send_email(to: str, subject: str, text: str, html_body: str | None = None,
@@ -64,17 +64,20 @@ def send_push(topic: str, title: str, message: str, url: str | None = None, prio
 
 def wrap_html(title: str, body_html: str, cta_label: str | None = None, cta_url: str | None = None,
               footer_html: str | None = None) -> str:
-    cta = (f"<p style='margin:28px 0'><a href='{html.escape(cta_url)}' style='background:#7C5CFF;color:#fff;"
-           f"padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:600'>{html.escape(cta_label)}</a></p>"
+    cta = (f"<p style='margin:28px 0'><a href='{html.escape(cta_url)}' style='background:#E2B25A;"
+           f"background-image:{GOLD_BUTTON};color:#1A1206;padding:13px 24px;border-radius:10px;text-decoration:none;"
+           f"font-weight:700'>{html.escape(cta_label)}</a></p>"
            if cta_label and cta_url else "")
     return (
-        "<div style='background:#0A0F2C;padding:32px 12px;font-family:Inter,Segoe UI,Arial,sans-serif'>"
-        "<div style='max-width:560px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden'>"
-        f"<div style='background:{BRAND_GRADIENT};padding:20px 28px;color:#fff;font-weight:700;font-size:18px'>"
-        "Pegasus</div>"
-        f"<div style='padding:28px;color:#0A0F2C;font-size:15px;line-height:1.55'><h2 style='margin:0 0 12px'>"
+        "<div style='background:#0B0A08;padding:32px 12px;font-family:Inter,Segoe UI,Arial,sans-serif'>"
+        "<div style='max-width:560px;margin:0 auto;background:#FFFDF8;border-radius:16px;overflow:hidden;"
+        "border:1px solid #3A2A12'>"
+        "<div style='background:#0B0A08;padding:18px 28px;border-bottom:2px solid #B9802F'>"
+        f"<img src='{get_settings().public_url}/static/brand/email-wordmark.png' width='220' height='58' "
+        "alt='PEGASUS' style='display:block;border:0;color:#E2B25A;font:600 22px Georgia,serif;letter-spacing:3px'></div>"
+        f"<div style='padding:28px;color:#17120A;font-size:15px;line-height:1.55'><h2 style='margin:0 0 12px'>"
         f"{html.escape(title)}</h2>{body_html}{cta}</div>"
-        "<div style='padding:16px 28px;color:#6b7280;font-size:12px;border-top:1px solid #eef0f6'>"
+        "<div style='padding:16px 28px;color:#807058;font-size:12px;border-top:1px solid #EFE6D6'>"
         f"{footer_html or 'Pegasus · data &amp; lead technology · You can change email settings in the app.'}"
         "</div></div></div>"
     )
@@ -125,8 +128,8 @@ def send_digest(session: Session, org: Org, hours: int = 24) -> int:
         title, meta = _lead_line(lead)
         url = f"{base}/app/leads/{lead.id}"
         rows_html.append(
-            f"<tr><td style='padding:10px 8px;font-weight:700;color:#7C5CFF;font-size:18px'>{lead.score}</td>"
-            f"<td style='padding:10px 8px'><a href='{url}' style='color:#0A0F2C;font-weight:600;text-decoration:none'>"
+            f"<tr><td style='padding:10px 8px;font-weight:700;color:#9A6420;font-size:18px'>{lead.score}</td>"
+            f"<td style='padding:10px 8px'><a href='{url}' style='color:#17120A;font-weight:600;text-decoration:none'>"
             f"{html.escape(title)}</a><br><span style='color:#6b7280;font-size:13px'>{html.escape(meta)}</span></td></tr>")
         rows_text.append(f"[{lead.score}] {title} ({meta})\n  {url}")
     subject = f"☀️ {len(leads)} new lead{'s' if len(leads) != 1 else ''} in your area"

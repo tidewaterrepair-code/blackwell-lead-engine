@@ -22,7 +22,7 @@ export function UpgradeModal() {
            title={<span className="inline-flex items-center gap-2"><Crown className="text-gold" size={20} />Unlock more with {target?.label ?? "an upgrade"}</span>}>
       <p className="text-ink2 text-sm">{FEATURE_COPY[upgrade?.feature ?? ""] ?? upgrade?.message ?? "That's part of a higher plan."}</p>
       {target && (
-        <div className="mt-4 rounded-xl bg-wing-soft p-4 border border-violet/25">
+        <div className="mt-4 rounded-xl bg-wing-soft p-4 border border-brand/25">
           <div className="flex items-baseline gap-2">
             <span className="font-display text-3xl font-bold">${me?.org.founding_member ? target.founding_monthly : target.monthly}</span>
             <span className="text-ink2 text-sm">/ month</span>

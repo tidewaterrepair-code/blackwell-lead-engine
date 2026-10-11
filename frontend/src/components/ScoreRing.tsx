@@ -5,13 +5,13 @@ export function ScoreRing({ score, size = 52, locked = false }: { score: number;
   const hot = score >= 75;
   const id = `sr-${size}-${hot ? "h" : "n"}`;
   return (
-    <div className={`relative shrink-0 ${hot ? "drop-shadow-[0_0_10px_rgba(255,194,75,0.55)]" : ""}`}
+    <div className={`relative shrink-0 ${hot ? "drop-shadow-[0_0_10px_rgba(240,138,44,0.55)]" : ""}`}
          style={{ width: size, height: size }} title={`Lead score ${score}/100`}>
       <svg width={size} height={size} className="-rotate-90">
         <defs>
           <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor={hot ? "#FFD36E" : "rgb(var(--violet))"} />
-            <stop offset="1" stopColor={hot ? "#FF9F1C" : "rgb(var(--cyan))"} />
+            <stop offset="0" stopColor={hot ? "#FFE3A3" : "rgb(var(--brand) / 0.75)"} />
+            <stop offset="1" stopColor={hot ? "#F08A2C" : "rgb(var(--brand))"} />
           </linearGradient>
         </defs>
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="rgb(var(--line) / 0.1)" strokeWidth={stroke} />

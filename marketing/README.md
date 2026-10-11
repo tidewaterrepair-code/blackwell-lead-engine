@@ -9,7 +9,8 @@ Everything needed to launch and market Pegasus. Copy and data live in plain file
 | `content/calendar.csv` | 30 days × 3 posts (90 captions) for both audiences, with hooks, hashtags, CTAs, asset references and UTM tags | Scheduler import (see `automation/social.md`) |
 | `video/` | 12 video scripts (15/30/60s): shot lists, voiceover, on-screen text and text-to-video prompts | Film them yourself, or generate them with an AI video tool |
 | `ads/campaigns.yaml` | Meta and Google campaigns, ad sets, audiences, keywords, negatives, headlines | `pegasus marketing ads` → import files |
-| `banners/copy.yaml` | Banner copy, accent colors and sizes | `pegasus marketing render` → PNGs |
+| `banners/copy.yaml` | Banner copy, layouts, map pins, lead cards and sizes | `pegasus marketing render` → PNGs |
+| `banners/plates/` | Photo backgrounds for the banners, plus the AI prompt for each | Drop in `<plate>.jpg`; until then a code-drawn night city is used |
 | `email/` | How lifecycle email works; copy lives in `pegasus/marketing/emails/*.yaml` | Sent automatically by the worker |
 | `automation/` | Runbooks for Stripe, email, social scheduling, analytics and the weekly routine | Setup |
 | `dist/` | Generated output (git-ignored) | Upload or import |
@@ -17,7 +18,8 @@ Everything needed to launch and market Pegasus. Copy and data live in plain file
 ## Commands
 
 ```bash
-pegasus marketing render        # banners: 7 designs × 7 sizes + the social share image → dist/banners/*.png
+pegasus marketing brand         # logo kit: emblem, wordmarks, app icon, favicons, email header (from pegasus/marketing/brand.py)
+pegasus marketing render        # banners: 13 designs × 7 sizes + the social share image → dist/banners/*.png
 pegasus marketing ads           # dist/ads/meta_bulk.csv, google_ads_editor.csv, utm_links.csv (validates char limits)
 pegasus marketing calendar      # checks the 30-day calendar (coverage, X length limits)
 pegasus marketing weekly-posts  # "This week in {city}" posts from live data → dist/weekly/*.md + .json

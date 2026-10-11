@@ -243,7 +243,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--threads", type=int, default=3)
     p.set_defaults(func=cmd_worker)
     p = sub.add_parser("marketing", help="launch toolkit")
-    p.add_argument("action", choices=["render", "ads", "calendar", "weekly-posts", "emails", "all"])
+    p.add_argument("action", choices=["brand", "render", "ads", "calendar", "weekly-posts", "emails", "all"])
     p.add_argument("--out", default="marketing/dist")
     p.add_argument("--city")
     p.add_argument("--state", default="VA")

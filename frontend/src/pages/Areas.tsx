@@ -10,7 +10,7 @@ import type { Coverage, Territory } from "../lib/types";
 
 const COVERAGE = {
   covered: { label: "Covered", pct: 100, tone: "bg-good" }, partial: { label: "Partial", pct: 55, tone: "bg-gold" },
-  scouting: { label: "Scouting…", pct: 25, tone: "bg-violet animate-pulse" }, none: { label: "Queued", pct: 8, tone: "bg-muted" },
+  scouting: { label: "Scouting…", pct: 25, tone: "bg-brand animate-pulse" }, none: { label: "Queued", pct: 8, tone: "bg-muted" },
 } as Record<string, { label: string; pct: number; tone: string }>;
 
 export default function Areas() {
@@ -53,7 +53,7 @@ export default function Areas() {
         <div className="space-y-3">
           {data?.items.map((t) => (
             <div key={t.id} className="card p-4 flex items-center gap-3">
-              <span className="h-10 w-10 rounded-xl bg-wing-soft grid place-items-center text-violet"><Radar size={18} /></span>
+              <span className="h-10 w-10 rounded-xl bg-wing-soft grid place-items-center text-brand"><Radar size={18} /></span>
               <div className="min-w-0 flex-1"><div className="font-semibold truncate">{t.name}</div>
                 <div className="text-xs text-ink2 capitalize">{t.kind}{t.exclusive ? " · exclusive" : ""}</div></div>
               <button className="btn-ghost btn-sm" onClick={() => remove(t)} aria-label="Remove"><Trash2 size={14} /></button>

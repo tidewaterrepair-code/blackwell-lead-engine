@@ -58,9 +58,33 @@ def test_banner_layouts(size, mode):
     from pegasus.marketing.banners import banner_html, layout, parse_size
 
     assert layout(*parse_size(size)) == mode
-    html = banner_html({"kicker": "K", "headline": "See the job <first>. Call first.", "sub": "S", "cta": "Go",
-                        "stat": {"value": "14", "label": "trades"}}, size)
-    assert "&lt;first&gt;" in html and "<em>Call first.</em>" in html and "@font-face" in html
+    html = banner_html({"id": "t", "layout": "audience", "kicker": "K", "headline": ["See the <job>", "*Call first.*"],
+                        "sub": "S", "cta": "Go", "bullets": [["home", "New builds"]]}, size)
+    assert "&lt;job&gt;" in html and '<span class="gold">Call first.</span>' in html and "@font-face" in html
+    assert "data:image/svg+xml;base64," in html  # no plate on disk: code-drawn scene
+
+
+def test_short_headline_and_cta_on_small_sizes():
+    from pegasus.marketing.banners import banner_html
+
+    b = {"id": "t", "headline": ["A very long headline", "*goes here*"], "short": ["Short one"],
+         "cta": "Get construction leads", "cta_short": "Get leads"}
+    small = banner_html(b, "300x250")
+    assert "Short one" in small and "Get leads" in small and "very long" not in small
+    assert "very long" in banner_html(b, "1080x1080")
+
+
+def test_plate_photo_is_used_when_present(tmp_path, monkeypatch):
+    import base64
+
+    from pegasus.marketing import banners
+
+    png = base64.b64decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGNgYGD4DwABBAEAwS2OUAAAAABJRU5ErkJggg==")
+    (tmp_path / "city.png").write_bytes(png)
+    monkeypatch.setattr(banners, "PLATES", tmp_path)
+    banners._data_uri.cache_clear()
+    html = banners.banner_html({"id": "t", "headline": ["Hi"], "plate": "city", "focus": "70% 40%"}, "1080x1080")
+    assert "data:image/png;base64," in html and "70% 40%" in html
 
 
 def test_every_banner_in_copy_renders_to_html():
@@ -69,9 +93,22 @@ def test_every_banner_in_copy_renders_to_html():
     from pegasus.marketing.banners import banner_html, load_copy
 
     data = load_copy(ROOT / "marketing/banners/copy.yaml")
+    assert len([b for b in data["banners"] if b["id"] != "og-image"]) == 13
     for b in data["banners"]:
         for size in b.get("sizes", data["sizes"]):
-            assert escape(b["headline"].split(".")[0][:10]) in banner_html(b, size)
+            html = banner_html(b, size)
+            lines = b.get("short") if size in ("300x250", "728x90", "160x600") and b.get("short") else b["headline"]
+            assert escape(lines[0].replace("*", "")) in html, (b["id"], size)
+
+
+def test_brand_kit_svgs(tmp_path):
+    from pegasus.marketing.brand import app_icon_svg, emblem_svg, wordmark_svg
+
+    assert emblem_svg().startswith("<svg") and 'id="pgh"' in emblem_svg()
+    assert 'id="xh"' in emblem_svg(p="x")  # prefixed ids: several emblems can share one page
+    assert "PEGASUS" in wordmark_svg() and "DATA &amp; LEAD TECHNOLOGY" in wordmark_svg()
+    assert "DATA &amp;" not in wordmark_svg(tagline=False)
+    assert 'rx="112"' in app_icon_svg()
 
 
 # ------------------------------------------------------------------ weekly data posts

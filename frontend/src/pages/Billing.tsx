@@ -45,7 +45,7 @@ export default function Billing() {
           const price = annual ? Math.round(p.annual / 12) : p.monthly;
           const founding = data.founding_member ? Math.round(price * 0.6) : null;
           return (
-            <div key={p.key} className={`card p-5 flex flex-col ${popular ? "ring-2 ring-violet shadow-glow" : ""}`}>
+            <div key={p.key} className={`card p-5 flex flex-col ${popular ? "ring-2 ring-brand shadow-glow" : ""}`}>
               {popular && <span className="chip chip-active self-start mb-2"><Sparkles size={12} />Most popular</span>}
               <div className="font-display text-xl font-bold">{p.label}</div>
               <div className="text-xs text-ink2">{p.tagline}</div>

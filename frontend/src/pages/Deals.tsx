@@ -10,7 +10,7 @@ import { useApp } from "../lib/store";
 import type { Lead, PropertyInfo, Territory } from "../lib/types";
 
 const DISTRESS = ["foreclosure", "tax_delinquent", "probate", "eviction", "violation", "vacant", "absentee"];
-const GRADE_TONE: Record<string, string> = { A: "text-good", B: "text-cyan", C: "text-gold", D: "text-ink2", F: "text-bad" };
+const GRADE_TONE: Record<string, string> = { A: "text-good", B: "text-ember", C: "text-gold", D: "text-ink2", F: "text-bad" };
 
 export function DealAnalyzer({ propertyId }: { propertyId: number }) {
   const [arv, setArv] = useState("");

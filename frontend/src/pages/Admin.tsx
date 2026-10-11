@@ -12,7 +12,7 @@ function Bars({ data, unit = "" }: { data: [string, number][]; unit?: string }) 
       {data.map(([k, v]) => (
         <div key={k} className="grid grid-cols-[110px_1fr_48px] items-center gap-2 text-sm" title={`${k}: ${v}${unit}`}>
           <span className="truncate text-ink2">{k}</span>
-          <div className="h-3 rounded-r bg-line/5"><div className="h-full rounded-r bg-[rgb(var(--violet))]" style={{ width: `${(v / max) * 100}%` }} /></div>
+          <div className="h-3 rounded-r bg-line/5"><div className="h-full rounded-r bg-[rgb(var(--brand))]" style={{ width: `${(v / max) * 100}%` }} /></div>
           <span className="tabular-nums text-right">{v}{unit}</span>
         </div>
       ))}

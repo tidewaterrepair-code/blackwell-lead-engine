@@ -8,31 +8,34 @@
 - **Short hooks:** "Leads with lift." · "Get there first." · "Your unfair head start."
 
 ## Logo
-- **Mark:** three swept wing feathers rising into a gold spark (data giving lift). Files: `logo-mark.svg`, `logo-app-icon.svg` (navy tile).
-- **Horizontal lockup:** `logo-horizontal-dark.svg` (for dark backgrounds) and `logo-horizontal-light.svg`.
-- Clear space: the height of the spark on every side. Minimum size: 20 px for the mark, 120 px wide for the lockup.
-- Don't recolor the wings, add shadows, stretch, or put the gradient mark on busy photos without a navy scrim.
+- **Mark:** a gold heraldic Pegasus: horse head in profile with a three-tier wing rising behind it. Files: `logo-mark.svg` (gold), `logo-mark-mono-gold.svg` and `logo-mark-mono-black.svg` (single-color print, embroidery, stamps), `logo-app-icon.svg` (black tile with a gold rim).
+- **Wordmark lockups:** `logo-horizontal-dark.svg` (gold on black) and `logo-horizontal-light.svg` (black on ivory). "PEGASUS" is set in Cinzel; the descriptor "DATA & LEAD TECHNOLOGY" in Inter, letter-spaced.
+- Every logo file is generated from `pegasus/marketing/brand.py` (`pegasus marketing brand`), so the site, app, emails, icons and ads always match. Don't edit the SVGs by hand.
+- Clear space: the height of the horse's ear on every side. Minimum size: 20 px for the mark, 140 px wide for the lockup.
+- Don't recolor the gold, stretch the mark, or set the gold logo on a light busy photo. On photos, use a dark scrim behind it.
 
 ## Color
 | Role | Hex | Use |
 |---|---|---|
-| Midnight (base) | `#0A0F2C` | Backgrounds, dark UI, ad canvases |
-| Deep night | `#070A1E` | Page background |
-| Electric violet | `#7C5CFF` | Primary brand, buttons, gradient start |
-| Cyan | `#22D3EE` | Gradient end, data accents |
-| Gold | `#FFC24B` | "Hot", money, wins, the spark. Use sparingly |
-| Mint | `#2EE6A6` | Success, won deals |
-| Coral | `#FF5C7A` | Errors, "do not call" |
-| Ink (on dark) | `#F4F6FF` | Text |
-| Mist | `#A9B0D6` | Secondary text |
+| Night (base) | `#0B0A08` | Backgrounds, ad canvases, dark UI |
+| Surface | `#16130F` | Cards on dark |
+| Gold | `#E2B25A` | Primary brand: buttons, highlights, the mark |
+| Gold light | `#FFE3A3` | Gradient highlights, glows |
+| Gold deep | `#9A6420` | Gold on light backgrounds (passes contrast on ivory) |
+| Ember | `#F08A2C` | Warm glows, map pins, "hot" |
+| Ivory | `#F6EFE2` | Text on dark |
+| Ivory page | `#FBF7EF` | Light-mode background |
+| Green | `#2ECC8C` | Won deals, success |
+| Red | `#F06060` | Errors, "do not call" |
 
-**Signature gradient ("wing"):** `linear-gradient(135deg, #7C5CFF 0%, #22D3EE 100%)`.
+**Signature gradient ("gold"):** `linear-gradient(180deg, #FFE3A3 0%, #E2B25A 55%, #B9802F 100%)`, used on buttons and the gold half of headlines.
 Data-viz categories use the color-blind-validated family palette in `frontend/src/lib/tags.ts`, always paired with an icon and label.
 
 ## Type
-- **Display:** Space Grotesk (700 for headlines, tight tracking −2 to −3%).
-- **UI & body:** Inter (400/500/600).
-- Both are open source (OFL), self-hosted, free to use in ads and video.
+- **Brand:** Cinzel 600, uppercase, letter-spaced. Only for the wordmark and rare ceremonial moments.
+- **Display:** Oswald (600–700), uppercase in ads, sentence case in the app. One line in ivory, the payoff line in gold.
+- **UI & body:** Inter (400/500/600). Small labels: uppercase, letter-spaced 0.08–0.3em.
+- All three are open source (OFL), self-hosted and free to use in ads and video.
 
 ## Voice
 - **Plainspoken, confident, a little cocky. Never hype.** Talk like a sharp foreman or a top agent, not a startup.
@@ -44,8 +47,9 @@ Data-viz categories use the color-blind-validated family palette in `frontend/sr
 
 ## Imagery
 - Real job sites, trucks at dawn, phones in hands with the app, map radar visuals, satellite/aerial neighborhood shots with glowing pins.
-- Overlay style: midnight scrim (60–75%) + gradient accent line + white Space Grotesk headline.
+- **Look:** cinematic black and gold. Deep shadows, warm amber backlight, slight haze, glowing gold map pins and data lines.
+- **Layering:** photo plate (no text in it) + dark scrim where copy sits + Oswald headline (ivory, payoff line gold) + gold CTA button + logo lockup. See `banners/copy.yaml` and `banners/plates/README.md`.
 - AI-generated imagery must never depict real, identifiable people or real customers. Mark it as illustrative where required by platform rules.
 
 ## Social handles
-`@pegasusleads` on Instagram, TikTok, YouTube, X, Facebook and LinkedIn. Profile image: `logo-app-icon.svg` exported at 1024×1024.
+`@pegasusleads` on Instagram, TikTok, YouTube, X, Facebook and LinkedIn. Profile image: `logo-app-icon.svg` exported at 1024×1024 (or `pegasus/web/static/brand/pegasus-512.png`).

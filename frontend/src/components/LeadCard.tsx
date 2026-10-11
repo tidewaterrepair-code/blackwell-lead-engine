@@ -35,7 +35,7 @@ export function LeadCard({ lead, active, onOpen, onSave, onPass, onUnlock }: Pro
                     style={{ x, rotate }} drag="x" dragConstraints={{ left: 0, right: 0 }} dragElastic={0.6}
                     onDragEnd={onDragEnd}
                     className={`card card-hover relative overflow-hidden p-4 sm:p-5 cursor-pointer touch-pan-y
-                                ${active ? "ring-2 ring-violet/70" : ""}`}
+                                ${active ? "ring-2 ring-brand/70" : ""}`}
                     onClick={onOpen}>
       <motion.div style={{ opacity: saveOpacity }}
                   className="pointer-events-none absolute inset-0 bg-good/15 grid place-items-start p-4">
@@ -52,7 +52,7 @@ export function LeadCard({ lead, active, onOpen, onSave, onPass, onUnlock }: Pro
           <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
             <TagChip tag={tag} label={tagLabel} />
             {lead.type === "prediction" && (
-              <span className="chip border-violet/50 text-ink"><Sparkles size={12} className="text-violet" />Predicted</span>
+              <span className="chip border-brand/50 text-ink"><Sparkles size={12} className="text-brand" />Predicted</span>
             )}
             {s?.kind && s.kind !== "permit" && lead.type !== "prediction" && <span className="chip">{s.kind_label}</span>}
             {lead.status !== "new" && <span className="chip chip-active">{lead.status_label}</span>}
@@ -70,7 +70,7 @@ export function LeadCard({ lead, active, onOpen, onSave, onPass, onUnlock }: Pro
           </div>
 
           {pred && (
-            <div className="mt-3 rounded-xl bg-wing-soft border border-violet/20 px-3 py-2">
+            <div className="mt-3 rounded-xl bg-wing-soft border border-brand/20 px-3 py-2">
               <div className="flex items-center justify-between text-xs">
                 <span className="font-semibold">{windowLabel(pred.window_start, pred.window_end)}</span>
                 <span className="text-ink2">{pct(pred.probability)} likely</span>

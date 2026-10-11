@@ -47,7 +47,7 @@ export function AreaPicker({ maxMiles = 40, onChange }: { maxMiles?: number; onC
             {results.map((r) => (
               <button key={`${r.type}-${r.id}`} className="w-full text-left px-3 py-2 rounded-lg hover:bg-surface2 flex items-center gap-2 text-sm"
                       onClick={() => { setPicked(r); setQ(r.label); setResults([]); }}>
-                <MapPin size={14} className="text-violet" />{r.label}
+                <MapPin size={14} className="text-brand" />{r.label}
                 <span className="ml-auto text-xs text-muted uppercase">{r.type}</span>
               </button>
             ))}
@@ -66,7 +66,7 @@ export function AreaPicker({ maxMiles = 40, onChange }: { maxMiles?: number; onC
             <div>
               <div className="flex justify-between text-xs text-ink2"><span>Radius</span><span className="font-semibold text-ink">{miles} miles</span></div>
               <input type="range" min={3} max={maxMiles} value={miles} onChange={(e) => setMiles(+e.target.value)}
-                     className="w-full accent-[rgb(var(--violet))]" />
+                     className="w-full accent-[rgb(var(--brand))]" />
             </div>
           )}
           <div className="h-56 rounded-2xl overflow-hidden">
