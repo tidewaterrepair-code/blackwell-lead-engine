@@ -259,9 +259,14 @@ def banner_html(b: dict, size: str) -> str:
     col = text_width(mode, t)
     if t == "hero" and mode in ("square", "tall", "wide"):
         col = .9
+    statement = bool(b.get("page")) and t == "scene" and mode in ("square", "tall")
+    if statement:
+        col = .86
     base = {"square": 9.6, "tall": 8.6, "wide": 11.5, "small": 12.5, "tower": 15.5, "strip": 30}[mode] * u
     if mode == "strip":
         base = h * .3
+    if statement:
+        base = 14 * u
     hsize = min(base, (w * col) / (max(longest, 6) * .5))
     if mode == "strip":
         hsize = min(hsize, (w * col) / (len(_plain(lines)) * .5))
@@ -319,6 +324,10 @@ def banner_html(b: dict, size: str) -> str:
         body = (f'<div class="text">{ribbon}{kicker}<h1>{headline_html(lines)}</h1>{sub}{bullets}</div>'
                 f'{visual}<div class="bottom">{logo}{cta}</div>{features}{footer}')
 
+    pager = ""
+    if b.get("page") and mode in ("square", "tall"):
+        swipe = '<span class="swipe">Swipe ' + icon("arrow", "arr") + "</span>" if b.get("swipe") else ""
+        pager = f'<div class="pager"><b>{html.escape(str(b["page"]))}</b>{swipe}</div>'
     return f"""<!doctype html><html><head><meta charset="utf-8"><style>{_font_css()}
 *{{box-sizing:border-box;margin:0;padding:0}}
 :root{{--u:{u:.3f}px;--gold:linear-gradient(180deg,#FFF1C9 0%,#E9BC66 45%,#B47A2C 100%);--ivory:#F6EFE2}}
@@ -388,9 +397,18 @@ h1{{font:700 {hsize:.1f}px/1.0 Oswald,sans-serif;text-transform:uppercase;letter
 .hero-lock{{position:absolute;left:50%;transform:translateX(-50%);text-align:center;display:flex;flex-direction:column;align-items:center}}
 .tagline{{font:500 calc(var(--u)*3)/1.25 Oswald;letter-spacing:.14em;text-transform:uppercase;margin-top:calc(var(--u)*2.4)}}
 .tagline .hl{{display:block;white-space:nowrap}}
+.pager{{position:absolute;right:calc(var(--u)*5);top:calc(var(--u)*5);display:flex;align-items:center;gap:calc(var(--u)*2);z-index:3;
+  font:600 calc(var(--u)*2.2)/1 Inter;letter-spacing:.14em;color:#E8DCC6;text-transform:uppercase}}
+.pager b{{padding:calc(var(--u)*.8) calc(var(--u)*1.6);border:1px solid rgba(226,178,90,.6);border-radius:99px;color:#FFE7B0}}
+.pager .swipe{{display:flex;align-items:center;gap:calc(var(--u)*.8);color:#E9BC66}}
+.statement .text{{top:auto!important;bottom:30%;}}
+.statement .sub{{font-size:calc(var(--u)*3.2);max-width:none;text-transform:none;letter-spacing:0;font-weight:500;line-height:1.4}}
+.statement .kicker{{font-size:calc(var(--u)*2.6)}}
+.carousel .step{{font-size:calc(var(--u)*2.6)}} .carousel .step .bar{{height:calc(var(--u)*2)}} .carousel .timeline{{padding:calc(var(--u)*3.4);gap:calc(var(--u)*2.2)}}
 {_mode_css(mode, t, w, h)}
-</style></head><body><div class="bg"></div><div class="shade"></div><div class="vign"></div>{pins}{side_html}
-<div class="wrap">{body}</div><div class="frame"></div></body></html>"""
+{".text{{width:86%!important}}" if statement else ""}
+</style></head><body class="{' '.join(c for c, on in (('statement', statement), ('carousel', bool(b.get('page')))) if on)}"><div class="bg"></div><div class="shade"></div><div class="vign"></div>{pins}{side_html}
+<div class="wrap">{body}</div>{pager}<div class="frame"></div></body></html>"""
 
 
 def text_width(mode: str, t: str) -> float:

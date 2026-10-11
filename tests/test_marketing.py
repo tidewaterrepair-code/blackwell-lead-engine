@@ -270,3 +270,26 @@ def test_leads_index_lists_cities(client, fixture_text):
     r = client.get("/leads")
     assert r.status_code == 200 and "/leads/va/norfolk" in r.text
     assert "/leads</loc>" in client.get("/sitemap.xml").text
+
+
+def test_week_package_is_complete():
+    import importlib.util
+
+    from pegasus.marketing.banners import banner_html, load_copy
+
+    week = ROOT / "marketing/weeks/2026-10-12"
+    for name in ("README.md", "ads.md", "ugc.md", "posts.md", "schedule.csv", "creative.yaml"):
+        assert (week / name).exists(), name
+    data = load_copy(week / "creative.yaml")
+    for b in data["banners"]:
+        for size in b.get("sizes", data["sizes"]):
+            assert "@font-face" in banner_html(b, size)
+    spec = importlib.util.spec_from_file_location("week_schedule", week / "build_schedule.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    for post in mod.POSTS:
+        if post[3] == "X":
+            assert len(post[6]) + 25 <= 280, post[-1]
+    rows = list(csv.DictReader((week / "schedule.csv").open()))
+    assert len(rows) == len(mod.POSTS) and {r["day"] for r in rows} == {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}
+    assert all("utm_campaign=w42_launch" in r["link"] for r in rows if r["link"])

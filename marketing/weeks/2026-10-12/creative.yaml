@@ -1,0 +1,241 @@
+# Week of Oct 12–18, 2026 · launch week · static creative
+# Render:  pegasus marketing week --week 2026-10-12   ->  marketing/dist/weeks/2026-10-12/<id>-<size>.png
+# Same fields as marketing/banners/copy.yaml. Lead cards are illustrative examples of lead types, not real records.
+
+sizes: [1080x1080, 1080x1350, 1080x1920, 1200x628]
+
+banners:
+  # ======================================================== PAID ADS (Meta + LinkedIn + Display)
+  - id: w42-ad-morning-drop
+    layout: phone
+    focus: "40% 50%"
+    headline: ["Your 7am", "*just got unfair.*"]
+    sub: "Every permit, bid, sale and storm in your area, ranked for your trade before your coffee's done."
+    cta: Start free
+    cards:
+      - {title: New construction, sub: Permit issued, meta: "Ranked #1 for framing"}
+      - {title: Room addition, sub: Permit approved, meta: "Your window: next 3 weeks"}
+      - {title: Roof replacement, sub: Storm swath, meta: "Hail overnight"}
+      - {title: Deck & fence, sub: Predicted, meta: "New home, month 4"}
+    features:
+      - [hammer, Construction leads]
+      - [home, Real estate leads]
+      - [file, Permit data]
+      - [layers, Predictions]
+    sizes: [1080x1080, 1080x1350, 1080x1920, 1200x628, 300x250, 728x90]
+
+  - id: w42-ad-shared-leads
+    layout: audience
+    ribbon: Contractors
+    headline: ["Stop buying", "*shared leads.*"]
+    sub: "Find the job at the source: the permit, the plat, the bid. Before three other pros get the same call."
+    bullets:
+      - [file, Building permits]
+      - [map, New subdivisions]
+      - [target, Public bids]
+      - [cloud, Storm swaths]
+    cta: See leads near you
+    cta_short: Start free
+    sizes: [1080x1080, 1080x1350, 1080x1920, 1200x628, 300x250, 728x90, 160x600]
+
+  - id: w42-ad-expired
+    layout: audience
+    ribbon: Real estate agents
+    headline: ["Expired at midnight.", "*On your list by 7am.*"]
+    short: ["Expired at midnight.", "*On your list by 7.*"]
+    sub: "Connect your MLS. Expired, withdrawn and cancelled listings in your farm become private leads the moment they change."
+    bullets:
+      - [tag, Expired & withdrawn listings]
+      - [target, Likely-to-sell scores]
+      - [home, Off-market properties]
+      - [file, Branded market reports]
+    cta: Get listing leads
+    cta_short: Start free
+    sizes: [1080x1080, 1080x1350, 1080x1920, 1200x628, 300x250, 728x90]
+
+  - id: w42-ad-storm
+    layout: cards
+    kicker: Roofers · siding · gutters
+    headline: ["Hail last night?", "*Your map is ready.*"]
+    sub: "NOAA hail and wind swaths matched to your area within hours, with the roofs most likely to need you."
+    cards:
+      - {title: Hail swath, sub: "Reported overnight", meta: Mapped to your area}
+      - {title: Roof age 20+ yrs, sub: Inside the swath, meta: Scored by morning}
+      - {title: New owner, sub: Bought this year, meta: Ready to call}
+    cta: Get storm leads
+    sizes: [1080x1080, 1080x1350, 1080x1920, 1200x628]
+
+  - id: w42-ad-founding
+    layout: offer
+    ribbon: Founding members
+    headline: ["First 100 only.", "*40% off for life.*"]
+    sub: "Lock the founding price on any plan for as long as you stay. 14 days free, no card."
+    stat: {value: "40%", label: "off forever"}
+    cta: Claim a seat
+    sizes: [1080x1080, 1080x1350, 1080x1920, 1200x628, 300x250, 728x90, 160x600]
+
+  - id: w42-ad-one-job
+    layout: offer
+    kicker: Do the math
+    headline: ["One extra job", "*pays for the year.*"]
+    sub: "Plans start at $79 a month. One $12,000 job at a 25% margin is $3,000 profit. Run your own numbers on our site."
+    stat: {value: "1", label: "job covers it"}
+    cta: Run my numbers
+    sizes: [1080x1080, 1080x1350, 1200x628]
+
+  # ======================================================== CAROUSEL · Tue · "Every job is filed before it's posted"
+  - id: w42-car-tue-1
+    layout: scene
+    page: "1/5"
+    swipe: true
+    kicker: Contractors, read this
+    headline: ["Every job in your town", "*is filed before*", "*it's posted.*"]
+    sub: "Here's how the first call gets made, and how to be the one making it."
+    sizes: [1080x1350]
+  - id: w42-car-tue-2
+    layout: scene
+    page: "2/5"
+    kicker: Step 1
+    headline: ["The *permit.*"]
+    sub: "Decks, additions, new homes, reroofs. Filed with the city days to months before anyone is hired."
+    sizes: [1080x1350]
+  - id: w42-car-tue-3
+    layout: timeline
+    page: "3/5"
+    kicker: Step 2
+    headline: ["The *sequence.*"]
+    sub: "One new home hires 14 trades in a predictable order."
+    timeline:
+      - [Framing, 0, 22, "Week 1–6"]
+      - [Roofing, 18, 18, "Week 5–10"]
+      - [HVAC · Plumbing · Electric, 26, 22, "Week 6–12"]
+      - [Flooring & paint, 48, 26, "Month 3–5"]
+      - [Deck · Fence · Pool, 62, 38, "Month 4–12"]
+    sizes: [1080x1350]
+  - id: w42-car-tue-4
+    layout: scene
+    page: "4/5"
+    kicker: Step 3
+    headline: ["The *first call.*"]
+    sub: "Whoever calls while the owner is still deciding sets the price everyone else is compared to."
+    sizes: [1080x1350]
+  - id: w42-car-tue-5
+    layout: scene
+    page: "5/5"
+    kicker: Your move
+    headline: ["See what was filed", "*near you this week.*"]
+    sub: "Free city lookup, no signup: pegasusleads.com/leads"
+    cta: pegasusleads.com
+    sizes: [1080x1350]
+
+  # ======================================================== CAROUSEL · Wed · agents · "5 signs a home is about to sell"
+  - id: w42-car-wed-1
+    layout: scene
+    page: "1/6"
+    swipe: true
+    kicker: Agents & investors
+    headline: ["5 public signs", "*a home is about*", "*to hit the market.*"]
+    sub: "All from property records. None of it about the people."
+    sizes: [1080x1350]
+  - id: w42-car-wed-2
+    layout: scene
+    page: "2/6"
+    kicker: Sign 1
+    headline: ["Long ownership,", "*high equity.*"]
+    sub: "15+ years in the home and most of the mortgage paid off. The math finally works for a move."
+    sizes: [1080x1350]
+  - id: w42-car-wed-3
+    layout: scene
+    page: "3/6"
+    kicker: Sign 2
+    headline: ["The listing", "*expired.*"]
+    sub: "They wanted to sell and still do. They just need a better plan than the last agent's."
+    sizes: [1080x1350]
+  - id: w42-car-wed-4
+    layout: scene
+    page: "4/6"
+    kicker: Sign 3
+    headline: ["Absentee owner +", "*open code case.*"]
+    sub: "A tired landlord managing from out of state is often ready for an easy exit."
+    sizes: [1080x1350]
+  - id: w42-car-wed-5
+    layout: scene
+    page: "5/6"
+    kicker: Signs 4 & 5
+    headline: ["Recent permits.", "*Recent filings.*"]
+    sub: "Fix-up permits before a sale, and new court or tax filings. Each one shifts the odds."
+    sizes: [1080x1350]
+  - id: w42-car-wed-6
+    layout: scene
+    page: "6/6"
+    kicker: Pegasus Realty
+    headline: ["We stack all five", "*into one score.*"]
+    sub: "Likely-to-sell forecasts for every home in your farm, plus your MLS expireds. Fair-housing safe."
+    cta: Try it free
+    sizes: [1080x1350]
+
+  # ======================================================== CAROUSEL · Fri · "What one missed job costs"
+  - id: w42-car-fri-1
+    layout: scene
+    page: "1/4"
+    swipe: true
+    kicker: Quick math
+    headline: ["What one missed job", "*actually costs you.*"]
+    sub: "It's more than the job."
+    sizes: [1080x1350]
+  - id: w42-car-fri-2
+    layout: offer
+    page: "2/4"
+    kicker: Example
+    headline: ["$12,000 job.", "*25% margin.*"]
+    sub: "That's $3,000 of profit you'd have kept. Miss one a month and it's $36,000 a year."
+    stat: {value: "$36k", label: "a year"}
+    sizes: [1080x1350]
+  - id: w42-car-fri-3
+    layout: offer
+    page: "3/4"
+    kicker: The other side
+    headline: ["Growth plan:", "*$107 a month.*"]
+    sub: "Founding price, locked for life. One extra job covers the year with room to spare."
+    stat: {value: "1", label: "job covers it"}
+    sizes: [1080x1350]
+  - id: w42-car-fri-4
+    layout: scene
+    page: "4/4"
+    kicker: Run your own numbers
+    headline: ["Stop leaving it", "*on the table.*"]
+    sub: "Calculator on our homepage. 14 days free, no card."
+    cta: pegasusleads.com
+    sizes: [1080x1350]
+
+  # ======================================================== STORIES (1080x1920)
+  - id: w42-story-mon
+    layout: hero
+    headline: ["Pegasus"]
+    tagline: ["Pegasus is live.", "*Opportunity finds you.*"]
+    cta: Start free
+    pins:
+      - {x: 14, y: 22, title: New build, sub: Permit issued, meta: Today}
+      - {x: 86, y: 30, title: Expired listing, sub: Your farm, meta: Overnight, label_side: left}
+    sizes: [1080x1920]
+  - id: w42-story-thu
+    layout: timeline
+    kicker: Predicted jobs
+    headline: ["One permit.", "*14 trades.*"]
+    sub: "Know the week your trade gets hired."
+    timeline:
+      - [Framing, 0, 22, "Week 1–6"]
+      - [Roofing, 18, 18, "Week 5–10"]
+      - [HVAC · Plumbing · Electric, 26, 22, "Week 6–12"]
+      - [Flooring & paint, 48, 26, "Month 3–5"]
+      - [Deck · Fence · Pool, 62, 38, "Month 4–12"]
+    cta: Find your window
+    sizes: [1080x1920]
+  - id: w42-story-sat
+    layout: offer
+    ribbon: Founding members
+    headline: ["The first 100", "*keep 40% off.*"]
+    sub: "Forever. Tap to claim your seat."
+    stat: {value: "40%", label: "for life"}
+    cta: Claim a seat
+    sizes: [1080x1920]

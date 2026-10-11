@@ -23,12 +23,16 @@ meta:
         ads:
           - {name: V01 Every permit is public, video: video/01, primary: "Every deck, addition and new home in your area files a permit before anyone gets hired. Pegasus reads them all every morning and ranks the ones for your trade. You call first.", headline: "See the job before they do", cta: SIGN_UP}
           - {name: V02 One permit 14 trades, video: video/02, primary: "One new-home permit hires 14 companies. Pegasus tells each trade exactly when it's their turn, before the GC calls anyone else.", headline: "Your next job, predicted", cta: SIGN_UP}
+          - {name: W42 Commercial 30, video: video/commercial-30, primary: "Every permit, bid, sale and storm in your area is on file before it's posted. Pegasus reads it every morning, ranks it for your trade and tells you what's coming next. 14 days free, no card.", headline: "Opportunity finds you", cta: SIGN_UP}
+          - {name: W42 Shared leads, image: weeks/2026-10-12/w42-ad-shared-leads, primary: "Lead sites send the same homeowner to several contractors at once. Pegasus finds the job at the source: the permit, the plat, the bid, before anyone's bidding. Try it free for 14 days.", headline: "Stop buying shared leads", cta: SIGN_UP}
+          - {name: W42 Morning Drop, image: weeks/2026-10-12/w42-ad-morning-drop, primary: "Your 7am just got unfair. A ranked list of today's jobs for your trade, with the next trade each project needs and when. Free for 14 days, no card.", headline: "Your 7am just got unfair", cta: SIGN_UP}
           - {name: B Founding 40 off, image: banners/founding, primary: "Founding members keep 40% off Pegasus for life. 14-day free trial, no card. Leads from public permits, bids and storms in your area.", headline: "40% off for life. 100 seats.", cta: SIGN_UP}
       - name: Roofers & exterior | Storm
         age: [25, 65]
         interests: [Roofing, Roofer, Siding, Gutter, Storm damage, Insurance adjuster]
         ads:
           - {name: V08 Three roof signals, video: video/08, primary: "Hail in the swath. A 20-year-old roof. A new owner. Pegasus scores all three every morning so you knock first.", headline: "Storm leads by morning", cta: SIGN_UP}
+          - {name: W42 Storm, image: weeks/2026-10-12/w42-ad-storm, primary: "Hail and wind swaths mapped to your service area within hours, with the roofs most likely to need you scored by morning. Be first on the street.", headline: "Hail last night? Map's ready", cta: SIGN_UP}
           - {name: B Storm map, image: banners/storm, primary: "Pegasus maps NOAA hail and wind reports to your service area within hours, then ranks the roofs most likely to need you.", headline: "Hail hit last night?", cta: SIGN_UP}
   - campaign: PG | Realty | Trial
     objective: OUTCOME_LEADS
@@ -39,6 +43,7 @@ meta:
         interests: [Real estate agent, Realtor, Real estate broker, National Association of Realtors, Real estate marketing]
         ads:
           - {name: V07 Expired listings, video: video/07, primary: "Connect your MLS and every expired, withdrawn or cancelled listing in your farm becomes a lead the moment it changes, plus public-record context. Private to you.", headline: "Know who's selling first", cta: SIGN_UP}
+          - {name: W42 Expired, image: weeks/2026-10-12/w42-ad-expired, primary: "Connect your MLS and expired, withdrawn and cancelled listings in your farm become private leads the moment they change, alongside likely-to-sell scores for every home.", headline: "On your list by 7am", cta: SIGN_UP}
           - {name: B Farm heatmap, image: banners/farm, primary: "Turnover, absentee owners, hottest streets and a branded market report for your farm. Likely-to-sell scores built only on property facts.", headline: "Your farm, as a heat map", cta: SIGN_UP}
       - name: Investors | Interests
         age: [25, 65]
@@ -55,6 +60,8 @@ meta:
         custom_audience: Website visitors 30 days, excluding Signups
         interests: []
         ads:
+          - {name: W42 Founding, image: weeks/2026-10-12/w42-ad-founding, primary: "The first 100 Pegasus customers keep 40% off for life. Start your 14-day trial today and lock the founding price before the seats are gone.", headline: "40% off for life. First 100.", cta: SIGN_UP}
+          - {name: W42 One job, image: weeks/2026-10-12/w42-ad-one-job, primary: "Plans start at $79 a month. One extra job a year pays for it. Run your own numbers on our site, then start free.", headline: "One job pays for the year", cta: LEARN_MORE}
           - {name: V09 Pegasus in 60, video: video/09, primary: "Still thinking about it? Your first Morning Drop is one signup away. 14 days free, then founding pricing locked for life.", headline: "Your leads are waiting", cta: SIGN_UP}
 
 google:
@@ -64,8 +71,8 @@ google:
     ad_groups:
       - name: Permit leads
         keywords: ["building permit leads", "construction leads", "new construction leads", "contractor leads", "permit data for contractors", "building permit list"]
-        headlines: ["Building Permit Leads Daily", "See the Job Before Others", "Leads From Public Permits", "Scored for Your Trade", "Predicted Jobs by Trade", "Any US County Covered", "14-Day Free Trial", "No Credit Card Needed", "Founding Price: 40% Off", "First Call Wins the Job", "New Homes, Adds, Remodels", "Morning Drop at 7am"]
-        descriptions: ["Every permit, bid and storm in your area, ranked for your trade every morning.", "Pegasus predicts the next job at every new build. Call first. Try it free.", "Stop buying shared leads. Public permits are first and almost nobody uses them.", "Founding members keep 40% off for life. 14 days free, no card required."]
+        headlines: ["Building Permit Leads Daily", "See the Job Before Others", "Leads From Public Permits", "Scored for Your Trade", "Predicted Jobs by Trade", "Any US County Covered", "14-Day Free Trial", "No Credit Card Needed", "Founding Price: 40% Off", "First Call Wins the Job", "New Homes, Adds, Remodels", "Morning Drop at 7am", "Your 7am Just Got Unfair", "Stop Buying Shared Leads", "Opportunity Finds You"]
+        descriptions: ["Every permit, bid and storm in your area, ranked for your trade every morning.", "Pegasus predicts the next job at every new build. Call first. Try it free.", "Every permit, bid and storm in your area, ranked for your trade before 7am. Try free.", "Founding members keep 40% off for life. 14 days free, no card required."]
         path: [permit-leads, free-trial]
       - name: Roofing leads
         keywords: ["roofing leads", "storm damage leads", "hail leads for roofers", "roofing sales leads"]
@@ -84,7 +91,7 @@ google:
         path: [off-market, deals]
       - name: Expired listings
         keywords: ["expired listing leads", "listing leads for realtors", "realtor prospecting tool", "farming tool for realtors"]
-        headlines: ["Expired Listing Leads", "Know Who's Selling First", "Connect Your MLS", "Farm Heat Map + Reports", "Likely-to-Sell Scores", "14-Day Free Trial"]
-        descriptions: ["Expired and withdrawn listings in your farm the minute they change, private to you.", "Public records plus your MLS, merged into one ranked prospect list. Try it free."]
+        headlines: ["Expired Listing Leads", "Know Who's Selling First", "Connect Your MLS", "Farm Heat Map + Reports", "Likely-to-Sell Scores", "14-Day Free Trial", "On Your List by 7am"]
+        descriptions: ["Expired and withdrawn listings in your farm the minute they change, private to you.", "Public records plus your MLS, merged into one ranked prospect list. Try it free.", "Expired and withdrawn listings from your MLS, plus likely-to-sell scores. Start free."]
         path: [agents, listings]
     negatives: [jobs, salary, "real estate license", course, "for rent"]

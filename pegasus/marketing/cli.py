@@ -85,6 +85,16 @@ def run(args) -> int:
                                                              ("Chesapeake", "VA")]
         written = write_weekly(cities, out / "weekly", polish=True)
         print("weekly posts:", ", ".join(str(p) for p in written) or "no data this week")
+    if action == "week":
+        from .banners import render_all
+
+        weeks = sorted(p.name for p in (ROOT / "weeks").iterdir() if (p / "creative.yaml").exists())
+        week = args.week or (weeks[-1] if weeks else None)
+        if not week:
+            print("no week folders with creative.yaml in marketing/weeks/")
+            return 1
+        written = render_all(ROOT / "weeks" / week / "creative.yaml", out / "weeks" / week)
+        print(f"week {week}: {len(written)} images in {out / 'weeks' / week}")
     if action in ("brand", "all"):
         from .brand_pack import main as import_pack
 
