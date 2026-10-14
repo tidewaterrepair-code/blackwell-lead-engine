@@ -6,7 +6,7 @@
 
 ## 1. Domain and DNS
 
-Point an **A record** for your domain (e.g. `pegasusleads.com`, and `www` if you want it) at the VPS IP. Caddy gets the HTTPS certificate on first start.
+Point two **A records** at the VPS IP: the bare domain (`@`, e.g. `pegasusleads.com`) and `www`. Caddy redirects `www` to the bare domain. Caddy gets the HTTPS certificate on first start.
 
 For email deliverability, add the SPF, DKIM and DMARC records from your mail provider now: see `marketing/automation/email.md`.
 
@@ -22,7 +22,7 @@ sudo ufw allow OpenSSH && sudo ufw allow 80 && sudo ufw allow 443 && sudo ufw en
 
 ```bash
 sudo mkdir -p /opt/pegasus && sudo chown $USER /opt/pegasus
-git clone https://github.com/tidewaterrepair-code/blackwell-lead-engine.git /opt/pegasus
+git clone -b claude/kind-cerf-2xjti5 https://github.com/tidewaterrepair-code/blackwell-lead-engine.git /opt/pegasus
 cd /opt/pegasus
 cp .env.example .env
 openssl rand -hex 32     # → SECRET_KEY
@@ -131,7 +131,7 @@ To change the schema: edit `pegasus/models.py`, run `pegasus db revision -m "wha
 sudo apt install python3.12-venv postgresql nodejs npm caddy
 sudo -u postgres createuser pegasus -P && sudo -u postgres createdb -O pegasus pegasus
 sudo useradd -r -m -d /opt/pegasus pegasus
-sudo -u pegasus git clone https://github.com/tidewaterrepair-code/blackwell-lead-engine.git /opt/pegasus
+sudo -u pegasus git clone -b claude/kind-cerf-2xjti5 https://github.com/tidewaterrepair-code/blackwell-lead-engine.git /opt/pegasus
 cd /opt/pegasus
 sudo -u pegasus sh -c "cd frontend && npm ci && npm run build"
 sudo -u pegasus python3 -m venv .venv && sudo -u pegasus .venv/bin/pip install .

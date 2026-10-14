@@ -5,6 +5,11 @@
 	}
 }
 
+# www → bare domain (add a DNS A record for www too; until it exists Caddy just logs a retry)
+www.{$DOMAIN} {
+	redir https://{$DOMAIN}{uri} permanent
+}
+
 # Optional extra sites on the same server (see marketing/automation/):
 # stats.{$DOMAIN} {
 # 	reverse_proxy umami:3000
