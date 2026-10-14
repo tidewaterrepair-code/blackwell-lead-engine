@@ -12,8 +12,8 @@ export function Splash({ label = "Opportunity finds you" }: { label?: string }) 
       <div className="absolute inset-0"
            style={{ background: "radial-gradient(60% 50% at 50% 45%, rgba(226,178,90,0.16), transparent 70%)" }} />
       <div className="relative flex flex-col items-center px-6">
-        <motion.img src="/static/brand/splash.png" alt="Pegasus · data & lead technology" draggable={false}
-                    className="w-[min(78vw,560px)] h-auto select-none"
+        <motion.img src="/static/brand/splash.webp" alt="Pegasus · data & lead technology" draggable={false}
+                    className="w-[min(92vw,calc(70svh*1.32),1100px)] h-auto select-none"
                     initial={{ opacity: 0, scale: 0.96, filter: "brightness(0.7)" }}
                     animate={{ opacity: 1, scale: 1, filter: ["brightness(0.95)", "brightness(1.12)", "brightness(0.95)"] }}
                     transition={{ opacity: { duration: 0.5 }, scale: { duration: 0.9, ease: [0.2, 0.8, 0.2, 1] },

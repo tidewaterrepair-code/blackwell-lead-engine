@@ -17,8 +17,8 @@ export function AuthFrame({ children, aside }: { children: React.ReactNode; asid
              style={{ background: "radial-gradient(55% 45% at 50% 40%, rgba(226,178,90,0.18), transparent 70%)" }} />
         <div className="absolute h-[640px] w-[640px] rounded-full animate-sweep opacity-60"
              style={{ background: "conic-gradient(from 0deg, transparent 0deg, rgba(226,178,90,0.16) 40deg, transparent 70deg)" }} />
-        <img src="/static/brand/splash.png" alt="Pegasus · data & lead technology" draggable={false}
-             className="relative w-[min(36vw,560px)] h-auto select-none" />
+        <img src="/static/brand/splash.webp" alt="Pegasus · data & lead technology" draggable={false}
+             className="relative w-[min(44vw,calc(62svh*1.32),860px)] h-auto select-none" />
         <div className="relative max-w-md px-8 text-center">{aside}</div>
       </div>
     </div>

@@ -111,16 +111,32 @@ def test_brand_pack_assets_are_in_place():
     assert (ROOT / "marketing/brand/source/brand-pack.webp").exists()
 
 
+def test_splash_art_is_sharp_full_screen():
+    """The splash/hero art is big enough for a full-screen retina display, with a responsive set for the site."""
+    pytest.importorskip("PIL")
+    from PIL import Image
+
+    assert Image.open(ROOT / "pegasus/web/static/brand/splash.webp").width >= 1600
+    for w in (640, 1000, 1600):
+        assert Image.open(ROOT / f"pegasus/web/static/site/hero-logo-{w}.webp").width == w
+
+
 def test_brand_pack_importer(tmp_path, monkeypatch):
     pytest.importorskip("PIL")
     from PIL import Image
 
     from pegasus.marketing import brand_pack
 
+    src = tmp_path / "src"  # the supplied 1x originals keep this test fast
+    src.mkdir()
+    for name in ("logo-primary.png", "brand-pack.webp"):
+        (src / name).write_bytes((brand_pack.SRC / name).read_bytes())
+    monkeypatch.setattr(brand_pack, "SRC", src)
     monkeypatch.setattr(brand_pack, "STATIC", tmp_path / "static")
     monkeypatch.setattr(brand_pack, "PACK_OUT", tmp_path / "pack")
     written = {p.name for p in brand_pack.main()}
-    assert {"logo.png", "logo-mark.png", "splash.png", "pegasus-512.png", "website-hero.png"} <= written
+    assert {"logo.png", "logo-mark.png", "splash.png", "splash.webp", "hero-logo-1600.webp", "pegasus-512.png",
+            "website-hero.png"} <= written
     logo = Image.open(tmp_path / "static" / "logo.png")
     assert logo.mode == "RGBA" and logo.getpixel((0, 0))[3] == 0  # black background keyed out
     assert Image.open(tmp_path / "static" / "pegasus-512.png").size == (512, 512)

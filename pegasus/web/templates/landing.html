@@ -3,7 +3,7 @@
 {% block title %}Construction Leads & Real Estate Leads Before Your Competition | Pegasus{% endblock %}
 {% block description %}Building permit leads, contractor leads and off-market real estate leads from public records, scored for your trade and predicted before they're advertised. 14 days free, no card.{% endblock %}
 {% block head %}
-<link rel="preload" as="image" href="/static/site/hero-logo.webp" imagesrcset="/static/site/hero-logo-360.webp 360w, /static/site/hero-logo.webp 444w" imagesizes="(max-width: 960px) 78vw, 444px" fetchpriority="high">
+<link rel="preload" as="image" href="/static/site/hero-logo-1000.webp" imagesrcset="/static/site/hero-logo-640.webp 640w, /static/site/hero-logo-1000.webp 1000w, /static/site/hero-logo-1600.webp 1600w" imagesizes="(max-width: 960px) 100vw, 58vw" fetchpriority="high">
 <script type="application/ld+json">{{ jsonld|safe }}</script>
 {% endblock %}
 
@@ -20,14 +20,14 @@
 <section class="hero2" aria-labelledby="hero-title">
   <picture>
     <source media="(max-width: 960px)" srcset="/static/site/hero-city-480.webp">
-    <img class="hero-city" src="/static/site/hero-city.webp" width="858" height="528" alt="" aria-hidden="true">
+    <img class="hero-city" src="/static/site/hero-city.webp" width="1920" height="1182" alt="" aria-hidden="true">
   </picture>
   <svg class="hero-arcs" viewBox="0 0 1440 260" preserveAspectRatio="none" aria-hidden="true">
     <defs><linearGradient id="arc" x1="0" x2="1"><stop offset="0" stop-color="#E2B25A" stop-opacity="0"/><stop offset=".5" stop-color="#FFD37A"/><stop offset="1" stop-color="#E2B25A" stop-opacity="0"/></linearGradient></defs>
     <path class="arc" d="M180 230 Q420 40 700 170"/><path class="arc a2" d="M700 170 Q960 20 1210 140"/>
     <path class="arc a3" d="M420 220 Q700 90 980 210"/><path class="arc a4" d="M980 210 Q1160 110 1330 200"/>
   </svg>
-  {% for x, y, d in [(54, 74, 0), (64, 66, 0.6), (75, 72, 1.2), (86, 65, 0.3), (95, 73, 0.9)] %}
+  {% for x, y, d in [(52, 90, 0), (63, 86, 0.6), (76, 91, 1.2), (87, 85, 0.3), (96, 90, 0.9)] %}
   <span class="hpin" style="left:{{ x }}%;top:{{ y }}%;animation-delay:{{ d }}s" aria-hidden="true">{{ icon("pin") }}</span>
   {% endfor %}
   <div class="wrap hero2-grid">
@@ -44,7 +44,7 @@
       <ul class="trust"><li>{{ icon("check") }} No card to start</li><li>{{ icon("check") }} Cancel in two clicks</li><li>{{ icon("check") }} Any US city or county</li></ul>
     </div>
     <div class="hero-art">
-      <img src="/static/site/hero-logo.webp" srcset="/static/site/hero-logo-360.webp 360w, /static/site/hero-logo.webp 444w" sizes="(max-width: 960px) 78vw, 444px" width="444" height="336" alt="Pegasus, data and lead technology" fetchpriority="high">
+      <img src="/static/site/hero-logo-1000.webp" srcset="/static/site/hero-logo-640.webp 640w, /static/site/hero-logo-1000.webp 1000w, /static/site/hero-logo-1600.webp 1600w" sizes="(max-width: 960px) 100vw, 58vw" width="1600" height="1211" alt="Pegasus, data and lead technology" fetchpriority="high">
       <p class="tagline">Opportunity finds you</p>
     </div>
   </div>
