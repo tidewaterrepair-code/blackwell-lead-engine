@@ -9,7 +9,7 @@
 | 0–3 | Fast push-in on a stack of permit papers, then a smash cut to a phone glowing on a truck dash at dawn | Every job in your city files paperwork first. Nobody reads it. | NOBODY READS THIS |
 | 3–8 | Screen recording: Pegasus radar map filling with pins | Decks, additions, new homes: every one gets a permit before anyone gets hired. | 10,000+ permits/day |
 | 8–14 | Screen: Lead Stream, swipe right on a "New construction · $468k · Framing window next week" card | Pegasus reads them every morning and ranks the ones that fit your trade. | Ranked for YOUR trade |
-| 14–20 | Contractor (b-roll, back to camera) dialing; end card | You call first. 14 days free. | Start free → pegasusleads.com |
+| 14–20 | Contractor (b-roll, back to camera) dialing; end card | You call first. 14 days free. | Start free → getpegasus.org |
 
 **AI b-roll prompts**
 - "Cinematic close-up push-in on a messy stack of municipal building permit forms on a wooden desk, early morning window light, shallow depth of field, 35mm, realistic, 9:16"

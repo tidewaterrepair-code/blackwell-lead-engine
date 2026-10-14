@@ -58,7 +58,7 @@ class Settings:
     geocode_enabled: bool
     geocode_per_run: int
     ntfy_base_url: str
-    user_agent: str = "PegasusLeadBot/1.0 (+https://pegasusleads.com/bot)"
+    user_agent: str = "PegasusLeadBot/1.0 (+https://getpegasus.org/bot)"
 
     @property
     def is_sqlite(self) -> bool:
@@ -95,7 +95,7 @@ def get_settings() -> Settings:
         smtp_port=int(_env("SMTP_PORT", "587")),
         smtp_user=_env("SMTP_USER"),
         smtp_password=_env("SMTP_PASSWORD"),
-        mail_from=_env("MAIL_FROM", _env("SMTP_USER", "Pegasus <hello@pegasusleads.com>")),
+        mail_from=_env("MAIL_FROM", _env("SMTP_USER", "Pegasus <hello@getpegasus.org>")),
         anthropic_api_key=_env("ANTHROPIC_API_KEY"),
         ai_fast_model=_env("AI_FAST_MODEL", "claude-opus-5-5"),
         ai_smart_model=_env("AI_SMART_MODEL", "claude-opus-5-5"),

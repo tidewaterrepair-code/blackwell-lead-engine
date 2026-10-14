@@ -74,6 +74,12 @@ class Adapter:
             )
         return self._client
 
+    def polite_get(self, url: str, **kw) -> httpx.Response:
+        """GET a web page (not an API) only if the site's robots.txt allows our user agent."""
+        if not robots_allowed(url, self.client):
+            raise RobotsDisallowed(f"robots.txt disallows {url}")
+        return self.client.get(url, **kw)
+
     def known(self, external_id: str) -> bool:
         """True if this record was stored on an earlier run (the pipeline overrides this)."""
         return False
@@ -96,6 +102,51 @@ class Adapter:
         item.state = item.state or self.config.get("state")
         item.county_fips = item.county_fips or self.config.get("county_fips")
         return item
+
+
+# ---------------------------------------------------------------- robots.txt
+
+class RobotsDisallowed(RuntimeError):
+    """The site's robots.txt asks crawlers like ours not to fetch this page."""
+
+
+_ROBOTS: dict[str, tuple[float, "RobotFileParser | None"]] = {}
+ROBOTS_TTL = 6 * 3600
+
+
+def robots_allowed(url: str, client: httpx.Client) -> bool:
+    """robots.txt check for page scraping, cached per site for 6 hours.
+
+    Missing robots.txt (4xx) allows everything; a server error (5xx) or timeout disallows until the next
+    check, the same way major search engines treat it.
+    """
+    import time
+    from urllib.parse import urlsplit
+    from urllib.robotparser import RobotFileParser
+
+    from ..config import get_settings
+
+    parts = urlsplit(url)
+    site = f"{parts.scheme}://{parts.netloc}"
+    now = time.time()
+    cached = _ROBOTS.get(site)
+    if cached is None or now - cached[0] > ROBOTS_TTL:
+        parser: RobotFileParser | None
+        try:
+            resp = client.get(f"{site}/robots.txt", timeout=15)
+            if resp.status_code >= 500:
+                parser = None
+            else:
+                parser = RobotFileParser()
+                parser.parse(resp.text.splitlines() if resp.status_code < 400 else [])
+        except httpx.HTTPError:
+            parser = None
+        _ROBOTS[site] = cached = (now, parser)
+    parser = cached[1]
+    if parser is None:
+        return False
+    agent = get_settings().user_agent.split("/")[0]  # "PegasusLeadBot"
+    return parser.can_fetch(agent, url)
 
 
 # ---------------------------------------------------------------- helpers

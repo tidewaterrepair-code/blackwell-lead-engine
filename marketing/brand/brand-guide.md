@@ -70,4 +70,4 @@ Data-viz categories use the color-blind-validated family palette in `frontend/sr
 - AI-generated imagery must never depict real, identifiable people or real customers. Mark it as illustrative where required by platform rules.
 
 ## Social handles
-`@pegasusleads` on Instagram, TikTok, YouTube, X, Facebook and LinkedIn. Profile image: `logo-app-icon.svg` exported at 1024×1024 (or `pegasus/web/static/brand/pegasus-512.png`).
+`@getpegasus` on Instagram, TikTok, YouTube, X, Facebook and LinkedIn, to match getpegasus.org. If it's taken anywhere, use the same fallback everywhere (e.g. `@getpegasusorg` or `@getpegasushq`) so people can find you. Profile image: `logo-app-icon.svg` exported at 1024×1024 (or `pegasus/web/static/brand/pegasus-512.png`).

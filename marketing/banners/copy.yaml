@@ -217,7 +217,7 @@ banners:
     headline: ["Pegasus"]
     tagline: ["Find the opportunity", "*before your competition does.*"]
     side_words: [Construction, Real estate, Data, Leads]
-    cta: pegasusleads.com
+    cta: getpegasus.org
     pins:
       - {x: 18, y: 40, title: New build, sub: Permit issued}
       - {x: 84, y: 44, title: Pre-foreclosure, sub: High equity, label_side: left}

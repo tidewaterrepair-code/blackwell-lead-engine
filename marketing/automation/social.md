@@ -6,7 +6,7 @@ The 30-day calendar (`content/calendar.csv`) has 90 posts with platform, audienc
 
 Postiz schedules to Facebook, Instagram, TikTok, LinkedIn, YouTube, X, Threads and more from one calendar.
 
-1. Install with Docker following the official guide (docs.postiz.com → Installation → Docker Compose). It runs next to Pegasus on the same VPS. Put it behind Caddy on `social.pegasusleads.com`.
+1. Install with Docker following the official guide (docs.postiz.com → Installation → Docker Compose). It runs next to Pegasus on the same VPS. Put it behind Caddy on `social.getpegasus.org`.
 2. Connect each channel (Postiz walks you through each platform's developer-app setup).
 3. Create posts from the calendar: one row per post, attaching the asset named in the `asset` column (`banners/...` from `dist/banners`, `video/...` once the videos are produced).
 4. Postiz also has a public API (Settings → API key) if you'd rather script the import. Check its current docs for the post-creation endpoint before automating.

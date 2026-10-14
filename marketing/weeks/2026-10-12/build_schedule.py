@@ -8,7 +8,7 @@ from pathlib import Path
 from urllib.parse import urlencode
 
 HERE = Path(__file__).parent
-SITE = "https://pegasusleads.com"
+SITE = "https://getpegasus.org"
 
 
 def link(path: str, source: str, content: str) -> str:
@@ -22,7 +22,7 @@ POSTS = [
      "Every morning, someone in your town makes the first call.\n\nPermits, bids, sales and storms are on file before a job is ever posted. Pegasus reads them every morning, ranks them for your trade and tells you what's coming next.\n\nPegasus is live. 14 days free, no card. First 100 keep 40% off for life.",
      "#contractor #construction #realestate #leadgeneration #smallbusiness #hamptonroads", "/", "mon_commercial"),
     ("Mon", "2026-10-12", "07:00", "Instagram+Facebook", "Story", "w42-story-mon-1080x1920.png",
-     "Pegasus is live. Link sticker → pegasusleads.com", "", "/", "mon_story"),
+     "Pegasus is live. Link sticker → getpegasus.org", "", "/", "mon_story"),
     ("Mon", "2026-10-12", "08:30", "LinkedIn", "Text + image (boost $40)", "w42-ad-morning-drop-1200x628.png",
      "Today I'm launching Pegasus.\n\nI kept watching good contractors and agents find out about work after it was gone. But almost every job leaves a trail first: a permit, a plat, a bid, a sale, an expired listing.\n\nPegasus reads that public record every morning, ranks it for your trade or your farm, and predicts what comes next: a new home means framing now, roofing in about six weeks, a deck within a year.\n\nIt's live in Hampton Roads today, and Source Scout maps any US county on request.\n\nThe first 100 customers keep 40% off for life. 14 days free, no card.",
      "#construction #realestate #proptech #contractors #leadgeneration", "/", "mon_linkedin"),
@@ -58,12 +58,12 @@ POSTS = [
      "Agents: an expired listing gets a wave of calls the morning it appears.\n\nConnect your MLS to Pegasus and expireds in your farm land as private leads by 7am, next to a likely-to-sell score for every home.",
      "", "/for/real-estate-agent", "wed_x"),
     ("Wed", "2026-10-14", "18:30", "LinkedIn", "Text", "none",
-     "A question for agents: how do you decide who to call in your farm each week?\n\nWe score every home by how likely it is to sell in the next 12 months, using only property facts (years owned, equity, absentee ownership, recent permits and filings). Never anything about the people living there.\n\nCurious what your farm looks like? 14 days free at pegasusleads.com.",
+     "A question for agents: how do you decide who to call in your farm each week?\n\nWe score every home by how likely it is to sell in the next 12 months, using only property facts (years owned, equity, absentee ownership, recent permits and filings). Never anything about the people living there.\n\nCurious what your farm looks like? 14 days free at getpegasus.org.",
      "#realestate #realtor #proptech", "/for/real-estate-agent", "wed_linkedin"),
 
     # ---------------------------------------------------------------- THU 10/15 · Prediction + storm
     ("Thu", "2026-10-15", "07:30", "Instagram+Facebook", "Story", "w42-story-thu-1080x1920.png",
-     "One permit. 14 trades. Know your week. Link sticker → pegasusleads.com", "", "/", "thu_story"),
+     "One permit. 14 trades. Know your week. Link sticker → getpegasus.org", "", "/", "thu_story"),
     ("Thu", "2026-10-15", "12:00", "Instagram Reels+TikTok+YouTube Shorts", "Screen + VO", "Founder quick hit · 'One permit, 14 trades'",
      "One new-home permit hires 14 trades in a predictable order. Pegasus tells each trade when its window opens.",
      "#construction #framing #hvac #roofing #plumbing #electrician", "/", "thu_reel"),

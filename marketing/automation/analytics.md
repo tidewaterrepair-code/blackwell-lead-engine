@@ -18,7 +18,7 @@ docker compose up -d   # http://SERVER:3000, default login admin / umami, change
 Add the website in Umami, then set in Pegasus `.env`:
 
 ```
-UMAMI_SRC=https://stats.pegasusleads.com/script.js
+UMAMI_SRC=https://stats.getpegasus.org/script.js
 UMAMI_WEBSITE_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 ```
 

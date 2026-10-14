@@ -50,7 +50,7 @@ Launch geography: **Hampton Roads first** (data is live), then expand through So
 ### Phase A: Pre-launch (weeks −4 to 0): build the waitlist
 | Week | Actions |
 |---|---|
-| −4 | Domain, email (Google Workspace or Zoho), socials claimed (@pegasusleads everywhere). Deploy the site + waitlist. Stripe products created. Postiz + Listmonk installed. |
+| −4 | Domain, email (Google Workspace or Zoho), socials claimed (@getpegasus everywhere, or one consistent fallback). Deploy the site + waitlist. Stripe products created. Postiz + Listmonk installed. |
 | −4 | Shoot or generate the first 4 videos (scripts 01, 02, 05, 09). Render banners (`pegasus marketing render`). |
 | −3 | Start the daily posting calendar (days 1–30). Join 15 Facebook groups (contractors, REI, local trades) and contribute value posts, not pitches. |
 | −3 | Launch the **"Hot permits in {city}" free weekly email** as the lead magnet (generated from live data: `pegasus marketing weekly-posts`). |

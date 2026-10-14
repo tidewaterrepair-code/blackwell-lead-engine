@@ -4,7 +4,7 @@
 # Budgets below are the $1,000/month tier (see launch/plan.md for $500 and $1,500).
 # Geography: launch metro. Change `geo` when expanding.
 
-landing: https://pegasusleads.com
+landing: https://getpegasus.org
 geo:
   name: Hampton Roads
   city: Virginia Beach

@@ -100,12 +100,12 @@ class RSSAdapter(Adapter):
         return text_lead(self, payload)
 
 
-class HTMLListAdapter(Adapter):
+class HTMLListAdapter(Adapter):  # scrapes a web page: honors robots.txt
     kind = "bid"
 
     def fetch(self, since: datetime) -> Iterable[RawItem]:
         url = self.config["url"]
-        resp = self.client.get(url)
+        resp = self.polite_get(url)
         resp.raise_for_status()
         soup = BeautifulSoup(resp.text, "html.parser")
         for item in soup.select(self.config["item"]):

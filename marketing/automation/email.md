@@ -17,7 +17,7 @@ SMTP_HOST=email-smtp.us-east-1.amazonaws.com
 SMTP_PORT=587
 SMTP_USER=...
 SMTP_PASSWORD=...
-MAIL_FROM=Pegasus <hello@pegasusleads.com>
+MAIL_FROM=Pegasus <hello@getpegasus.org>
 ```
 
 DNS for the sending domain: **SPF**, **DKIM** (from the provider) and **DMARC** (`v=DMARC1; p=none; rua=mailto:dmarc@yourdomain`, tightened to `quarantine` after two clean weeks). Gmail and Yahoo require all three plus one-click unsubscribe, which Pegasus already adds.
@@ -34,7 +34,7 @@ curl -LO https://github.com/knadh/listmonk/raw/master/docker-compose.yml
 docker compose up -d            # then open http://SERVER:9000 and create the admin user
 ```
 
-Point Listmonk's SMTP settings at the same provider. Put it behind Caddy on a subdomain (e.g. `lists.pegasusleads.com`).
+Point Listmonk's SMTP settings at the same provider. Put it behind Caddy on a subdomain (e.g. `lists.getpegasus.org`).
 
 Weekly newsletter ("Hot permits in {city}"):
 

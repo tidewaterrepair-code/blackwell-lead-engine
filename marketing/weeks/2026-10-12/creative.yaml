@@ -124,8 +124,8 @@ banners:
     page: "5/5"
     kicker: Your move
     headline: ["See what was filed", "*near you this week.*"]
-    sub: "Free city lookup, no signup: pegasusleads.com/leads"
-    cta: pegasusleads.com
+    sub: "Free city lookup, no signup: getpegasus.org/leads"
+    cta: getpegasus.org
     sizes: [1080x1350]
 
   # ======================================================== CAROUSEL · Wed · agents · "5 signs a home is about to sell"
@@ -205,7 +205,7 @@ banners:
     kicker: Run your own numbers
     headline: ["Stop leaving it", "*on the table.*"]
     sub: "Calculator on our homepage. 14 days free, no card."
-    cta: pegasusleads.com
+    cta: getpegasus.org
     sizes: [1080x1350]
 
   # ======================================================== STORIES (1080x1920)

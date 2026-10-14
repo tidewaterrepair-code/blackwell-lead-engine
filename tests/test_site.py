@@ -114,3 +114,8 @@ def test_compression_and_cache_headers(client):
     r = client.get("/", headers={"Accept-Encoding": "gzip"})
     assert r.headers.get("content-encoding") == "gzip"
     assert "max-age" in client.get("/static/site.css").headers.get("cache-control", "")
+
+
+def test_bot_page_explains_crawler(client):
+    text = client.get("/bot").text
+    assert text.startswith("PegasusLeadBot") and "robots.txt" in text and "never logs in" in text

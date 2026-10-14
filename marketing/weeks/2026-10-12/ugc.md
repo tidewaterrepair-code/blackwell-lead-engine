@@ -12,7 +12,7 @@ User-generated-style video is the highest-converting format for contractors and 
 
 ## Creator brief (send this to each creator)
 
-> **Product:** Pegasus finds construction and real estate leads from public records (permits, bids, sales, storms, tax and court filings), ranks them for your trade every morning at 7am, and predicts the next jobs. 14 days free at pegasusleads.com.
+> **Product:** Pegasus finds construction and real estate leads from public records (permits, bids, sales, storms, tax and court filings), ranks them for your trade every morning at 7am, and predicts the next jobs. 14 days free at getpegasus.org.
 > **Your account:** we've set you up with Growth on your own area. Use it for at least 3 mornings before you film.
 > **Deliverable:** one 30–45 s vertical video (9:16, 1080×1920, natural light, phone audio is fine; lav mic if outside), plus 3 alternate first lines (hooks) recorded separately, plus 10 s of silent B-roll of you using the app.
 > **Must include:** your honest take; one real moment from your account (with addresses blurred); "14 days free, link in bio/caption"; `#ad`.
@@ -34,9 +34,9 @@ C. "This is how I find jobs before they're posted."
 | 3–10 | Phone screen: Morning Drop list (blur addresses) | "These are permits and projects filed in my area. It ranks them for decks, so I'm not scrolling through plumbing jobs." | RANKED FOR MY TRADE |
 | 10–20 | Taps a new-home lead → predicted timeline | "This one's a new build. It tells me framing's now, roofing in about six weeks, and a deck around month four. So I know when to call." | IT PREDICTS WHEN |
 | 20–28 | Back to selfie, walking to the truck | "Honest take: [your real opinion after 3 days]." | — |
-| 28–35 | Selfie | "It's free for 14 days. Link's in my bio. #ad" | 14 DAYS FREE · pegasusleads.com |
+| 28–35 | Selfie | "It's free for 14 days. Link's in my bio. #ad" | 14 DAYS FREE · getpegasus.org |
 
-**Caption:** Jobs are on file before they're posted. I've been trying Pegasus for my area this week. Free 14 days at pegasusleads.com. #ad #contractor #deckbuilder #construction #smallbusiness
+**Caption:** Jobs are on file before they're posted. I've been trying Pegasus for my area this week. Free 14 days at getpegasus.org. #ad #contractor #deckbuilder #construction #smallbusiness
 
 ## Script 2 · "Hail last night" (roofer) · 30 s
 
@@ -73,7 +73,7 @@ Creator stands in front of a green-screen of a lead-marketplace pricing page (ge
 Post Saturday on TikTok, Reels, Shorts and LinkedIn (native video).
 **Hook options:** A. "I built this because I was tired of finding out about jobs after they were gone." B. "Here's why I built a lead tool from public records." C. "Every deck, addition and new home in my area was on file. I just couldn't see it."
 **Beats:** your real story in Hampton Roads (15 s) → the moment you realized permits come first (10 s) → screen-share of the app finding a real public record in your city (15 s) → "First 100 customers keep 40% off for life. 14 days free, no card. Link below." (10 s)
-**Caption:** Why I built Pegasus. Every job in your town is on file before it's posted. Free 14 days, first 100 keep 40% off for life. pegasusleads.com
+**Caption:** Why I built Pegasus. Every job in your town is on file before it's posted. Free 14 days, first 100 keep 40% off for life. getpegasus.org
 
 ---
 

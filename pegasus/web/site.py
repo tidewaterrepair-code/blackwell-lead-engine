@@ -288,6 +288,17 @@ def robots():
     return f"User-agent: *\nAllow: /\nDisallow: /app\nDisallow: /api\nSitemap: {get_settings().public_url}/sitemap.xml\n"
 
 
+@router.get("/bot", response_class=PlainTextResponse)
+def bot_info():
+    """Linked from the crawler's User-Agent so site owners can see who's fetching and how to reach us."""
+    s = get_settings()
+    return (f"PegasusLeadBot\n\nPegasus ({s.public_url}) reads public records such as building permits, bids and "
+            "property data from government open-data portals and websites, to help contractors and real estate "
+            "professionals find work.\n\n- It fetches politely: a few requests per source per run, a few runs a day.\n"
+            "- It respects robots.txt and each site's terms.\n- It never logs in or bypasses access controls.\n\n"
+            f"Questions, rate limits or opt-out for your site: {s.mail_from}\n")
+
+
 @router.get("/llms.txt", response_class=PlainTextResponse)
 def llms_txt(db: Session = Depends(get_db)):
     """Plain-language summary for AI assistants and answer engines (llmstxt.org convention)."""

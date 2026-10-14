@@ -2,7 +2,7 @@
 
 **Theme:** *Opportunity finds you.* The work in your area is already on file; Pegasus gets you there first.
 **Offer:** 14-day free trial, no card. Founding members (first 100) keep 40% off for life.
-**Landing:** `https://pegasusleads.com/` (contractors) and `https://pegasusleads.com/for/real-estate-agent` (agents). Every link below already carries UTM tags; `utm_campaign=w42_launch`.
+**Landing:** `https://getpegasus.org/` (contractors) and `https://getpegasus.org/for/real-estate-agent` (agents). Every link below already carries UTM tags; `utm_campaign=w42_launch`.
 
 ---
 
@@ -21,12 +21,12 @@ Shot for 9:16 (Reels, TikTok, Shorts, Stories) and reframed to 16:9 (YouTube pre
 | 0:15–0:19 | Real estate agent at a kitchen island, tablet shows a gold map with likely-to-sell homes glowing. | "For agents: who's likely to sell, before they list." | **KNOW WHO'S SELLING FIRST** |
 | 0:19–0:24 | Storm clouds roll off; a roofer's truck pulls up a wet street as lights come on in the houses. | "Hail last night? Your map's ready by morning." | — |
 | 0:24–0:27 | Gold Pegasus emblem rears up out of the city lights (brand pack splash art, animated). Brass hit. | "Pegasus. Opportunity finds you." | **PEGASUS** · DATA & LEAD TECHNOLOGY |
-| 0:27–0:30 | End card: logo, URL, offer. | "Start free at pegasusleads.com." | **14 DAYS FREE · NO CARD** · pegasusleads.com · *First 100 keep 40% off for life* |
+| 0:27–0:30 | End card: logo, URL, offer. | "Start free at getpegasus.org." | **14 DAYS FREE · NO CARD** · getpegasus.org · *First 100 keep 40% off for life* |
 
 **Cutdowns**
 
-- **15 s · Contractors:** 0:00–0:03 → 0:03–0:07 → 0:11–0:15 → end card (VO: "Every morning someone in your town makes the first call. It's all on file before it's posted. Pegasus ranks it for your trade and predicts what's next. Start free at pegasusleads.com.")
-- **15 s · Agents:** 0:00–0:03 (agent's phone instead of truck) → 0:15–0:19 → app screen of an expired listing → end card (VO: "Every morning, an agent in your farm calls the expired listing first. Pegasus shows you who's likely to sell before they list, and your MLS expireds at 7am. Start free at pegasusleads.com.")
+- **15 s · Contractors:** 0:00–0:03 → 0:03–0:07 → 0:11–0:15 → end card (VO: "Every morning someone in your town makes the first call. It's all on file before it's posted. Pegasus ranks it for your trade and predicts what's next. Start free at getpegasus.org.")
+- **15 s · Agents:** 0:00–0:03 (agent's phone instead of truck) → 0:15–0:19 → app screen of an expired listing → end card (VO: "Every morning, an agent in your farm calls the expired listing first. Pegasus shows you who's likely to sell before they list, and your MLS expireds at 7am. Start free at getpegasus.org.")
 - **6 s bumpers (YouTube, no VO, supers only):** (a) pins rising over a neighborhood → "THE JOB IS ALREADY ON FILE. · PEGASUS" (b) hail → roof → "HAIL LAST NIGHT? YOUR MAP IS READY. · PEGASUS" (c) expired sign → phone → "EXPIRED AT MIDNIGHT. ON YOUR LIST BY 7AM. · PEGASUS"
 
 **How to produce it**

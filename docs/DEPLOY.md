@@ -6,7 +6,7 @@
 
 ## 1. Domain and DNS
 
-Point two **A records** at the VPS IP: the bare domain (`@`, e.g. `pegasusleads.com`) and `www`. Caddy redirects `www` to the bare domain. Caddy gets the HTTPS certificate on first start.
+Point two **A records** at the VPS IP: the bare domain (`@`, e.g. `getpegasus.org`) and `www`. Caddy redirects `www` to the bare domain. Caddy gets the HTTPS certificate on first start.
 
 For email deliverability, add the SPF, DKIM and DMARC records from your mail provider now: see `marketing/automation/email.md`.
 

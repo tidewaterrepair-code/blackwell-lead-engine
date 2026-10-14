@@ -13,6 +13,7 @@ from pathlib import Path
 
 from sqlalchemy import func, select
 
+from ..config import get_settings
 from ..db import session_scope, utcnow
 from ..intel.taxonomy import tag_label
 from ..models import Signal
@@ -43,13 +44,14 @@ def city_stats(city: str, state: str, days: int = 7) -> dict:
 
 def compose(stats: dict) -> dict:
     city, n = stats["city"], stats["count"]
-    url = f"https://pegasusleads.com/leads/{stats['state'].lower()}/{slugify(city)}"
+    base = get_settings().public_url
+    url = f"{base}/leads/{stats['state'].lower()}/{slugify(city)}"
     lines = [f"{label}: {count}" for label, count in stats["top_tags"]]
     caption = (f"This week in {city}: {n} new projects filed, worth about {money(stats['value'])}.\n\n"
                + "\n".join(f"• {l}" for l in lines[:5])
                + f"\n\nEvery one is a lead for someone. Pegasus ranks them for your trade every morning. Full list: {url}")
     slides = [f"This week in {city}: {n} new projects", *[f"{label}: {count}" for label, count in stats["top_tags"][:4]],
-              "Get them with addresses every morning → pegasusleads.com"]
+              f"Get them with addresses every morning → {base.split('://', 1)[-1]}"]
     banner = {"id": f"weekly-{slugify(city)}", "kicker": f"This week in {city}",
               "headline": f"{n} new projects. {money(stats['value'])} in work.",
               "sub": " · ".join(f"{label} {count}" for label, count in stats["top_tags"][:3]),

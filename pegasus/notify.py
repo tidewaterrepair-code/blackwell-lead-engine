@@ -29,7 +29,7 @@ def send_email(to: str, subject: str, text: str, html_body: str | None = None,
     s = get_settings()
     msg = EmailMessage()
     msg["Subject"], msg["From"], msg["To"] = subject, s.mail_from, to
-    msg["Message-ID"] = make_msgid(domain="pegasusleads.com")
+    msg["Message-ID"] = make_msgid(domain="getpegasus.org")
     for k, v in (headers or {}).items():
         msg[k] = v
     msg.set_content(text)

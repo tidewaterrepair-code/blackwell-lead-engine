@@ -67,7 +67,7 @@ class AgendaPDFAdapter(Adapter):
 
     def agenda_links(self) -> list[tuple[str, str | None]]:
         index = self.config["index"]
-        resp = self.client.get(index)
+        resp = self.polite_get(index)
         resp.raise_for_status()
         pattern = re.compile(self.config.get("link_pattern", r"(?i)agenda"))
         links: list[tuple[str, str | None]] = []
@@ -94,7 +94,7 @@ class AgendaPDFAdapter(Adapter):
         for link, published in self.agenda_links():
             if self.known(link):
                 continue
-            resp = self.client.get(link)
+            resp = self.polite_get(link)
             resp.raise_for_status()
             if resp.content[:4] == b"%PDF":
                 text = pdf_text(resp.content)

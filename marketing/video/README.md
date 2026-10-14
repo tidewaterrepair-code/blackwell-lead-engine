@@ -12,7 +12,7 @@ Production rules:
 - Voice: confident, plain, fast. 150–170 words per minute.
 - Captions burned in (Inter Bold, white with midnight 70% box, gold highlight on the key word).
 - Music: royalty-free, punchy (YouTube Audio Library, Pixabay, or the platform's licensed library).
-- End card on every video: logo lockup + "Start free · pegasusleads.com" + founding-seat line.
+- End card on every video: logo lockup + "Start free · getpegasus.org" + founding-seat line.
 
 | # | Title | Audience | Length |
 |---|---|---|---|

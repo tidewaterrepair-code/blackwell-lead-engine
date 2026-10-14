@@ -16,14 +16,14 @@ Pegasus is live. 14 days free, no card. First 100 keep 40% off for life.
 
 #contractor #construction #realestate #leadgeneration #smallbusiness #hamptonroads
 
-Link: https://pegasusleads.com/?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=mon_commercial
+Link: https://getpegasus.org/?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=mon_commercial
 
 ### 07:00 · Instagram+Facebook · Story
 **Asset:** w42-story-mon-1080x1920.png
 
-Pegasus is live. Link sticker → pegasusleads.com
+Pegasus is live. Link sticker → getpegasus.org
 
-Link: https://pegasusleads.com/?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=mon_story
+Link: https://getpegasus.org/?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=mon_story
 
 ### 08:30 · LinkedIn · Text + image (boost $40)
 **Asset:** w42-ad-morning-drop-1200x628.png
@@ -40,14 +40,14 @@ The first 100 customers keep 40% off for life. 14 days free, no card.
 
 #construction #realestate #proptech #contractors #leadgeneration
 
-Link: https://pegasusleads.com/?utm_source=linkedin&utm_medium=social&utm_campaign=w42_launch&utm_content=mon_linkedin
+Link: https://getpegasus.org/?utm_source=linkedin&utm_medium=social&utm_campaign=w42_launch&utm_content=mon_linkedin
 
 ### 09:00 · Google Business Profile · Update + image
 **Asset:** w42-ad-founding-1080x1080.png
 
 Pegasus is live: construction and real estate leads from public records, ranked every morning. First 100 customers keep 40% off for life.
 
-Link: https://pegasusleads.com/?utm_source=google&utm_medium=social&utm_campaign=w42_launch&utm_content=mon_gbp
+Link: https://getpegasus.org/?utm_source=google&utm_medium=social&utm_campaign=w42_launch&utm_content=mon_gbp
 
 ### 12:00 · X · Post + image
 **Asset:** w42-ad-morning-drop-1200x628.png
@@ -56,7 +56,7 @@ Every permit, bid, sale and storm in your area is on file before the job is post
   
 Pegasus ranks it for your trade every morning at 7. Live today. 14 days free.
 
-Link: https://pegasusleads.com/?utm_source=x&utm_medium=social&utm_campaign=w42_launch&utm_content=mon_x
+Link: https://getpegasus.org/?utm_source=x&utm_medium=social&utm_campaign=w42_launch&utm_content=mon_x
 
 ### 18:00 · TikTok+YouTube Shorts · Video
 **Asset:** Commercial 15 s · Contractors
@@ -65,7 +65,7 @@ The job is already on file. You just can't see it yet. Pegasus: 14 days free.
 
 #contractor #construction #roofing #deckbuilder
 
-Link: https://pegasusleads.com/?utm_source=tiktok&utm_medium=social&utm_campaign=w42_launch&utm_content=mon_tiktok
+Link: https://getpegasus.org/?utm_source=tiktok&utm_medium=social&utm_campaign=w42_launch&utm_content=mon_tiktok
 
 ## Tue 2026-10-13
 
@@ -82,7 +82,7 @@ See what was filed near you this week: free city lookup, no signup.
 
 #contractor #construction #building #remodeling #roofing #decks
 
-Link: https://pegasusleads.com/leads?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=tue_carousel
+Link: https://getpegasus.org/leads?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=tue_carousel
 
 ### 12:00 · TikTok+Instagram Reels · UGC
 **Asset:** UGC Script 1 · 'My 7am' (creator) or founder version
@@ -91,7 +91,7 @@ This is how I find jobs before they're posted.
 
 #contractor #deckbuilder #construction #smallbusiness
 
-Link: https://pegasusleads.com/?utm_source=tiktok&utm_medium=social&utm_campaign=w42_launch&utm_content=tue_ugc1
+Link: https://getpegasus.org/?utm_source=tiktok&utm_medium=social&utm_campaign=w42_launch&utm_content=tue_ugc1
 
 ### 17:00 · X · Post
 **Asset:** w42-car-tue-3-1080x1350.png
@@ -106,7 +106,7 @@ Deck, fence, pool: months 4–12
   
 Know your week before anyone calls.
 
-Link: https://pegasusleads.com/?utm_source=x&utm_medium=social&utm_campaign=w42_launch&utm_content=tue_x
+Link: https://getpegasus.org/?utm_source=x&utm_medium=social&utm_campaign=w42_launch&utm_content=tue_x
 
 ### 19:00 · Facebook Groups (value post) · Text
 **Asset:** none
@@ -130,7 +130,7 @@ Pegasus stacks all five into one likely-to-sell score for every home in your far
 
 #realtor #realestateagent #listings #realestate #realestateinvesting
 
-Link: https://pegasusleads.com/for/real-estate-agent?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=wed_carousel
+Link: https://getpegasus.org/for/real-estate-agent?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=wed_carousel
 
 ### 12:00 · TikTok+Instagram Reels · UGC
 **Asset:** UGC Script 3 · 'Expired at midnight' (agent creator)
@@ -139,7 +139,7 @@ Every expired listing in my farm, on my phone by 7am.
 
 #realtor #realestateagent #expiredlistings
 
-Link: https://pegasusleads.com/for/real-estate-agent?utm_source=tiktok&utm_medium=social&utm_campaign=w42_launch&utm_content=wed_ugc3
+Link: https://getpegasus.org/for/real-estate-agent?utm_source=tiktok&utm_medium=social&utm_campaign=w42_launch&utm_content=wed_ugc3
 
 ### 17:00 · X · Post + image
 **Asset:** w42-ad-expired-1200x628.png
@@ -148,7 +148,7 @@ Agents: an expired listing gets a wave of calls the morning it appears.
   
 Connect your MLS to Pegasus and expireds in your farm land as private leads by 7am, next to a likely-to-sell score for every home.
 
-Link: https://pegasusleads.com/for/real-estate-agent?utm_source=x&utm_medium=social&utm_campaign=w42_launch&utm_content=wed_x
+Link: https://getpegasus.org/for/real-estate-agent?utm_source=x&utm_medium=social&utm_campaign=w42_launch&utm_content=wed_x
 
 ### 18:30 · LinkedIn · Text
 **Asset:** none
@@ -157,20 +157,20 @@ A question for agents: how do you decide who to call in your farm each week?
   
 We score every home by how likely it is to sell in the next 12 months, using only property facts (years owned, equity, absentee ownership, recent permits and filings). Never anything about the people living there.  
   
-Curious what your farm looks like? 14 days free at pegasusleads.com.
+Curious what your farm looks like? 14 days free at getpegasus.org.
 
 #realestate #realtor #proptech
 
-Link: https://pegasusleads.com/for/real-estate-agent?utm_source=linkedin&utm_medium=social&utm_campaign=w42_launch&utm_content=wed_linkedin
+Link: https://getpegasus.org/for/real-estate-agent?utm_source=linkedin&utm_medium=social&utm_campaign=w42_launch&utm_content=wed_linkedin
 
 ## Thu 2026-10-15
 
 ### 07:30 · Instagram+Facebook · Story
 **Asset:** w42-story-thu-1080x1920.png
 
-One permit. 14 trades. Know your week. Link sticker → pegasusleads.com
+One permit. 14 trades. Know your week. Link sticker → getpegasus.org
 
-Link: https://pegasusleads.com/?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=thu_story
+Link: https://getpegasus.org/?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=thu_story
 
 ### 12:00 · Instagram Reels+TikTok+YouTube Shorts · Screen + VO
 **Asset:** Founder quick hit · 'One permit, 14 trades'
@@ -179,7 +179,7 @@ One new-home permit hires 14 trades in a predictable order. Pegasus tells each t
 
 #construction #framing #hvac #roofing #plumbing #electrician
 
-Link: https://pegasusleads.com/?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=thu_reel
+Link: https://getpegasus.org/?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=thu_reel
 
 ### 15:00 · Facebook+Instagram · Image
 **Asset:** w42-ad-storm-1080x1350.png
@@ -190,7 +190,7 @@ Pegasus maps NOAA hail and wind reports to your service area within hours and sc
 
 #roofing #roofer #stormdamage #hail #siding
 
-Link: https://pegasusleads.com/for/roofer?utm_source=facebook&utm_medium=social&utm_campaign=w42_launch&utm_content=thu_storm
+Link: https://getpegasus.org/for/roofer?utm_source=facebook&utm_medium=social&utm_campaign=w42_launch&utm_content=thu_storm
 
 ### 17:00 · X · Post
 **Asset:** none
@@ -201,7 +201,7 @@ By 7am Pegasus has the swath on your service area and the roofs inside it scored
   
 First truck on the street wins.
 
-Link: https://pegasusleads.com/for/roofer?utm_source=x&utm_medium=social&utm_campaign=w42_launch&utm_content=thu_x
+Link: https://getpegasus.org/for/roofer?utm_source=x&utm_medium=social&utm_campaign=w42_launch&utm_content=thu_x
 
 ## Fri 2026-10-16
 
@@ -216,7 +216,7 @@ Pegasus Growth is $107/month at founding price, locked for life. Run your own nu
 
 #contractor #smallbusiness #construction #businessgrowth
 
-Link: https://pegasusleads.com/#calculator?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=fri_carousel
+Link: https://getpegasus.org/#calculator?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=fri_carousel
 
 ### 12:00 · TikTok+Instagram Reels · UGC
 **Asset:** UGC Script 5 · 'Shared leads vs public record'
@@ -225,7 +225,7 @@ There's a free-to-find version of every job you're paying for.
 
 #contractor #leadgeneration #homeadvisor #construction
 
-Link: https://pegasusleads.com/?utm_source=tiktok&utm_medium=social&utm_campaign=w42_launch&utm_content=fri_ugc5
+Link: https://getpegasus.org/?utm_source=tiktok&utm_medium=social&utm_campaign=w42_launch&utm_content=fri_ugc5
 
 ### 17:00 · X · Post + image
 **Asset:** w42-ad-founding-1200x628.png
@@ -234,7 +234,7 @@ First 100 Pegasus customers keep 40% off for life.
   
 14 days free, no card. When the seats are gone, they're gone.
 
-Link: https://pegasusleads.com/app/signup?offer=founding?utm_source=x&utm_medium=social&utm_campaign=w42_launch&utm_content=fri_x
+Link: https://getpegasus.org/app/signup?offer=founding?utm_source=x&utm_medium=social&utm_campaign=w42_launch&utm_content=fri_x
 
 ## Sat 2026-10-17
 
@@ -245,14 +245,14 @@ Why I built Pegasus. Every job in your town is on file before it's posted. Free 
 
 #founder #construction #realestate #smallbusiness
 
-Link: https://pegasusleads.com/?utm_source=tiktok&utm_medium=social&utm_campaign=w42_launch&utm_content=sat_founder
+Link: https://getpegasus.org/?utm_source=tiktok&utm_medium=social&utm_campaign=w42_launch&utm_content=sat_founder
 
 ### 10:00 · Instagram+Facebook · Story
 **Asset:** w42-story-sat-1080x1920.png
 
 Founding seats are going. Tap to claim yours.
 
-Link: https://pegasusleads.com/app/signup?offer=founding?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=sat_story
+Link: https://getpegasus.org/app/signup?offer=founding?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=sat_story
 
 ## Sun 2026-10-18
 
@@ -263,12 +263,12 @@ This week in [city]: [N] new projects filed, worth about [$]. (Generated from li
 
 #hamptonroads #virginiabeach #norfolk #chesapeake #construction
 
-Link: https://pegasusleads.com/leads?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=sun_weekly
+Link: https://getpegasus.org/leads?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=sun_weekly
 
 ### 18:00 · Instagram+Facebook · Story
 **Asset:** Screenshot of /leads/va/<city> (your phone)
 
 What got filed near you this week → link sticker to the city page.
 
-Link: https://pegasusleads.com/leads?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=sun_story
+Link: https://getpegasus.org/leads?utm_source=instagram&utm_medium=social&utm_campaign=w42_launch&utm_content=sun_story
 

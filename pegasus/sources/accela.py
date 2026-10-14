@@ -4,7 +4,7 @@ ACA is an ASP.NET site with no public API, so this adapter drives a headless
 Chromium (Playwright) through the anonymous "General Search" by date range and
 parses the results grid. Requires the `browser` extra:
 
-    pip install 'leadengine[browser]' && playwright install --with-deps chromium
+    pip install 'pegasus[browser]' && playwright install --with-deps chromium
 
 sources.yaml:
     chesapeake-permits:
@@ -71,11 +71,16 @@ class AccelaAdapter(Adapter):
             from playwright.sync_api import sync_playwright
         except ImportError as exc:  # pragma: no cover - depends on optional extra
             raise RuntimeError(
-                "Accela sources need Playwright: pip install 'leadengine[browser]' && "
+                "Accela sources need Playwright: pip install 'pegasus[browser]' && "
                 "playwright install --with-deps chromium (or build the Docker image with INSTALL_BROWSER=true)"
             ) from exc
 
         base = self.config["base_url"].rstrip("/")
+        from ..config import get_settings
+        from .base import RobotsDisallowed, robots_allowed
+
+        if not robots_allowed(f"{base}/Cap/CapHome.aspx", self.client):
+            raise RobotsDisallowed(f"robots.txt disallows {base}/Cap/CapHome.aspx")
         module = self.config.get("module", "Building")
         max_pages = int(self.config.get("max_pages", 20))
         # ACA rejects very wide date ranges; search in week-long windows.
@@ -84,7 +89,7 @@ class AccelaAdapter(Adapter):
 
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True)
-            page = browser.new_page(user_agent=self.config.get("user_agent") or None)
+            page = browser.new_page(user_agent=self.config.get("user_agent") or get_settings().user_agent)
             page.set_default_timeout(45_000)
             try:
                 start = since

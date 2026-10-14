@@ -1,5 +1,5 @@
 import json
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 import httpx
 
@@ -163,3 +163,36 @@ def test_csv_and_excel_tax_lists():
                             client=httpx.Client(transport=httpx.MockTransport(lambda r: httpx.Response(200, content=content))))
     item = adapter.normalize(next(iter(adapter.fetch(utcnow()))).payload)
     assert item.kind == "tax_delinquent" and item.address == "9 Oak St" and item.facts["amount_due"] == 845.5
+
+
+def _robots_client(robots_status: int, robots_body: str = ""):
+    import httpx
+
+    def handler(request):
+        if request.url.path == "/robots.txt":
+            return httpx.Response(robots_status, text=robots_body)
+        return httpx.Response(200, text="<html><body>ok</body></html>")
+
+    return httpx.Client(transport=httpx.MockTransport(handler))
+
+
+def test_robots_txt_rules():
+    import pytest as _pytest
+
+    from pegasus.sources import base
+    from pegasus.sources.feeds import HTMLListAdapter
+
+    base._ROBOTS.clear()
+    assert base.robots_allowed("https://a.test/permits", _robots_client(404))  # no robots.txt: allowed
+    base._ROBOTS.clear()
+    assert not base.robots_allowed("https://b.test/permits", _robots_client(503))  # server error: back off
+    base._ROBOTS.clear()
+    blocked = _robots_client(200, "User-agent: PegasusLeadBot\nDisallow: /permits\n")
+    assert not base.robots_allowed("https://c.test/permits/list", blocked)
+    assert base.robots_allowed("https://c.test/news", blocked)
+    base._ROBOTS.clear()
+    adapter = HTMLListAdapter("t", {"type": "html_list", "url": "https://d.test/bids", "item": "li"},
+                              client=_robots_client(200, "User-agent: *\nDisallow: /\n"))
+    with _pytest.raises(base.RobotsDisallowed):
+        list(adapter.fetch(datetime(2026, 1, 1)))
+    base._ROBOTS.clear()
