@@ -351,6 +351,8 @@ def run_source(source_id: str, *, since: datetime | None = None, client: httpx.C
             source.last_status, source.last_error, source.consecutive_failures = "ok", None, 0
             if not dry_run:
                 source.last_success_at = source.last_run_at
+                if source.status == "broken":  # the outage cleared: put it back on the schedule
+                    source.status = "active"
     return result
 
 

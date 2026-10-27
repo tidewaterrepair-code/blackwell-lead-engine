@@ -136,6 +136,11 @@ def test_broken_source_is_recorded_and_eventually_marked_broken():
         src = s.get(Source, "down")
         assert src.last_status == "error" and src.status == "broken"
 
+    res = run_source("down", client=httpx.Client(transport=httpx.MockTransport(lambda r: httpx.Response(200, json=[]))))
+    assert res.error is None
+    with session_scope() as s:
+        assert s.get(Source, "down").status == "active"
+
 
 def test_storm_signal_reaches_roofers_in_the_area():
     _, roofer = make_org("roof@x.com", ["roofer"], HAMPTON_ROADS)

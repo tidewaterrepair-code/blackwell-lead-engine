@@ -62,6 +62,23 @@ def test_arcgis_fetch_and_normalize(fixture_text):
     assert lead.posted_at is not None
 
 
+def test_arcgis_text_date_field():
+    calls = []
+
+    def handler(request):
+        calls.append(request.url)
+        return httpx.Response(200, json={"features": [{"attributes": {
+            "PermitNumber": "2026-BLDR-1", "WorkDesc": "New deck", "ApplicationDate": "2026/10/23"}}]})
+
+    cfg = {"type": "arcgis", "url": "https://services2.arcgis.com/x/FeatureServer/0", "city": "Virginia Beach",
+           "date_field": "ApplicationDate", "date_format": "%Y/%m/%d",
+           "fields": {"external_id": "PermitNumber", "description": "WorkDesc", "posted_at": "ApplicationDate"}}
+    adapter = build_adapter("vb", cfg, client=mock_client(handler))
+    items = list(adapter.fetch(datetime(2026, 10, 1)))
+    assert calls[0].params["where"] == "ApplicationDate >= '2026/10/01'"
+    assert adapter.normalize(items[0].payload).posted_at == datetime(2026, 10, 23)
+
+
 def test_accela_results_parsing(fixture_text):
     rows = parse_aca_results(fixture_text("aca_results.html"), "https://aca-prod.accela.com/CHESAPEAKE")
     assert len(rows) == 2
@@ -75,8 +92,14 @@ def test_accela_results_parsing(fixture_text):
 
 
 def test_rss_bids(fixture_bytes):
+    # the fixture was captured on 2026-10-04; shift its dates so "recent" and "still open" hold on any run date
+    shift = (utcnow().date() - datetime(2026, 10, 4).date()).days
+    body = fixture_bytes("bids.rss").decode()
+    for old, fmt in (("Sun, 04 Oct 2026", "%a, %d %b %Y"), ("October 18, 2026", "%B %d, %Y"), ("10/11/2026", "%m/%d/%Y")):
+        body = body.replace(old, (datetime.strptime(old, fmt) + timedelta(days=shift)).strftime(fmt))
+
     def handler(request):
-        return httpx.Response(200, content=fixture_bytes("bids.rss"),
+        return httpx.Response(200, content=body.encode(),
                               headers={"content-type": "application/rss+xml"})
 
     adapter = build_adapter("bids", {"type": "rss", "kind": "bid", "url": "https://x/rss", "city": "Norfolk"},
@@ -196,3 +219,12 @@ def test_robots_txt_rules():
     with _pytest.raises(base.RobotsDisallowed):
         list(adapter.fetch(datetime(2026, 1, 1)))
     base._ROBOTS.clear()
+
+
+def test_env_ignores_inline_comment_values(monkeypatch):
+    from pegasus.config import _env
+
+    monkeypatch.setenv("SOCRATA_APP_TOKEN", "# free; raises open-data rate limits")
+    assert _env("SOCRATA_APP_TOKEN") is None
+    monkeypatch.setenv("SOCRATA_APP_TOKEN", "  abc123  ")
+    assert _env("SOCRATA_APP_TOKEN") == "abc123"

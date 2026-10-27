@@ -12,13 +12,13 @@ sources.yaml:
 
 from __future__ import annotations
 
-import os
 from datetime import datetime
 from typing import Iterable
 
 from .base import Adapter, LeadInput, RawItem
 from .permits_common import get, normalize_permit
 from .base import clean
+from ..config import _env
 
 PAGE = 1000
 
@@ -36,7 +36,7 @@ class SocrataAdapter(Adapter):
         if self.config.get("where"):
             where = f"({where}) AND ({self.config['where']})"
         headers = {}
-        token = self.config.get("app_token") or os.environ.get("SOCRATA_APP_TOKEN")
+        token = self.config.get("app_token") or _env("SOCRATA_APP_TOKEN")
         if token:
             headers["X-App-Token"] = token
         max_rows = int(self.config.get("max_rows", 20000))

@@ -148,9 +148,9 @@ def checkout_url(session: Session, org: Org, email: str, item: str, interval: st
 
 
 def get_settings_coupon() -> str | None:
-    import os
+    from .config import _env
 
-    return os.environ.get("STRIPE_COUPON_FOUNDING") or None
+    return _env("STRIPE_COUPON_FOUNDING")
 
 
 def portal_url(org: Org) -> str:

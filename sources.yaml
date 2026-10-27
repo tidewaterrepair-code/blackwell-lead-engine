@@ -23,7 +23,8 @@ sources:
     state: VA
     county_fips: "51710"
     jurisdiction: "51710"
-    # date_field: issue_date      # optional; default uses Socrata's :updated_at system field
+    # Norfolk re-touches every row daily, so :updated_at would pull the whole archive
+    date_field: application_date
     # fields:                     # override column names if `inspect` shows different ones
     #   description: work_description
     #   est_value: project_cost
@@ -39,6 +40,7 @@ sources:
     county_fips: "51810"
     jurisdiction: "51810"
     date_field: ApplicationDate
+    date_format: "%Y/%m/%d"       # the layer stores dates as text
     fields:
       external_id: PermitNumber
       description: WorkDesc

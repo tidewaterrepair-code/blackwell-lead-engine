@@ -6,6 +6,7 @@ sources.yaml:
       url: https://services2.arcgis.com/.../FeatureServer/0
       city: Virginia Beach
       date_field: ApplicationDate
+      date_format: "%Y/%m/%d"     # only when the date field is text; must sort like a date (year first)
 """
 
 from __future__ import annotations
@@ -28,7 +29,12 @@ class ArcGISAdapter(Adapter):
 
     def fetch(self, since: datetime) -> Iterable[RawItem]:
         date_field = self.config.get("date_field")
-        where = f"{date_field} >= TIMESTAMP '{since.strftime('%Y-%m-%d %H:%M:%S')}'" if date_field else "1=1"
+        if not date_field:
+            where = "1=1"
+        elif self.config.get("date_format"):  # text column: compare strings in the layer's own format
+            where = f"{date_field} >= '{since.strftime(self.config['date_format'])}'"
+        else:
+            where = f"{date_field} >= TIMESTAMP '{since.strftime('%Y-%m-%d %H:%M:%S')}'"
         if self.config.get("where"):
             where = f"({where}) AND ({self.config['where']})"
         max_rows = int(self.config.get("max_rows", 20000))
