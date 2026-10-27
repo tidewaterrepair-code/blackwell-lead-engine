@@ -309,3 +309,37 @@ def test_week_package_is_complete():
     rows = list(csv.DictReader((week / "schedule.csv").open()))
     assert len(rows) == len(mod.POSTS) and {r["day"] for r in rows} == {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}
     assert all("utm_campaign=w42_launch" in r["link"] for r in rows if r["link"])
+
+
+def test_morning_drop_one_click_off(client, fixture_text):
+    from pegasus.db import session_scope
+    from pegasus.models import Org
+    from pegasus.notify import digest_off_url, send_digest
+
+    uid, oid = make_org("drop@pegasus.test", ["general_contractor"], HAMPTON_ROADS, plan="growth")
+    ingest("nor-drop", NORFOLK, json.loads(fixture_text("norfolk_socrata.json")))
+    _outbox().clear()
+    with session_scope() as s:
+        assert send_digest(s, s.get(Org, oid)) == 1
+    msg = _outbox()[-1]
+    assert msg["headers"]["List-Unsubscribe-Post"] == "List-Unsubscribe=One-Click"
+    assert "Stop Morning Drop emails" in msg["html"] and "top score" in msg["html"]
+
+    path = digest_off_url(oid, uid).split("://", 1)[1].split("/", 1)[1]
+    assert "Morning Drop is off" in client.post(f"/{path}").text
+    with session_scope() as s:
+        assert send_digest(s, s.get(Org, oid)) == 0
+    assert "didn't work" in client.get("/email/morning-drop/off?t=forged").text
+
+
+def test_magic_link_survives_mail_outage(client, monkeypatch):
+    from pegasus.api import auth_routes
+
+    make_org("outage@pegasus.test", ["roofer"])
+
+    def boom(*_a, **_k):
+        raise OSError("smtp down")
+
+    monkeypatch.setattr(auth_routes, "send_magic_link", boom)
+    r = client.post("/api/auth/magic", json={"email": "outage@pegasus.test"}, headers={"X-Pegasus": "1"})
+    assert r.status_code == 200 and r.json() == {"ok": True}

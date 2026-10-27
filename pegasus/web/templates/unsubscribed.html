@@ -2,7 +2,10 @@
 {% block title %}Email preferences · Pegasus{% endblock %}
 {% block content %}
 <section class="hero"><div class="wrap prose">
-  {% if ok %}
+  {% if ok and kind == "digest" %}
+  <h1>Morning Drop is off</h1>
+  <p class="lead muted" style="margin-top:16px">You won't get the Morning Drop email any more. Your leads are still waiting in the app, and you can turn the email back on there.</p>
+  {% elif ok %}
   <h1>You're unsubscribed</h1>
   <p class="lead muted" style="margin-top:16px">You won't get marketing or onboarding emails from Pegasus any more. Account emails you ask for, like sign-in links and your Morning Drop, still arrive and can be turned off in the app.</p>
   {% else %}

@@ -21,7 +21,7 @@ from ..config import get_settings
 from ..db import utcnow
 from ..intel.scoring import normalize_address
 from ..intel.taxonomy import tag_label, trades as trade_defs
-from ..models import EmailSuppression, OptOut, Signal, WaitlistSignup
+from ..models import EmailSuppression, OptOut, Org, Signal, WaitlistSignup
 from ..plans import FOUNDING_SEATS, public_catalog
 
 HERE = Path(__file__).parent
@@ -281,6 +281,20 @@ def email_unsubscribe(request: Request, t: str = "", db: Session = Depends(get_d
     if email and not db.get(EmailSuppression, email):
         db.add(EmailSuppression(email=email))
     return page(request, "unsubscribed.html", ok=bool(email))
+
+
+@router.get("/email/morning-drop/off", response_class=HTMLResponse)
+@router.post("/email/morning-drop/off", response_class=HTMLResponse)
+def morning_drop_off(request: Request, t: str = "", db: Session = Depends(get_db)):
+    """One-click Morning Drop opt-out for one person; the rest of their team keeps getting it."""
+    from ..notify import read_digest_off_token
+
+    ids = read_digest_off_token(t)
+    org = db.get(Org, ids[0]) if ids else None
+    if org:
+        muted = set((org.settings or {}).get("digest_muted", [])) | {ids[1]}
+        org.settings = {**(org.settings or {}), "digest_muted": sorted(muted)}
+    return page(request, "unsubscribed.html", ok=bool(org), kind="digest")
 
 
 @router.get("/robots.txt", response_class=PlainTextResponse)

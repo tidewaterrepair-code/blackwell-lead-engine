@@ -60,7 +60,7 @@ def body_html(text: str) -> str:
     for block in re.split(r"\n\s*\n", text.strip()):
         lines = block.strip().splitlines()
         if all(ln.lstrip().startswith("- ") for ln in lines):
-            items = "".join(f"<li style='margin:4px 0'>{html.escape(ln.lstrip()[2:])}</li>" for ln in lines)
+            items = "".join(f"<li style='margin:6px 0;color:#E9E0CF'>{html.escape(ln.lstrip()[2:])}</li>" for ln in lines)
             out.append(f"<ul style='padding-left:20px;margin:0 0 14px'>{items}</ul>")
         else:
             out.append(f"<p style='margin:0 0 14px'>{html.escape(' '.join(ln.strip() for ln in lines))}</p>")
@@ -73,11 +73,9 @@ def render(email: dict, values: dict, to: str) -> tuple[str, str, str]:
     body = fill(email["body"], values)
     cta_label, cta_url = (fill(x, values) for x in email.get("cta") or ("", ""))
     unsub = unsubscribe_url(to)
-    preview = html.escape(fill(email.get("preview", ""), values))
-    footer = (f"Pegasus · data &amp; lead technology · <a href='{html.escape(unsub)}' style='color:#807058'>"
-              "Unsubscribe</a>")
-    hidden = f"<div style='display:none;max-height:0;overflow:hidden'>{preview}</div>"
-    html_body = hidden + wrap_html(subject, body_html(body), cta_label or None, cta_url or None, footer)
+    preview = fill(email.get("preview", ""), values)
+    footer = f"<a href='{html.escape(unsub)}' style='color:#C9A35C'>Unsubscribe</a>"
+    html_body = wrap_html(subject, body_html(body), cta_label or None, cta_url or None, footer, preview=preview or None)
     text = f"{body.strip()}\n\n{cta_label}: {cta_url}\n\n--\nUnsubscribe: {unsub}\n"
     return subject, text, html_body
 

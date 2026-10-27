@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field
@@ -31,6 +33,7 @@ from ..plans import effective_plan, public_catalog
 from .deps import Ctx, csrf_guard, current_ctx, get_db, rate_limit, require_org_admin
 from .serialize import iso, user_dict
 
+log = logging.getLogger(__name__)
 router = APIRouter(dependencies=[Depends(csrf_guard)])
 MAGIC_MAX_AGE = 30 * 60
 
@@ -133,7 +136,10 @@ def api_magic(body: MagicIn, db: Session = Depends(get_db)):
     user = db.scalar(select(User).where(User.email == email))
     if user:  # same response either way, so this can't be used to probe for accounts
         token = make_token("magic", {"uid": user.id})
-        send_magic_link(email, f"{get_settings().public_url}/auth/magic?token={token}")
+        try:
+            send_magic_link(email, f"{get_settings().public_url}/auth/magic?token={token}")
+        except Exception:  # noqa: BLE001 - a mail outage must not turn into an error page or leak who has an account
+            log.exception("magic link to %s failed", email)
     return {"ok": True}
 
 
@@ -206,6 +212,8 @@ def api_org_update(body: OrgIn, ctx: Ctx = Depends(require_org_admin), db: Sessi
         org.base_lat, org.base_lng = body.base_lat, body.base_lng
     if body.settings:
         clean = {k: v for k, v in body.settings.items() if k in ALLOWED_SETTINGS}
+        if clean.get("digest") is True:  # saving with Morning Drop on undoes this person's email opt-out
+            clean["digest_muted"] = [u for u in (org.settings or {}).get("digest_muted", []) if u != ctx.user.id]
         org.settings = {**(org.settings or {}), **clean}
     return me_payload(db, ctx)
 
