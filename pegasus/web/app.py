@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import mimetypes
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -76,6 +77,7 @@ def create_app() -> FastAPI:
         return {"ok": True}
 
     app.add_middleware(GZipMiddleware, minimum_size=800, compresslevel=6)
+    mimetypes.add_type("image/webp", ".webp")  # slim images have no /etc/mime.types; Python 3.12 lacks webp
     app.mount("/static", StaticFiles(directory=HERE / "static"), name="static")
 
     @app.get("/app")
