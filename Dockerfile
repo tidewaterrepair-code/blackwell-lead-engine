@@ -15,6 +15,9 @@ FROM python:3.12-slim
 # INSTALL_BROWSER=true adds headless Chromium (~500 MB): needed for Accela-style permit
 # portals and for `pegasus marketing render` (banner PNGs).
 ARG INSTALL_BROWSER=false
+# INSTALL_CLAUDE_CLI=true adds the Claude Code CLI, used for AI when CLAUDE_CODE_OAUTH_TOKEN
+# (a Claude subscription) is set instead of ANTHROPIC_API_KEY.
+ARG INSTALL_CLAUDE_CLI=true
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -36,6 +39,12 @@ COPY sources.yaml ./sources.yaml
 COPY marketing ./marketing
 
 RUN useradd --create-home --uid 1000 app && mkdir -p /data && chown app /data /app/marketing
+RUN if [ "$INSTALL_CLAUDE_CLI" = "true" ]; then \
+      apt-get update && apt-get install -y --no-install-recommends curl ca-certificates \
+      && rm -rf /var/lib/apt/lists/* \
+      && su app -c "curl -fsSL https://claude.ai/install.sh | bash" \
+      && ln -s /home/app/.local/bin/claude /usr/local/bin/claude; \
+    fi
 USER app
 VOLUME ["/data"]
 EXPOSE 8000

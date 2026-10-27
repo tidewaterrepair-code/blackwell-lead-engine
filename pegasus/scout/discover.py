@@ -107,33 +107,21 @@ Finish with a single JSON object and nothing after it:
 "permit|violation|sale|tax_delinquent|subdivision|bid", "title": "...", "url": "https://...", "note": "..."}]}"""
 
 
+def _research_text_cli(county_label: str) -> str | None:
+    from ..intel.ai import run_claude_cli
+
+    data = run_claude_cli(RESEARCH_SYSTEM, f"County: {county_label}", model=get_settings().ai_smart_model,
+                          effort="medium", tools="WebSearch,WebFetch", max_turns=20, timeout=900)
+    return data.get("result") if data else None
+
+
 def claude_candidates(county_label: str) -> list[Candidate]:
     settings = get_settings()
     if not settings.ai_enabled:
         return []
-    import anthropic
-
-    from ..intel.ai import FALLBACK_BETA, _client
-
-    tools = [{"type": "web_search_20260209", "name": "web_search", "max_uses": 8},
-             {"type": "web_fetch_20260209", "name": "web_fetch", "max_uses": 6}]
-    messages: list = [{"role": "user", "content": f"County: {county_label}"}]
-    response = None
-    try:
-        for _ in range(5):  # resume pause_turn up to 5 times
-            response = _client().beta.messages.create(
-                model=settings.ai_smart_model, max_tokens=16000, betas=[FALLBACK_BETA], fallbacks="default",
-                system=RESEARCH_SYSTEM, messages=messages, tools=tools, output_config={"effort": "medium"})
-            if response.stop_reason != "pause_turn":
-                break
-            # Resume: send the paused assistant turn back; the server continues where it stopped.
-            messages = [*messages, {"role": "assistant", "content": response.content}]
-    except (anthropic.APIStatusError, anthropic.APIConnectionError) as exc:
-        log.warning("Claude source research failed: %s", exc)
+    text = _research_text_cli(county_label) if settings.ai_backend == "cli" else _research_text_api(county_label)
+    if not text:
         return []
-    if response is None or response.stop_reason == "refusal":
-        return []
-    text = "".join(b.text for b in response.content if b.type == "text")
     match = re.search(r"\{[\s\S]*\}\s*$", text.strip())
     if not match:
         return []
@@ -149,6 +137,33 @@ def claude_candidates(county_label: str) -> list[Candidate]:
         out.append(Candidate(platform=s.get("platform", "unknown"), kind=s.get("kind", "permit"),
                              title=str(s.get("title", ""))[:200], url=url, note=str(s.get("note", ""))[:300]))
     return out
+
+
+def _research_text_api(county_label: str) -> str | None:
+    import anthropic
+
+    from ..intel.ai import FALLBACK_BETA, _client
+
+    settings = get_settings()
+    tools = [{"type": "web_search_20260209", "name": "web_search", "max_uses": 8},
+             {"type": "web_fetch_20260209", "name": "web_fetch", "max_uses": 6}]
+    messages: list = [{"role": "user", "content": f"County: {county_label}"}]
+    response = None
+    try:
+        for _ in range(5):  # resume pause_turn up to 5 times
+            response = _client().beta.messages.create(
+                model=settings.ai_smart_model, max_tokens=16000, betas=[FALLBACK_BETA], fallbacks="default",
+                system=RESEARCH_SYSTEM, messages=messages, tools=tools, output_config={"effort": "medium"})
+            if response.stop_reason != "pause_turn":
+                break
+            # Resume: send the paused assistant turn back; the server continues where it stopped.
+            messages = [*messages, {"role": "assistant", "content": response.content}]
+    except (anthropic.APIStatusError, anthropic.APIConnectionError) as exc:
+        log.warning("Claude source research failed: %s", exc)
+        return None
+    if response is None or response.stop_reason == "refusal":
+        return None
+    return "".join(b.text for b in response.content if b.type == "text")
 
 
 def discover(fips: str, client: httpx.Client | None = None) -> list[Candidate]:

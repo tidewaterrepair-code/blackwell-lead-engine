@@ -1,8 +1,11 @@
 """Claude-powered intelligence: labels for odd records, lead briefs, outreach scripts.
 
-Everything here is optional. With no ANTHROPIC_API_KEY, Pegasus falls back to
-a local Ollama model (OLLAMA_URL) or to deterministic templates, so the product
-works without AI spend. Models are set with AI_FAST_MODEL / AI_SMART_MODEL.
+Everything here is optional. Claude is reached one of two ways:
+- ANTHROPIC_API_KEY: the Messages API, billed per token.
+- CLAUDE_CODE_OAUTH_TOKEN (from `claude setup-token`): headless Claude Code (`claude -p`)
+  on a Claude subscription. Used only when there is no API key.
+With neither, Pegasus falls back to a local Ollama model (OLLAMA_URL) or to deterministic
+templates, so the product works without AI spend. Models are set with AI_FAST_MODEL / AI_SMART_MODEL.
 
 Requests opt into server-side refusal fallbacks (`fallbacks: "default"`), so a
 safety-classifier decline is retried on Anthropic's recommended model instead
@@ -13,6 +16,9 @@ from __future__ import annotations
 
 import json
 import logging
+import os
+import shutil
+import subprocess
 from functools import lru_cache
 
 from ..config import get_settings
@@ -29,12 +35,64 @@ def _client():
     return anthropic.Anthropic(api_key=get_settings().anthropic_api_key, max_retries=3, timeout=120)
 
 
+def run_claude_cli(system: str, prompt: str, *, model: str, effort: str = "low", schema: dict | None = None,
+                   tools: str = "", max_turns: int = 3, timeout: int = 180) -> dict | None:
+    """One headless Claude Code run (`claude -p`). Returns its JSON result envelope, or None on any failure.
+
+    Runs isolated from any local Claude Code setup: no settings files, MCP servers, slash commands
+    or saved sessions, and only the built-in tools named in `tools` ("" = none).
+    """
+    exe = shutil.which("claude")
+    if not exe:
+        log.warning("CLAUDE_CODE_OAUTH_TOKEN is set but the claude CLI is not installed; skipping AI step")
+        return None
+    cmd = [exe, "-p", "--output-format", "json", "--no-session-persistence", "--strict-mcp-config",
+           "--setting-sources", "", "--disable-slash-commands", "--model", model, "--effort", effort,
+           "--max-turns", str(max_turns), "--system-prompt", system, "--tools", tools]
+    if tools:
+        cmd += ["--allowedTools", tools]
+    if schema:
+        cmd += ["--json-schema", json.dumps(schema)]
+    env = {**os.environ, "CLAUDE_CODE_OAUTH_TOKEN": get_settings().claude_code_oauth_token or ""}
+    env.pop("ANTHROPIC_API_KEY", None)  # never let a stray key switch billing to the API
+    try:
+        proc = subprocess.run(cmd, input=prompt, capture_output=True, text=True, timeout=timeout, env=env)
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        log.warning("claude CLI failed to run: %s", exc)
+        return None
+    try:
+        data = json.loads(proc.stdout)
+    except ValueError:
+        log.warning("claude CLI exit %s with non-JSON output: %s", proc.returncode, (proc.stderr or proc.stdout)[:300])
+        return None
+    if data.get("is_error") or data.get("subtype") != "success":
+        log.warning("claude CLI run failed: %s", str(data.get("result") or data.get("subtype"))[:300])
+        return None
+    return data
+
+
+def _ask_json_cli(system: str, user: str, schema: dict, model: str, effort: str) -> dict | None:
+    data = run_claude_cli(system, user, model=model, effort=effort, schema=schema)
+    if data is None:
+        return None
+    out = data.get("structured_output")
+    if isinstance(out, dict):
+        return out
+    try:
+        return json.loads(data.get("result") or "")
+    except ValueError:
+        log.warning("claude CLI returned non-JSON output")
+        return None
+
+
 def ask_json(system: str, user: str, schema: dict, *, model: str | None = None, effort: str = "low",
              max_tokens: int = 2000) -> dict | None:
     """One Claude call with a JSON-schema-constrained answer. Returns None on any failure."""
     settings = get_settings()
     if not settings.ai_enabled:
         return None
+    if settings.ai_backend == "cli":
+        return _ask_json_cli(system, user, schema, model or settings.ai_fast_model, effort)
     import anthropic
 
     try:

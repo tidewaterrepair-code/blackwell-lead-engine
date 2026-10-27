@@ -11,8 +11,9 @@ import yaml
 
 
 def _env(name: str, default: str | None = None) -> str | None:
-    value = os.environ.get(name)
-    return value if value not in (None, "") else default
+    value = (os.environ.get(name) or "").strip()
+    # `KEY=   # note` in an env_file reaches us as "# note": treat it as unset, never as a credential
+    return value if value and not value.startswith("#") else default
 
 
 def _env_bool(name: str, default: bool) -> bool:
@@ -37,8 +38,10 @@ class Settings:
     smtp_user: str | None
     smtp_password: str | None
     mail_from: str
-    # AI (pay as you go). Without a key, rules + templates are used instead.
+    # AI: an API key (pay as you go) or a Claude subscription token run through headless Claude Code.
+    # With neither, rules + templates are used instead.
     anthropic_api_key: str | None
+    claude_code_oauth_token: str | None
     ai_fast_model: str
     ai_smart_model: str
     ollama_url: str | None
@@ -65,8 +68,17 @@ class Settings:
         return self.database_url.startswith("sqlite")
 
     @property
+    def ai_backend(self) -> str | None:
+        """"api" (Messages API), "cli" (headless `claude -p` on a subscription) or None. The API key wins."""
+        if self.anthropic_api_key:
+            return "api"
+        if self.claude_code_oauth_token:
+            return "cli"
+        return None
+
+    @property
     def ai_enabled(self) -> bool:
-        return bool(self.anthropic_api_key)
+        return self.ai_backend is not None
 
     @property
     def billing_enabled(self) -> bool:
@@ -97,6 +109,7 @@ def get_settings() -> Settings:
         smtp_password=_env("SMTP_PASSWORD"),
         mail_from=_env("MAIL_FROM", _env("SMTP_USER", "Pegasus <hello@getpegasus.org>")),
         anthropic_api_key=_env("ANTHROPIC_API_KEY"),
+        claude_code_oauth_token=_env("CLAUDE_CODE_OAUTH_TOKEN"),
         ai_fast_model=_env("AI_FAST_MODEL", "claude-opus-5-5"),
         ai_smart_model=_env("AI_SMART_MODEL", "claude-opus-5-5"),
         ollama_url=_env("OLLAMA_URL"),

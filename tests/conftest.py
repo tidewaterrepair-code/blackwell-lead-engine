@@ -13,7 +13,7 @@ os.environ["SOURCES_FILE"] = str(_TMP / "no-seed-sources.yaml")
 os.environ["GEOCODE"] = "0"
 os.environ["SECRET_KEY"] = "test-secret"
 os.environ["ADMIN_EMAILS"] = "boss@pegasus.test"
-for key in ("ANTHROPIC_API_KEY", "STRIPE_SECRET_KEY", "BATCHDATA_API_KEY", "OLLAMA_URL", "SMTP_HOST"):
+for key in ("ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN", "STRIPE_SECRET_KEY", "BATCHDATA_API_KEY", "OLLAMA_URL", "SMTP_HOST"):
     os.environ.pop(key, None)
 
 FIXTURES = Path(__file__).parent / "fixtures"

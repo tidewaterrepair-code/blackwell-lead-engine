@@ -21,6 +21,7 @@ services:
       context: .
       args:
         INSTALL_BROWSER: ${INSTALL_BROWSER:-false}
+        INSTALL_CLAUDE_CLI: ${INSTALL_CLAUDE_CLI:-true}
     image: pegasus
     env_file: .env
     environment:
